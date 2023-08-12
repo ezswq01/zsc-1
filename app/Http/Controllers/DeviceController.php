@@ -45,7 +45,7 @@ class DeviceController extends Controller
             'subscribe_topic' => 'required',
         ]);
 
-        DB::transaction(function () use($validated)) {
+        DB::transaction(function () use ($validated) {
             $device = Device::create([
                 'id' => $validated['id'],
                 'device_type_id' => $validated['device_type_id'],
@@ -53,8 +53,7 @@ class DeviceController extends Controller
                 'subscribe_topic' => $validated['subscribe_topic'],
             ]);
 
-            foreach ($request->subscribe_expressions as $subscribe_expression)
-            {
+            foreach ($request->subscribe_expressions as $subscribe_expression) {
                 SubscribeExpression::create([
                     'device_id' => $device['id'],
                     'expression' => $subscribe_expression['expression'],
@@ -62,15 +61,13 @@ class DeviceController extends Controller
                 ]);
             }
 
-            foreach ($request->publis_actions as $publis_action)
-            {
-                PublisAction::create([
+            foreach ($request->publish_actions as $publish_action) {
+                PublishAction::create([
                     'device_id' => $device['id'],
-                    'label' => $publis_action['label'],
-                    'value' => $publis_action['value'],
+                    'label' => $publish_action['label'],
+                    'value' => $publish_action['value'],
                 ]);
             }
-
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device created successfully.');
@@ -84,7 +81,8 @@ class DeviceController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Device::with('subscribe_expression', 'public_action')->find($id);
+        return view('admin.devices.show', compact('data'));
     }
 
     /**
@@ -95,7 +93,8 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Device::with('subscribe_expression', 'public_action')->find($id);
+        return view('admin.devices.edit', compact('data'));
     }
 
     /**
@@ -107,7 +106,42 @@ class DeviceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        dd($request->all());
+
+        $validated = $request->validate([
+            'id' => 'required',
+            'device_type_id' => 'required',
+            'publish_topic' => 'required',
+            'subscribe_topic' => 'required',
+        ]);
+
+        DB::transaction(function () use ($validated, $id) {
+            $device = Device::find($id)->update([
+                'id' => $validated['id'],
+                'device_type_id' => $validated['device_type_id'],
+                'publish_topic' => $validated['publish_topic'],
+                'subscribe_topic' => $validated['subscribe_topic'],
+            ]);
+
+            foreach ($request->subscribe_expressions as $subscribe_expression) {
+                SubscribeExpression::updateOrCreate(['id' => $subscribe_expression->id], [
+                    'device_id' => $device['id'],
+                    'expression' => $subscribe_expression['expression'],
+                    'status_type_id' => $subscribe_expression['status_type_id'],
+                ]);
+            }
+
+            foreach ($request->publish_actions as $publish_action) {
+                PublishAction::updateOrCreate(['id' => $publish_action->id], [
+                    'device_id' => $device['id'],
+                    'label' => $publish_action['label'],
+                    'value' => $publish_action['value'],
+                ]);
+            }
+        });
+
+        return redirect()->route('admin.devices.index')->with('success', 'Device updated successfully.');
     }
 
     /**
@@ -118,7 +152,9 @@ class DeviceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Device::find($id);
+        $data->delete();
+        return redirect()->route('admin.devices.index')->with('success', 'Device deleted successfully.');
     }
 
     public function dummyDataFromDB()
