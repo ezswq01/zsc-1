@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Temporary redirect to devices index
+Route::get('/', function () {
+    return redirect()->route('admin.devices.index');
+});
+
 Route::name('admin.')->prefix('admin')->group(function () {
     Route::resource('devices', DeviceController::class);
 });
