@@ -13,4 +13,9 @@ class StatusType extends Model
     {
         return $this->hasMany(DeviceStatus::class, 'status_type_id');
     }
+
+    public function subscribe_expression()
+    {
+        return $this->hasMany(SubscribeExpression::class, 'status_type_id');
+    }
 }
