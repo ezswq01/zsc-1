@@ -9,6 +9,20 @@ class Device extends Model
 {
     // use HasFactory;
 
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $fillable = [
+        'device_id',
+        'device_type_id',
+        'publish_topic',
+        'subscribe_topic',
+        'created_at',
+        'updated_at'
+    ];
+
     public function device_type()
     {
         return $this->belongsTo(DeviceType::class, 'device_type_id', 'id');
