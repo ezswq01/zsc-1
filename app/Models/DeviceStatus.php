@@ -11,6 +11,20 @@ class DeviceStatus extends Model
 
     protected $table = 'device_status';
 
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $fillable = [
+        'device_id',
+        'status_type_id',
+        'device_log_id',
+        'value',
+        'created_at',
+        'updated_at'
+    ];
+
     public function device()
     {
         return $this->belongsTo(Device::class, 'device_id', 'id');

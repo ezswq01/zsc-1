@@ -9,6 +9,19 @@ class SubscribeExpression extends Model
 {
     // use HasFactory;
 
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $fillable = [
+        'device_id',
+        'status_type_id',
+        'expression',
+        'created_at',
+        'updated_at'
+    ];
+
     public function device()
     {
         return $this->belongsTo(Device::class, 'device_id', 'id');

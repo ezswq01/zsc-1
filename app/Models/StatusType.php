@@ -9,6 +9,17 @@ class StatusType extends Model
 {
     // use HasFactory;
 
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $fillable = [
+        'name',
+        'created_at',
+        'updated_at'
+    ];
+
     public function device_status()
     {
         return $this->hasMany(DeviceStatus::class, 'status_type_id');
