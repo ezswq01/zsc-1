@@ -19,6 +19,12 @@ class AddForeignKeysToSubscribeExpressionsTable extends Migration
                 ->on('devices')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
+
+            $table->foreign('status_type_id', 'fk_subscribe_expressions_to_status_types')
+                ->references('id')
+                ->on('status_types')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
