@@ -13,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // User::factory(10)->create();
+        $this->call([
+            DeviceTypeSeeder::class,
+            StatusTypeSeeder::class,
+            DeviceSeeder::class,
+            PublishActionSeeder::class,
+            SubscribeExpressionSeeder::class,
+            DeviceLogSeeder::class,
+            DeviceStatusSeeder::class
+        ]);
     }
 }
