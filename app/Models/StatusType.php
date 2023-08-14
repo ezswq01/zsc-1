@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StatusType extends Model
 {
-    use HasFactory;
+    // use HasFactory;
 
     public function device_status()
     {

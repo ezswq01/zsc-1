@@ -9,9 +9,6 @@ class Device extends Model
 {
     // use HasFactory;
 
-    public $incrementing = false;
-    protected $keyType = 'string';
-
     public function device_type()
     {
         return $this->belongsTo(DeviceType::class, 'device_type_id', 'id');
