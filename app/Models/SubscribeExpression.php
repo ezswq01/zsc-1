@@ -13,4 +13,9 @@ class SubscribeExpression extends Model
     {
         return $this->belongsTo(Device::class, 'device_id', 'id');
     }
+
+    public function status_type()
+    {
+        return $this->belongsTo(StatusType::class, 'status_type_id', 'id');
+    }
 }
