@@ -15,8 +15,8 @@ class CreateSubscribeExpressionsTable extends Migration
     {
         Schema::create('subscribe_expressions', function (Blueprint $table) {
             $table->id();
-            $table->char('device_id', 5)->nullable()->index('fk_subscribe_expressions_to_devices');
-            $table->foreign('status_type_id')->nullable()->index('fk_subscribe_expressions_to_status_types');
+            $table->foreignId('device_id')->nullable()->index('fk_subscribe_expressions_to_devices');
+            $table->foreignId('status_type_id')->nullable()->index('fk_subscribe_expressions_to_status_types');
             $table->string('expression');
             $table->timestamps();
         });
