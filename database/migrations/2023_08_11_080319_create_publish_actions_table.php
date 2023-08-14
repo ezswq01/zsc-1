@@ -15,7 +15,7 @@ class CreatePublishActionsTable extends Migration
     {
         Schema::create('publish_actions', function (Blueprint $table) {
             $table->id();
-            $table->char('device_id', 5)->nullable()->index('fk_publish_actions_to_devices');
+            $table->foreignId('device_id')->nullable()->index('fk_publish_actions_to_devices');
             $table->string('label');
             $table->string('value');
             $table->timestamps();

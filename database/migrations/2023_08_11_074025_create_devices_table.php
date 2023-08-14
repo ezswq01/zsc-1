@@ -14,7 +14,8 @@ class CreateDevicesTable extends Migration
     public function up()
     {
         Schema::create('devices', function (Blueprint $table) {
-            $table->char('id', 5)->primary();
+            $table->id();
+            $table->string('device_id');
             $table->foreignId('device_type_id')->nullable()->index('fk_devices_to_device_types');
             $table->string('publish_topic');
             $table->string('subscribe_topic');
