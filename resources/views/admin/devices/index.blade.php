@@ -54,7 +54,7 @@
         @foreach ($datas as $key => $data)
           <tr>
             <td>{{ $key + 1 }}</td>
-            <td><a href="{{ route('admin.devices.show', $data->id) }}">{{ $data->id }}</a></td>
+            <td><a href="{{ route('admin.devices.show', $data->id) }}">{{ $data->device_id }}</a></td>
             <td>{{ $data->publish_topic }}</td>
             <td>{{ $data->subscribe_topic }}</td>
             <td class="text-center">

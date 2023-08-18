@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
+use App\Models\PublishAction;
+use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +17,7 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        $datas = $this->dummyDataFromDB();
+        $datas = Device::all();
         return view('admin.devices.index', compact('datas'));
     }
 
@@ -36,37 +39,39 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-
         $validated = $request->validate([
-            'id' => 'required',
+            'device_id' => 'required',
             'device_type_id' => 'required',
             'publish_topic' => 'required',
             'subscribe_topic' => 'required',
         ]);
 
-        DB::transaction(function () use ($validated) {
+        DB::transaction(function () use ($validated, $request) {
             $device = Device::create([
-                'id' => $validated['id'],
+                'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => $validated['publish_topic'],
                 'subscribe_topic' => $validated['subscribe_topic'],
             ]);
 
-            foreach ($request->subscribe_expressions as $subscribe_expression) {
-                SubscribeExpression::create([
-                    'device_id' => $device['id'],
-                    'expression' => $subscribe_expression['expression'],
-                    'status_type_id' => $subscribe_expression['status_type_id'],
-                ]);
+            if ($request->subscribe_expressions) {
+                foreach ($request->subscribe_expressions['expression'] as $key => $subscribe_expression) {
+                    SubscribeExpression::create([
+                        'device_id' => $device->id,
+                        'expression' => $request->subscribe_expressions['expression'][$key],
+                        'status_type_id' => $request->subscribe_expressions['status_type'][$key],
+                    ]);
+                }
             }
 
-            foreach ($request->publish_actions as $publish_action) {
-                PublishAction::create([
-                    'device_id' => $device['id'],
-                    'label' => $publish_action['label'],
-                    'value' => $publish_action['value'],
-                ]);
+            if ($request->publish_actions) {
+                foreach ($request->publish_actions['label'] as $key => $publish_action) {
+                    PublishAction::create([
+                        'device_id' => $device->id,
+                        'label' => $publish_action['label'][$key],
+                        'value' => $publish_action['value'][$key],
+                    ]);
+                }
             }
         });
 
@@ -81,7 +86,7 @@ class DeviceController extends Controller
      */
     public function show($id)
     {
-        $data = Device::with('subscribe_expression', 'public_action')->find($id);
+        $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
         return view('admin.devices.show', compact('data'));
     }
 
@@ -93,7 +98,7 @@ class DeviceController extends Controller
      */
     public function edit($id)
     {
-        $data = Device::with('subscribe_expression', 'public_action')->find($id);
+        $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
         return view('admin.devices.edit', compact('data'));
     }
 
@@ -107,37 +112,42 @@ class DeviceController extends Controller
     public function update(Request $request, $id)
     {
 
-        dd($request->all());
-
         $validated = $request->validate([
-            'id' => 'required',
+            'device_id' => 'required',
             'device_type_id' => 'required',
             'publish_topic' => 'required',
             'subscribe_topic' => 'required',
         ]);
 
-        DB::transaction(function () use ($validated, $id) {
-            $device = Device::find($id)->update([
-                'id' => $validated['id'],
+        DB::transaction(function () use ($validated, $request, $id) {
+            Device::find($id)->update([
+                'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => $validated['publish_topic'],
                 'subscribe_topic' => $validated['subscribe_topic'],
             ]);
 
-            foreach ($request->subscribe_expressions as $subscribe_expression) {
-                SubscribeExpression::updateOrCreate(['id' => $subscribe_expression->id], [
-                    'device_id' => $device['id'],
-                    'expression' => $subscribe_expression['expression'],
-                    'status_type_id' => $subscribe_expression['status_type_id'],
-                ]);
+            SubscribeExpression::where('device_id', $id)->delete();
+            PublishAction::where('device_id', $id)->delete();
+
+            if ($request->subscribe_expressions) {
+                foreach ($request->subscribe_expressions['expression'] as $key => $arr) {
+                    SubscribeExpression::create([
+                        'device_id' => $id,
+                        'expression' => $request->subscribe_expressions['expression'][$key],
+                        'status_type_id' => $request->subscribe_expressions['status_type'][$key],
+                    ]);
+                }
             }
 
-            foreach ($request->publish_actions as $publish_action) {
-                PublishAction::updateOrCreate(['id' => $publish_action->id], [
-                    'device_id' => $device['id'],
-                    'label' => $publish_action['label'],
-                    'value' => $publish_action['value'],
-                ]);
+            if ($request->publish_actions) {
+                foreach ($request->publish_actions['label'] as $key => $publish_action) {
+                    PublishAction::create([
+                        'device_id' => $id,
+                        'label' => $request->publish_actions['label'][$key],
+                        'value' => $request->publish_actions['value'][$key],
+                    ]);
+                }
             }
         });
 
@@ -155,59 +165,5 @@ class DeviceController extends Controller
         $data = Device::find($id);
         $data->delete();
         return redirect()->route('admin.devices.index')->with('success', 'Device deleted successfully.');
-    }
-
-    public function dummyDataFromDB()
-    {
-        $datas = [
-            [
-                'id' => 'DEVICE_2138321',
-                'device_type_id' => '1',
-                'publish_topic' => 'devices/1/publish',
-                'subscribe_topic' => 'devices/1/subscribe',
-                'created_at' => '2021-08-11 07:40:25',
-                'updated_at' => '2021-08-11 07:40:25',
-            ],
-            [
-                'id' => 'DEVICE_2138322',
-                'device_type_id' => '1',
-                'publish_topic' => 'devices/2/publish',
-                'subscribe_topic' => 'devices/2/subscribe',
-                'created_at' => '2021-08-11 07:40:25',
-                'updated_at' => '2021-08-11 07:40:25',
-            ],
-            [
-                'id' => 'DEVICE_2138323',
-                'device_type_id' => '1',
-                'publish_topic' => 'devices/3/publish',
-                'subscribe_topic' => 'devices/3/subscribe',
-                'created_at' => '2021-08-11 07:40:25',
-                'updated_at' => '2021-08-11 07:40:25',
-            ],
-            [
-                'id' => 'DEVICE_2138324',
-                'device_type_id' => '1',
-                'publish_topic' => 'devices/4/publish',
-                'subscribe_topic' => 'devices/4/subscribe',
-                'created_at' => '2021-08-11 07:40:25',
-                'updated_at' => '2021-08-11 07:40:25',
-            ],
-            [
-                'id' => 'DEVICE_2138325',
-                'device_type_id' => '1',
-                'publish_topic' => 'devices/5/publish',
-                'subscribe_topic' => 'devices/5/subscribe',
-                'created_at' => '2021-08-11 07:40:25',
-                'updated_at' => '2021-08-11 07:40:25',
-            ],
-        ];
-
-        $datas = collect($datas);
-
-        foreach ($datas as $index => $data) {
-            $datas[$index] = (object) $data;
-        }
-
-        return $datas;
     }
 }
