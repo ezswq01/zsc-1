@@ -23,4 +23,7 @@ Route::get('/', function () {
 Route::name('admin.')->prefix('admin')->group(function () {
     Route::resource('devices', DeviceController::class);
     Route::resource('device_types', DeviceTypeController::class);
+
+    // Ajax routes
+    Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
 });

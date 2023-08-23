@@ -165,4 +165,15 @@ class DeviceController extends Controller
         $data->delete();
         return redirect()->route('admin.devices.index')->with('success', 'Device deleted successfully.');
     }
+
+    public function publish(Request $request)
+    {
+        $publish_action = PublishAction::find($request->id);
+        // @TODO: Do something here to publish to MQTT broker
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Published successfully.',
+        ]);
+    }
 }
