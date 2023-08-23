@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Device\StoreDeviceRequest;
+use App\Http\Requests\Device\UpdateDeviceRequest;
 use App\Models\Device;
+use App\Models\DeviceType;
 use App\Models\PublishAction;
+use App\Models\StatusType;
 use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +32,10 @@ class DeviceController extends Controller
      */
     public function create()
     {
-        return view('admin.devices.create');
+        $device_types = DeviceType::all(['id', 'name']);
+        $status_types = StatusType::all(['id', 'name']);
+
+        return view('admin.devices.create', compact('device_types', 'status_types'));
     }
 
     /**
@@ -37,14 +44,9 @@ class DeviceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDeviceRequest $request)
     {
-        $validated = $request->validate([
-            'device_id' => 'required',
-            'device_type_id' => 'required',
-            'publish_topic' => 'required',
-            'subscribe_topic' => 'required',
-        ]);
+        $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request) {
             $device = Device::create([
@@ -99,7 +101,10 @@ class DeviceController extends Controller
     public function edit($id)
     {
         $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
-        return view('admin.devices.edit', compact('data'));
+        $device_types = DeviceType::all(['id', 'name']);
+        $status_types = StatusType::all(['id', 'name']);
+
+        return view('admin.devices.edit', compact('data', 'device_types', 'status_types'));
     }
 
     /**
@@ -109,15 +114,9 @@ class DeviceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateDeviceRequest $request, $id)
     {
-
-        $validated = $request->validate([
-            'device_id' => 'required',
-            'device_type_id' => 'required',
-            'publish_topic' => 'required',
-            'subscribe_topic' => 'required',
-        ]);
+        $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request, $id) {
             Device::find($id)->update([
