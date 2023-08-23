@@ -189,6 +189,7 @@
     const handleDeleteSubscribeExpression = (el) => {
         const subscribeExpression = $(el).data('subscribe_expression');
         $(`.subscribe_expression_${subscribeExpression}`).remove();
+        subscribeExpressionCount--;
     }
 
     const handleAddPublishButtonAction = () => {
@@ -215,6 +216,7 @@
     const handleDeletePublishActions = (el) => {
         const publishActions = $(el).data('publish_actions');
         $(`.publish_button_${publishActions}`).remove();
+        publishActionsCount--;
     }
 
 </script>
