@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceTypeController;
+use App\Http\Controllers\StatusTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +25,8 @@ Route::get('/', function () {
 Route::name('admin.')->prefix('admin')->group(function () {
     Route::resource('devices', DeviceController::class);
     Route::resource('device_types', DeviceTypeController::class);
+    Route::resource('status_types', StatusTypeController::class);
+    Route::resource('dashboard', DashboardController::class)->only(['index']);
 
     // Ajax routes
     Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
