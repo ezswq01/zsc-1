@@ -80,6 +80,7 @@
                                 Action</button>
                         </div>
                     </div>
+                    <hr>
                     <div class="text-end">
                         <button class="btn btn-primary" type="submit">Submit form <i class="ph-paper-plane-tilt ms-2"></i></button>
                     </div>
