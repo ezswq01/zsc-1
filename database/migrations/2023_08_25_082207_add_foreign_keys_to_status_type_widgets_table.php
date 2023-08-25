@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeysToSubscribeExpressionsTable extends Migration
+class AddForeignKeysToStatusTypeWidgetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class AddForeignKeysToSubscribeExpressionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('subscribe_expressions', function (Blueprint $table) {
-            $table->foreign('device_id', 'fk_subscribe_expressions_to_devices')
+        Schema::table('status_type_widgets', function (Blueprint $table) {
+            $table->foreign('setting_id', 'fk_status_type_widgets_to_settings')
                 ->references('id')
-                ->on('devices')
+                ->on('settings')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
 
-            $table->foreign('status_type_id', 'fk_subscribe_expressions_to_status_types')
+            $table->foreign('status_type_id', 'fk_status_type_widgets_to_status_types')
                 ->references('id')
                 ->on('status_types')
                 ->onUpdate('CASCADE')
@@ -35,9 +35,9 @@ class AddForeignKeysToSubscribeExpressionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('subscribe_expressions', function (Blueprint $table) {
-            $table->dropForeign('fk_subscribe_expressions_to_devices');
-            $table->dropForeign('fk_subscribe_expressions_to_status_types');
+        Schema::table('status_type_widgets', function (Blueprint $table) {
+            $table->dropForeign('fk_status_type_widgets_to_settings');
+            $table->dropForeign('fk_status_type_widgets_to_status_types');
         });
     }
 }
