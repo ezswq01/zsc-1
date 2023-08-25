@@ -37,6 +37,7 @@ class AddForeignKeysToSubscribeExpressionsTable extends Migration
     {
         Schema::table('subscribe_expressions', function (Blueprint $table) {
             $table->dropForeign('fk_subscribe_expressions_to_devices');
+            $table->dropForeign('fk_subscribe_expressions_to_status_types');
         });
     }
 }
