@@ -29,4 +29,9 @@ class StatusType extends Model
     {
         return $this->hasMany(SubscribeExpression::class, 'status_type_id');
     }
+
+    public function status_type_widget()
+    {
+        return $this->hasMany(StatusTypeWidget::class, 'status_type_id');
+    }
 }
