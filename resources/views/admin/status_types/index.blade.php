@@ -45,6 +45,7 @@
         <tr>
           <th>No</th>
           <th>Name</th>
+          <th>Color</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -53,6 +54,7 @@
           <tr>
             <td>{{ $key + 1 }}</td>
             <td><a href="{{ route('admin.status_types.show', $data->id) }}">{{ $data->name }}</a></td>
+            <td>{{ $data->color }}</td>
             <td class="text-center">
               <div class="d-inline-flex">
                 <div class="dropdown">
