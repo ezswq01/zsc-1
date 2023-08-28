@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Device\StoreDeviceRequest;
 use App\Http\Requests\Device\UpdateDeviceRequest;
 use App\Models\Device;
+use App\Models\DeviceLog;
+use App\Models\DeviceStatus;
 use App\Models\DeviceType;
 use App\Models\PublishAction;
 use App\Models\StatusType;
 use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpMqtt\Client\Facades\MQTT;
 
 class DeviceController extends Controller
 {
@@ -169,7 +172,40 @@ class DeviceController extends Controller
     public function publish(Request $request)
     {
         $publish_action = PublishAction::find($request->id);
-        // @TODO: Do something here to publish to MQTT broker
+        $device = $publish_action->device;
+        $subscribe_expression = $device->subscribe_expression;
+
+        // create mqtt connection
+        $mqtt = MQTT::connection();
+
+        // publish message
+        $mqtt->publish($device->publish_topic, $publish_action->value, 1);
+        $mqtt->loop(true, true);
+
+        DB::transaction(function () use ($publish_action, $device, $subscribe_expression) {
+            // save publish action to device log
+            $device_log = DeviceLog::create([
+                'device_id' => $device->id,
+                'value' => $publish_action->value
+            ]);
+
+            // update or create device status
+            foreach ($subscribe_expression as $val) {
+                $expression = str_replace("{{value}}", "'$publish_action->value'", $val->expression);
+
+                if (eval("return $expression;")) {
+                    DeviceStatus::updateOrCreate(
+                        [
+                            'device_id' => $device->id
+                        ],
+                        [
+                            'status_type_id' => $val->status_type_id,
+                            'device_log_id' => $device_log->id
+                        ]
+                    );
+                }
+            }
+        });
 
         return response()->json([
             'success' => true,
