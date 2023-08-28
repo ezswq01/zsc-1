@@ -18,14 +18,14 @@ class SubscribeExpressionSeeder extends Seeder
             [
                 'device_id' => 1,
                 'status_type_id' => 1,
-                'expression' => '{{value}} == open',
+                'expression' => "{{value}} == 'open'",
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'device_id' => 1,
                 'status_type_id' => 2,
-                'expression' => '{{value}} == close',
+                'expression' => "{{value}} == 'close'",
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]
