@@ -27,41 +27,19 @@
 
 @section('content')
   <div class="row">
-    <div class="col-lg-3 col-12">
-      <div class="card bg-teal text-white">
-        <div class="card-body">
-          <div class="d-flex">
-            <h3 class="mb-0">0</h3>
-          </div>
-          <div>
-            Service Type 1
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-12">
-      <div class="card bg-teal text-white">
-        <div class="card-body">
-          <div class="d-flex">
-            <h3 class="mb-0">0</h3>
-          </div>
-          <div>
-            Service Type 2
+    @foreach ($status_types as $status_type)
+      <div class="col-lg-3 col-12">
+        <div class="card text-white" style="background-color: {{ $status_type->color }};">
+          <div class="card-body">
+            <div class="d-flex">
+              <h3 class="mb-0">{{ $status_type->device_status->count() }}</h3>
+            </div>
+            <div>
+              {{ $status_type->name }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-3 col-12">
-      <div class="card bg-teal text-white">
-        <div class="card-body">
-          <div class="d-flex">
-            <h3 class="mb-0">0</h3>
-          </div>
-          <div>
-            Service Type 3
-          </div>
-        </div>
-      </div>
-    </div>
+    @endforeach
   </div>
 @endsection

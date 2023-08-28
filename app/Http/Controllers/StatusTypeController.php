@@ -38,6 +38,7 @@ class StatusTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
+            'color' => 'required'
         ]);
 
         StatusType::create($validated);
@@ -80,6 +81,7 @@ class StatusTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
+            'color' => 'required'
         ]);
 
         StatusType::find($id)->update($validated);
