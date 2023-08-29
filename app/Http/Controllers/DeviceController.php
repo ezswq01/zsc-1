@@ -78,6 +78,12 @@ class DeviceController extends Controller
                     ]);
                 }
             }
+
+            $mqtt = MQTT::connection();
+            $mqtt->subscribe($validated['subscribe_topic'], function (string $topic, string $message) use ($validated) {
+                echo "Received message on topic: {$topic}\n";
+                echo "Received message with payload: {$message}\n";
+            }, 0);
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device created successfully.');
@@ -151,6 +157,9 @@ class DeviceController extends Controller
                     ]);
                 }
             }
+
+            $mqtt = MQTT::connection();
+            Device::subscribeToTopic($mqtt, $validated['subscribe_topic']);
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device updated successfully.');
@@ -190,21 +199,7 @@ class DeviceController extends Controller
             ]);
 
             // update or create device status
-            foreach ($subscribe_expression as $val) {
-                $expression = str_replace("{{value}}", "'$publish_action->value'", $val->expression);
-
-                if (eval("return $expression;")) {
-                    DeviceStatus::updateOrCreate(
-                        [
-                            'device_id' => $device->id
-                        ],
-                        [
-                            'status_type_id' => $val->status_type_id,
-                            'device_log_id' => $device_log->id
-                        ]
-                    );
-                }
-            }
+            Device::evalValue($device->id, $device_log->id, $subscribe_expression, $publish_action->value);
         });
 
         return response()->json([
