@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeviceType\StoreDeviceTypeRequest;
+use App\Http\Requests\DeviceType\UpdateDeviceTypeRequest;
 use App\Models\DeviceType;
 use Illuminate\Http\Request;
 
@@ -34,13 +36,12 @@ class DeviceTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDeviceTypeRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-        ]);
+        $validated = $request->all();
 
         DeviceType::create($validated);
+
         return redirect()->route('admin.device_types.index')
             ->with('success', 'Device Type created successfully.');
     }
@@ -76,11 +77,9 @@ class DeviceTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateDeviceTypeRequest $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-        ]);
+        $validated = $request->all();
 
         DeviceType::find($id)->update($validated);
 
