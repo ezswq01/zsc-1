@@ -6,7 +6,6 @@ use App\Http\Requests\Device\StoreDeviceRequest;
 use App\Http\Requests\Device\UpdateDeviceRequest;
 use App\Models\Device;
 use App\Models\DeviceLog;
-use App\Models\DeviceStatus;
 use App\Models\DeviceType;
 use App\Models\PublishAction;
 use App\Models\StatusType;
