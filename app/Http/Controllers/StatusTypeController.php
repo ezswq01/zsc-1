@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StatusType\StoreStatusTypeRequest;
+use App\Http\Requests\StatusType\UpdateStatusTypeRequest;
 use App\Models\StatusType;
 use Illuminate\Http\Request;
 
@@ -34,12 +36,9 @@ class StatusTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreStatusTypeRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-            'color' => 'required'
-        ]);
+        $validated = $request->all();
 
         StatusType::create($validated);
         return redirect()->route('admin.status_types.index')
@@ -77,12 +76,9 @@ class StatusTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateStatusTypeRequest $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-            'color' => 'required'
-        ]);
+        $validated = $request->all();
 
         StatusType::find($id)->update($validated);
 
