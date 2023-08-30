@@ -79,10 +79,7 @@ class DeviceController extends Controller
             }
 
             $mqtt = MQTT::connection();
-            $mqtt->subscribe($validated['subscribe_topic'], function (string $topic, string $message) use ($validated) {
-                echo "Received message on topic: {$topic}\n";
-                echo "Received message with payload: {$message}\n";
-            }, 0);
+            Device::subscribeToTopic($mqtt, $validated['subscribe_topic']);
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device created successfully.');
