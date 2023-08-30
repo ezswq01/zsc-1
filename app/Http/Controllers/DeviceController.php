@@ -94,7 +94,9 @@ class DeviceController extends Controller
     public function show($id)
     {
         $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
-        return view('admin.devices.show', compact('data'));
+        $device_types = DeviceType::all(['id', 'name']);
+        $status_types = StatusType::all(['id', 'name']);
+        return view('admin.devices.show', compact('data', 'device_types', 'status_types'));
     }
 
     /**

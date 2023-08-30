@@ -63,7 +63,7 @@
               <div class="col-lg-8">
                 <select disabled class="form-control select" data-placeholder="Select Device Type" name="device_type_id">
                   <option></option>
-                  @foreach (\App\Models\DeviceType::all() as $device_type)
+                  @foreach ($device_types as $device_type)
                     <option {{ $data->device_type_id == $device_type->id ? 'selected' : '' }}
                       value="{{ $device_type->id }}">{{ $device_type->name }}</option>
                   @endforeach
