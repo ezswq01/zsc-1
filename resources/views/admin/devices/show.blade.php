@@ -134,11 +134,11 @@
       <div class="row mt-3">
         <label class="col-lg-4 col-form-label">Status Type</label>
         <div class="col-lg-8">
-          <select disabled class="form-control select2modify" data-placeholder="Select Status Type"
+          <select class="form-control select2modify" data-placeholder="Select Status Type"
             name="subscribe_expressions[status_type][]">
             <option></option>
-            @foreach (\App\Models\DeviceType::all() as $device_type)
-              <option value="{{ $device_type->id }}">{{ $device_type->name }}</option>
+            @foreach ($status_types as $status_type)
+              <option value="{{ $status_type->id }}">{{ $status_type->name }}</option>
             @endforeach
           </select>
         </div>
