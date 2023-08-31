@@ -82,6 +82,14 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item active {{ $active == 'device_logs' ? 'nav-item-open' : '' }}">
+          <a class="nav-link" href="{{ route('admin.device_logs.index') }}">
+            <i class="ph-notebook"></i>
+            <span>
+              Log and Report
+            </span>
+          </a>
+        </li>
       </ul>
     </div>
     <!-- /main navigation -->
