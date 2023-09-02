@@ -45,17 +45,17 @@
                   required type="text">
               </div>
             </div>
-            <div class="row mt-3">
+            <div class="row mb-3">
               <label class="col-lg-4 col-form-label">Status Card Active</label>
               <div class="col-lg-8">
                 <select multiple="multiple" class="form-control select" data-placeholder="Select Status Card Active"
                   name="status_types[]">
                   <option></option>
                   @foreach ($status_types as $status_type)
-                    @foreach ($status_type_widgets as $status_type_widget)
-                      <option {{ $status_type_widget->id == $status_type->id ? 'selected' : '' }}
-                        value="{{ $status_type->id }}">{{ $status_type->name }}</option>
-                    @endforeach
+                    @php
+                      $selected = in_array($status_type->id, $status_type_widgets->pluck('id')->toArray()) ? 'selected' : '';
+                    @endphp
+                    <option {{ $selected }} value="{{ $status_type->id }}">{{ $status_type->name }}</option>
                   @endforeach
                 </select>
               </div>
