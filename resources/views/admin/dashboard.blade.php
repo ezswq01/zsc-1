@@ -27,15 +27,15 @@
 
 @section('content')
   <div class="row">
-    @foreach ($status_types as $status_type)
+    @foreach ($status_type_widgets as $status_type_widget)
       <div class="col-lg-3 col-12">
-        <div class="card text-white" style="background-color: {{ $status_type->color }};">
+        <div class="card text-white" style="background-color: {{ $status_type_widget->status_type->color }};">
           <div class="card-body">
             <div class="d-flex">
-              <h3 class="mb-0">{{ $status_type->device_status->count() }}</h3>
+              <h3 class="mb-0">{{ $status_type_widget->status_type->device_status->count() }}</h3>
             </div>
             <div>
-              {{ $status_type->name }}
+              {{ $status_type_widget->status_type->name }}
             </div>
           </div>
         </div>

@@ -90,6 +90,14 @@
             </span>
           </a>
         </li>
+        <li class="nav-item active {{ $active == 'settings' ? 'nav-item-open' : '' }}">
+          <a class="nav-link" href="{{ route('admin.settings.index') }}">
+            <i class="ph-gear"></i>
+            <span>
+              Setting
+            </span>
+          </a>
+        </li>
       </ul>
     </div>
     <!-- /main navigation -->

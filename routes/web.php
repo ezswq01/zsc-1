@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceLogController;
 use App\Http\Controllers\DeviceTypeController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::name('admin.')->prefix('admin')->group(function () {
+    Route::resource('settings', SettingController::class)->only('index', 'update');
     Route::resource('devices', DeviceController::class);
     Route::resource('device_types', DeviceTypeController::class);
     Route::resource('status_types', StatusTypeController::class);
