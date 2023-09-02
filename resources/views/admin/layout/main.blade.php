@@ -1,28 +1,17 @@
 <!DOCTYPE html>
-<html dir="ltr"
-  lang="en">
+<html dir="ltr" lang="en">
 
 <head>
   <meta charset="utf-8">
-  <meta content="IE=edge"
-    http-equiv="X-UA-Compatible">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    name="viewport">
-  <title>MCC IOT</title>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <title>{{ \App\Models\Setting::first()->app_name }}</title>
 
   <!-- Global stylesheets -->
-  <link href="/assets/fonts/inter/inter.css"
-    rel="stylesheet"
-    type="text/css">
-  <link href="/assets/icons/phosphor/styles.min.css"
-    rel="stylesheet"
-    type="text/css">
-  <link href="/assets_2/css/ltr/all.min.css"
-    id="stylesheet"
-    rel="stylesheet"
-    type="text/css">
-  <link href="/assets_2/css/custom.css"
-    rel="stylesheet">
+  <link href="/assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
+  <link href="/assets/icons/phosphor/styles.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets_2/css/ltr/all.min.css" id="stylesheet" rel="stylesheet" type="text/css">
+  <link href="/assets_2/css/custom.css" rel="stylesheet">
   <!-- /global stylesheets -->
 
   <!-- Core JS files -->
