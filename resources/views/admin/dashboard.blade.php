@@ -21,18 +21,27 @@
           <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
         </a>
       </div>
+      <div class="ms-auto d-flex gap-3 py-3 bg-white">
+        <a href="{{ route('admin.dashboard.index') }}?area=jakarta">Jakarta</a>
+        <span>|</span>
+        <a href="{{ route('admin.dashboard.index') }}?area=bandung">Bandung</a>
+        <span>|</span>
+        <a href="{{ route('admin.dashboard.index') }}?area=depok">Depok</a>
+      </div>
     </div>
   </div>
 @endpush
 
 @section('content')
-  <div class="row">
+  <div class="row g-3">
     @foreach ($status_type_widgets as $status_type_widget)
       <div class="col-lg-3 col-12">
         <div class="card text-white" style="background-color: {{ $status_type_widget->status_type->color }};">
           <div class="card-body">
             <div class="d-flex">
-              <h3 class="mb-0">{{ $status_type_widget->status_type->device_status->count() }}</h3>
+              <h3 class="mb-0">
+                {{ $status_type_widget->status_type->device_status->where('device', '!=', null)->count() }}
+              </h3>
             </div>
             <div>
               {{ $status_type_widget->status_type->name }}

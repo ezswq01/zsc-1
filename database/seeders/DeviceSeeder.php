@@ -26,8 +26,8 @@ class DeviceSeeder extends Seeder
             [
                 'device_id' => 'LBBES1',
                 'device_type_id' => 2,
-                'publish_topic' => 'cpc/bandung/door-2',
-                'subscribe_topic' => 'cpc/bandung/door-2',
+                'publish_topic' => 'cpc/jakarta/door-2',
+                'subscribe_topic' => 'cpc/jakarta/door-2',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]
