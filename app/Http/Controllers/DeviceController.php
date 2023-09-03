@@ -54,8 +54,8 @@ class DeviceController extends Controller
             $device = Device::create([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
-                'publish_topic' => $validated['publish_topic'],
-                'subscribe_topic' => $validated['subscribe_topic'],
+                'publish_topic' => strtolower($validated['publish_topic']),
+                'subscribe_topic' => strtolower($validated['subscribe_topic']),
             ]);
 
             if ($request->subscribe_expressions) {
@@ -129,8 +129,8 @@ class DeviceController extends Controller
             Device::find($id)->update([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
-                'publish_topic' => $validated['publish_topic'],
-                'subscribe_topic' => $validated['subscribe_topic'],
+                'publish_topic' => strtolower($validated['publish_topic']),
+                'subscribe_topic' => strtolower($validated['subscribe_topic']),
             ]);
 
             SubscribeExpression::where('device_id', $id)->delete();

@@ -22,6 +22,13 @@ class DeviceStatusSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
+            [
+                'device_id' => 2,
+                'status_type_id' => 1,
+                'device_log_id' => 2,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
         ];
 
         DeviceStatus::insert($device_status);
