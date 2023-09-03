@@ -33,7 +33,7 @@
 @endpush
 
 @section('content')
-  <div class="row g-3">
+  <div class="row gx-3">
     @foreach ($status_type_widgets as $status_type_widget)
       <div class="col-lg-3 col-12">
         <div class="card text-white" style="background-color: {{ $status_type_widget->status_type->color }};">
