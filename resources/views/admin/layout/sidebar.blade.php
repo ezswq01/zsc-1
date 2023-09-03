@@ -37,7 +37,7 @@
           <i class="ph-dots-three sidebar-resize-show"></i>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/admin/dashboard">
+          <a class="nav-link {{ $active == 'dashboard' ? 'active' : '' }}" href="/admin/dashboard">
             <i class="ph-house"></i>
             <span>
               Dashboard
@@ -82,16 +82,16 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item active {{ $active == 'device_logs' ? 'nav-item-open' : '' }}">
-          <a class="nav-link" href="{{ route('admin.device_logs.index') }}">
+        <li class="nav-item">
+          <a class="nav-link {{ $active == 'device_logs' ? 'active' : '' }}" href="{{ route('admin.device_logs.index') }}">
             <i class="ph-notebook"></i>
             <span>
               Log and Report
             </span>
           </a>
         </li>
-        <li class="nav-item active {{ $active == 'settings' ? 'nav-item-open' : '' }}">
-          <a class="nav-link" href="{{ route('admin.settings.index') }}">
+        <li class="nav-item">
+          <a class="nav-link {{ $active == 'settings' ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
             <i class="ph-gear"></i>
             <span>
               Setting
