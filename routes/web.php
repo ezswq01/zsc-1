@@ -18,10 +18,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Temporary redirect to devices index
 Route::get('/', function () {
-    return redirect()->route('admin.devices.index');
+    return redirect()->route('admin.dashboard.index');
 });
 
 Route::name('admin.')->prefix('admin')->group(function () {
