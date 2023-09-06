@@ -37,7 +37,7 @@
             List of All Device Logs.
         </div>
 
-        <table class="table datatable-basic">
+        <table id="datatable" class="table">
             <thead>
                 <tr>
                     <th>No</th>
@@ -46,17 +46,85 @@
                     <th>Time</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($device_logs as $key => $device_log)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $device_log->device->device_id }}</td>
-                        <td>{{ $device_log->value }}</td>
-                        <td>{{ $device_log->created_at }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
         </table>
     </div>
     <!-- /basic datatable -->
 @endsection
+
+@push('js')
+    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const exportOption = [0, 1, 2, 3];
+            const buttons = [{
+                extend: 'copyHtml5',
+                className: 'btn btn-light',
+                exportOptions: {
+                    columns: exportOption
+                }
+            }, {
+                extend: 'excelHtml5',
+                className: 'btn btn-light',
+                exportOptions: {
+                    columns: exportOption
+                },
+                filename: function() {
+                    return getExportFilename('device_logs')
+                },
+            }, {
+                extend: 'csvHtml5',
+                className: 'btn btn-light',
+                exportOptions: {
+                    columns: exportOption
+                },
+                filename: function() {
+                    return getExportFilename('device_logs')
+                },
+            }, {
+                extend: 'pdfHtml5',
+                className: 'btn btn-light',
+                exportOptions: {
+                    columns: exportOption
+                },
+                filename: function() {
+                    return getExportFilename('device_logs')
+                },
+            }, ];
+
+            const datatable = $('#datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('admin.device_logs.index') !!}',
+                autoWidth: false,
+                dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
+                buttons,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                    },
+                    {
+                        data: 'device_id',
+                        name: 'device_id'
+                    },
+                    {
+                        data: 'value',
+                        name: 'value'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    }
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    searchable: false,
+                    targets: 0
+                }],
+                order: []
+            });
+        });
+    </script>
+@endpush
