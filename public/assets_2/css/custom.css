@@ -6,3 +6,12 @@ table img {
 .colorpick-eyedropper-input-trigger {
     display: none !important;
 }
+
+.dt-buttons {
+    order: 2;
+}
+
+.dataTables_length {
+    margin-left: auto;
+    margin-right: 16px;
+}

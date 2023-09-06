@@ -270,6 +270,7 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: $(el).data('id'),
+                    is_testing: true,
                 },
                 success: function(response) {
                     alert(response.message);
