@@ -125,7 +125,7 @@
                     targets: 0
                 }, {
                     orderable: false,
-                    targets: 2
+                    targets: 3
                 }],
                 order: []
             });
