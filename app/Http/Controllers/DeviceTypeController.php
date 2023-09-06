@@ -33,8 +33,7 @@ class DeviceTypeController extends Controller
                 ->toJson();
         }
 
-        $datas = DeviceType::all();
-        return view('admin.device_types.index', compact('datas'));
+        return view('admin.device_types.index');
     }
 
     /**
