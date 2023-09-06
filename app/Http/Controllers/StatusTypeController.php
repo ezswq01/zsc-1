@@ -33,8 +33,7 @@ class StatusTypeController extends Controller
                 ->toJson();
         }
 
-        $datas = StatusType::all();
-        return view('admin.status_types.index', compact('datas'));
+        return view('admin.status_types.index');
     }
 
     /**
