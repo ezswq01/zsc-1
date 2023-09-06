@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DeviceLog;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class DeviceLogController extends Controller
 {
@@ -14,9 +15,24 @@ class DeviceLogController extends Controller
      */
     public function index()
     {
-        $device_logs = DeviceLog::with('device')->get();
+        if (request()->ajax()) {
+            return DataTables::of(DeviceLog::query()->with('device'))
+                ->addIndexColumn()
+                ->addColumn('device_id', function ($model) {
+                    return $model->device->device_id;
+                })
+                ->addColumn('created_at', function ($model) {
+                    return date('Y-m-d H:i:s', strtotime($model->created_at));
+                })
+                ->setRowAttr([
+                    'data-model-id' => function ($model) {
+                        return $model->id;
+                    }
+                ])
+                ->toJson();
+        }
 
-        return view('admin.device_logs.index', compact('device_logs'));
+        return view('admin.device_logs.index');
     }
 
     /**
