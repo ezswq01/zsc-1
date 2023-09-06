@@ -6,6 +6,7 @@ use App\Http\Requests\StatusType\StoreStatusTypeRequest;
 use App\Http\Requests\StatusType\UpdateStatusTypeRequest;
 use App\Models\StatusType;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class StatusTypeController extends Controller
 {
@@ -16,6 +17,22 @@ class StatusTypeController extends Controller
      */
     public function index()
     {
+        if (request()->ajax()) {
+            return DataTables::of(StatusType::query())
+                ->addIndexColumn()
+                ->addColumn('name', function ($model) {
+                    return '<a href="' . route('admin.status_types.show', $model->id) . '">' . $model->name . '</a>';
+                })
+                ->addColumn('options', 'admin.status_types.datatables.options')
+                ->setRowAttr([
+                    'data-model-id' => function ($model) {
+                        return $model->id;
+                    }
+                ])
+                ->rawColumns(['name', 'options'])
+                ->toJson();
+        }
+
         $datas = StatusType::all();
         return view('admin.status_types.index', compact('datas'));
     }
