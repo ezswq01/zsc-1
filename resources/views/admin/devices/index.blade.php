@@ -73,7 +73,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device')
+                    return getExportFilename('devices')
                 },
             }, {
                 extend: 'csvHtml5',
@@ -82,7 +82,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device')
+                    return getExportFilename('devices')
                 },
             }, {
                 extend: 'pdfHtml5',
@@ -91,7 +91,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device')
+                    return getExportFilename('devices')
                 },
             }, ];
 
