@@ -67,7 +67,6 @@ class Device extends Model
                     // Subscribe Logic
                     $subscribe_expression = $device->subscribe_expression;
                     Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
-
                 });
                 echo "Received message success!\n";
             } catch (\Exception $e) {
@@ -82,13 +81,8 @@ class Device extends Model
             $expression = str_replace("{{value}}", "'$value'", $val->expression);
             if (eval("return $expression;")) {
                 DeviceStatus::updateOrCreate(
-                    [
-                        'device_id' => $device_id
-                    ],
-                    [
-                        'status_type_id' => $val->status_type_id,
-                        'device_log_id' => $device_log_id
-                    ]
+                    ['device_id' => $device_id],
+                    ['status_type_id' => $val->status_type_id, 'device_log_id' => $device_log_id]
                 );
             }
         }

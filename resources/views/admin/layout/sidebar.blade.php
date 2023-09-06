@@ -44,60 +44,66 @@
             </span>
           </a>
         </li>
-        <li class="nav-item nav-item-submenu {{ $active == 'status_types' ? 'nav-item-expanded nav-item-open' : '' }}">
-          <a class="nav-link" href="#">
-            <i class="ph-activity"></i>
-            <span>Status Type</span>
-          </a>
-          <ul class="nav-group-sub collapse {{ $active == 'status_types' ? 'show' : '' }}">
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.status_types.index') }}">All</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.status_types.create') }}">Create</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item-header">
-          <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">
-            Device</div>
-          <i class="ph-dots-three sidebar-resize-show"></i>
-        </li>
-        <li class="nav-item nav-item-submenu {{ $active == 'device_types' ? 'nav-item-expanded nav-item-open' : '' }}">
-          <a class="nav-link" href="#">
-            <i class="ph-bookmarks-simple"></i>
-            <span>Device Type</span>
-          </a>
-          <ul class="nav-group-sub collapse {{ $active == 'device_types' ? 'show' : '' }}">
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.index') }}">All</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.create') }}">Create</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item nav-item-submenu {{ $active == 'devices' ? 'nav-item-expanded nav-item-open' : '' }}">
-          <a class="nav-link" href="#">
-            <i class="ph-atom"></i>
-            <span>Device</span>
-          </a>
-          <ul class="nav-group-sub collapse {{ $active == 'devices' ? 'show' : '' }}">
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.index') }}">All</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.create') }}">Create</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ $active == 'device_logs' ? 'active' : '' }}" href="{{ route('admin.device_logs.index') }}">
-            <i class="ph-notebook"></i>
-            <span>
-              Log and Report
-            </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {{ $active == 'settings' ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
-            <i class="ph-gear"></i>
-            <span>
-              Setting
-            </span>
-          </a>
-        </li>
+        @if (auth()->check() && auth()->user()->role == 'admin')
+          <li
+            class="nav-item nav-item-submenu {{ $active == 'status_types' ? 'nav-item-expanded nav-item-open' : '' }}">
+            <a class="nav-link" href="#">
+              <i class="ph-activity"></i>
+              <span>Status Type</span>
+            </a>
+            <ul class="nav-group-sub collapse {{ $active == 'status_types' ? 'show' : '' }}">
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.status_types.index') }}">All</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.status_types.create') }}">Create</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item-header">
+            <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">
+              Device</div>
+            <i class="ph-dots-three sidebar-resize-show"></i>
+          </li>
+          <li
+            class="nav-item nav-item-submenu {{ $active == 'device_types' ? 'nav-item-expanded nav-item-open' : '' }}">
+            <a class="nav-link" href="#">
+              <i class="ph-bookmarks-simple"></i>
+              <span>Device Type</span>
+            </a>
+            <ul class="nav-group-sub collapse {{ $active == 'device_types' ? 'show' : '' }}">
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.index') }}">All</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.create') }}">Create</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item nav-item-submenu {{ $active == 'devices' ? 'nav-item-expanded nav-item-open' : '' }}">
+            <a class="nav-link" href="#">
+              <i class="ph-atom"></i>
+              <span>Device</span>
+            </a>
+            <ul class="nav-group-sub collapse {{ $active == 'devices' ? 'show' : '' }}">
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.index') }}">All</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.create') }}">Create</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ $active == 'device_logs' ? 'active' : '' }}"
+              href="{{ route('admin.device_logs.index') }}">
+              <i class="ph-notebook"></i>
+              <span>
+                Log and Report
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ $active == 'settings' ? 'active' : '' }}"
+              href="{{ route('admin.settings.index') }}">
+              <i class="ph-gear"></i>
+              <span>
+                Setting
+              </span>
+            </a>
+          </li>
+        @endif
       </ul>
     </div>
     <!-- /main navigation -->

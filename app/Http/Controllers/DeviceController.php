@@ -6,6 +6,7 @@ use App\Http\Requests\Device\StoreDeviceRequest;
 use App\Http\Requests\Device\UpdateDeviceRequest;
 use App\Models\Device;
 use App\Models\DeviceLog;
+use App\Models\DeviceStatus;
 use App\Models\DeviceType;
 use App\Models\PublishAction;
 use App\Models\StatusType;
@@ -213,7 +214,7 @@ class DeviceController extends Controller
     {
         $publish_action = PublishAction::find($request->id);
         $device = $publish_action->device;
-        $subscribe_expression = $device->subscribe_expression;
+        // $subscribe_expression = $device->subscribe_expression;
 
         // create mqtt connection
         $mqtt = MQTT::connection();
@@ -222,15 +223,23 @@ class DeviceController extends Controller
         $mqtt->publish($device->publish_topic, $publish_action->value, 1);
         $mqtt->loop(true, true);
 
-        DB::transaction(function () use ($publish_action, $device, $subscribe_expression) {
+        DB::transaction(function () use ($publish_action, $device, $request) {
+
             // save publish action to device log
-            $device_log = DeviceLog::create([
+            DeviceLog::create([
                 'device_id' => $device->id,
                 'value' => $publish_action->value
             ]);
 
+            // @note : this is not needed
             // update or create device status
-            Device::evalValue($device->id, $device_log->id, $subscribe_expression, $publish_action->value);
+            // Device::evalValue($device->id, $device_log->id, $subscribe_expression, $publish_action->value);
+
+            // dashboard action only.
+            // delete current device_status to point that i handled.
+            if (!$request->is_testing) {
+                DeviceStatus::where('device_id', $device->id)->delete();
+            }
         });
 
         return response()->json([
