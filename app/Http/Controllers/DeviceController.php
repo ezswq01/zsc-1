@@ -13,6 +13,7 @@ use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpMqtt\Client\Facades\MQTT;
+use Yajra\DataTables\Facades\DataTables;
 
 class DeviceController extends Controller
 {
@@ -23,8 +24,23 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        $datas = Device::all();
-        return view('admin.devices.index', compact('datas'));
+        if (request()->ajax()) {
+            return DataTables::of(Device::query())
+                ->addIndexColumn()
+                ->addColumn('device_id', function ($model) {
+                    return '<a href="' . route('admin.devices.show', $model->id) . '">' . $model->device_id . '</a>';
+                })
+                ->addColumn('options', 'admin.devices.datatables.options')
+                ->setRowAttr([
+                    'data-model-id' => function ($model) {
+                        return $model->id;
+                    }
+                ])
+                ->rawColumns(['device_id', 'options'])
+                ->toJson();
+        }
+
+        return view('admin.devices.index');
     }
 
     /**
