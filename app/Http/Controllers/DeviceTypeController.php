@@ -21,7 +21,7 @@ class DeviceTypeController extends Controller
             return DataTables::of(DeviceType::query())
                 ->addIndexColumn()
                 ->addColumn('name', function ($model) {
-                    return '<a href="' . route('admin.devices.show', $model->id) . '">' . $model->name . '</a>';
+                    return '<a href="' . route('admin.device_types.show', $model->id) . '">' . $model->name . '</a>';
                 })
                 ->addColumn('options', 'admin.device_types.datatables.options')
                 ->setRowAttr([
