@@ -6,6 +6,7 @@ use App\Http\Requests\DeviceType\StoreDeviceTypeRequest;
 use App\Http\Requests\DeviceType\UpdateDeviceTypeRequest;
 use App\Models\DeviceType;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class DeviceTypeController extends Controller
 {
@@ -16,6 +17,22 @@ class DeviceTypeController extends Controller
      */
     public function index()
     {
+        if (request()->ajax()) {
+            return DataTables::of(DeviceType::query())
+                ->addIndexColumn()
+                ->addColumn('name', function ($model) {
+                    return '<a href="' . route('admin.devices.show', $model->id) . '">' . $model->name . '</a>';
+                })
+                ->addColumn('options', 'admin.device_types.datatables.options')
+                ->setRowAttr([
+                    'data-model-id' => function ($model) {
+                        return $model->id;
+                    }
+                ])
+                ->rawColumns(['name', 'options'])
+                ->toJson();
+        }
+
         $datas = DeviceType::all();
         return view('admin.device_types.index', compact('datas'));
     }
