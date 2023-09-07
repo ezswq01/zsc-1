@@ -16,13 +16,16 @@ class DeviceLogController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(DeviceLog::query()->with('device'))
+            return DataTables::eloquent(DeviceLog::with('device')->select('device_logs.*'))
                 ->addIndexColumn()
                 ->addColumn('device_id', function ($model) {
                     return $model->device->device_id;
                 })
-                ->addColumn('created_at', function ($model) {
-                    return date('Y-m-d H:i:s', strtotime($model->created_at));
+                ->editColumn('created_at', function ($model) {
+                    return [
+                        'display' => date('Y-m-d H:i:s', strtotime($model->created_at)),
+                        'timestamp' => strtotime($model->created_at)
+                    ];
                 })
                 ->setRowAttr([
                     'data-model-id' => function ($model) {

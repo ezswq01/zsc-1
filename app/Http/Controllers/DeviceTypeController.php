@@ -20,7 +20,7 @@ class DeviceTypeController extends Controller
         if (request()->ajax()) {
             return DataTables::of(DeviceType::query())
                 ->addIndexColumn()
-                ->addColumn('name', function ($model) {
+                ->editColumn('name', function ($model) {
                     return '<a href="' . route('admin.device_types.show', $model->id) . '">' . $model->name . '</a>';
                 })
                 ->addColumn('options', 'admin.device_types.datatables.options')

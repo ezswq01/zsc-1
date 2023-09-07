@@ -28,7 +28,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xl-7 col-12">
+        <div class="col-xl-8 col-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">Detail Device</h5>
@@ -99,8 +99,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-xl-5 col-12">
+    <div class="row">
+        <div class="col-xl-8 col-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">Device Logs</h5>
@@ -324,7 +326,10 @@
                         name: 'value'
                     },
                     {
-                        data: 'created_at',
+                        data: {
+                            '_': 'created_at.display',
+                            'sort': 'created_at.timestamp'
+                        },
                         name: 'created_at'
                     }
                 ],

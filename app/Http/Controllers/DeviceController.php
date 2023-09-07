@@ -28,7 +28,7 @@ class DeviceController extends Controller
         if (request()->ajax()) {
             return DataTables::of(Device::query())
                 ->addIndexColumn()
-                ->addColumn('device_id', function ($model) {
+                ->editColumn('device_id', function ($model) {
                     return '<a href="' . route('admin.devices.show', $model->id) . '">' . $model->device_id . '</a>';
                 })
                 ->addColumn('options', 'admin.devices.datatables.options')
@@ -113,8 +113,11 @@ class DeviceController extends Controller
         if (request()->ajax()) {
             return DataTables::of(DeviceLog::query()->where('device_id', $id))
                 ->addIndexColumn()
-                ->addColumn('created_at', function ($model) {
-                    return date('Y-m-d H:i:s', strtotime($model->created_at));
+                ->editColumn('created_at', function ($model) {
+                    return [
+                        'display' => date('Y-m-d H:i:s', strtotime($model->created_at)),
+                        'timestamp' => strtotime($model->created_at)
+                    ];
                 })
                 ->setRowAttr([
                     'data-model-id' => function ($model) {

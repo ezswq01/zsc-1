@@ -107,14 +107,17 @@
                     },
                     {
                         data: 'device_id',
-                        name: 'device_id'
+                        name: 'device.device_id'
                     },
                     {
                         data: 'value',
                         name: 'value'
                     },
                     {
-                        data: 'created_at',
+                        data: {
+                            '_': 'created_at.display',
+                            'sort': 'created_at.timestamp'
+                        },
                         name: 'created_at'
                     }
                 ],

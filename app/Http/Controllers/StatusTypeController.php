@@ -20,7 +20,7 @@ class StatusTypeController extends Controller
         if (request()->ajax()) {
             return DataTables::of(StatusType::query())
                 ->addIndexColumn()
-                ->addColumn('name', function ($model) {
+                ->editColumn('name', function ($model) {
                     return '<a href="' . route('admin.status_types.show', $model->id) . '">' . $model->name . '</a>';
                 })
                 ->addColumn('options', 'admin.status_types.datatables.options')
