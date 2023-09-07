@@ -114,7 +114,8 @@
                   @if ($device_status->device)
                     @if ($device_status->device->publish_action)
                       @foreach ($device_status->device->publish_action as $publish_action)
-                        <div id="publish_{{ $device_status->id }}_{{ $publish_action->id }}" class="modal fade" tabindex="-1">
+                        <div id="publish_{{ $device_status->id }}_{{ $publish_action->id }}" class="publish_{{ $device_status->id }} modal fade"
+                          tabindex="-1">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -133,7 +134,7 @@
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary"
-                                  onclick="handlePublishAction('{{ $publish_action->id }}')">Submit</button>
+                                  onclick="handlePublishAction('{{ $device_status->id }}', '{{ $publish_action->id }}')">Submit</button>
                               </div>
                             </div>
                           </div>
@@ -194,18 +195,28 @@
       $(`#${id}`).toggle();
     }
 
-    function handlePublishAction(id) {
+    function handlePublishAction(device_status_id, publish_action_id) {
       if (!confirm('Are you sure want to publish?')) return false;
+
+      const textarea = $(`#publish_${device_status_id}_${publish_action_id} textarea`).val()
 
       $.ajax({
         url: '/admin/devices/publish',
         type: 'POST',
         data: {
           _token: '{{ csrf_token() }}',
-          id: id,
-          notes: $(`#publish_${id} textarea`).val(),
+          id: publish_action_id,
+          device_status_id: device_status_id,
+          notes: textarea,
         },
         success: function(response) {
+          // @TODO : Change Icon to marked
+          //
+          //
+          
+          $(`#open_${device_status_id} p`).html(textarea);
+          $(`#create_${device_status_id} textarea`).val(textarea);
+          $(`.publish_${device_status_id} textarea`).val(textarea);
           alert(response.message);
         },
         error: function(error) {
@@ -217,18 +228,24 @@
     function handleSubmitNotes(device_status_id) {
       if (!confirm('Are you sure want to submit this notes?')) return false;
 
+      const textarea = $(`#create_${device_status_id} textarea`).val()
+
       $.ajax({
         url: '/admin/device_status/notes',
         type: 'POST',
         data: {
           _token: '{{ csrf_token() }}',
           device_status_id: device_status_id,
-          notes: $(`#create_${device_status_id} textarea`).val(),
+          notes: textarea,
           marked_as_read: $(`#marked_${device_status_id}`).is(':checked'),
         },
         success: function(response) {
+          // @TODO : Change Icon to marked
+          //
+          //
+
+          $(`#open_${device_status_id} p`).html(textarea);
           alert(response.message);
-          $(`#create_${device_status_id} p`).html($(`#create_${device_status_id} textarea`).val());
         },
         error: function(error) {
           alert("Something went wrong!");

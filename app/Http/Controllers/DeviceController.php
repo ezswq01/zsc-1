@@ -236,8 +236,9 @@ class DeviceController extends Controller
             // dashboard action only.
             // delete current device_status to point that i handled.
             if (!$request->is_testing) {
-                DeviceStatus::where('device_id', $device->id)->update([
-                    'marked_as_read' => true
+                DeviceStatus::find($request->device_status_id)->update([
+                    'marked_as_read' => true,
+                    'notes' => $request->notes
                 ]);
             }
         });
