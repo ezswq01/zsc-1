@@ -43,6 +43,7 @@
                     <th>No</th>
                     <th>Device ID</th>
                     <th>Command</th>
+                    <th>Type</th>
                     <th>Time</th>
                 </tr>
             </thead>
@@ -112,6 +113,10 @@
                     {
                         data: 'value',
                         name: 'value'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
                     },
                     {
                         data: {

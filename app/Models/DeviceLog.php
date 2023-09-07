@@ -17,6 +17,7 @@ class DeviceLog extends Model
     protected $fillable = [
         'device_id',
         'value',
+        'type',
         'created_at',
         'updated_at'
     ];

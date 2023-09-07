@@ -94,9 +94,6 @@ class DeviceController extends Controller
                     ]);
                 }
             }
-
-            $mqtt = MQTT::connection();
-            Device::subscribeToTopic($mqtt, $validated['subscribe_topic']);
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device created successfully.');
@@ -192,9 +189,6 @@ class DeviceController extends Controller
                     ]);
                 }
             }
-
-            $mqtt = MQTT::connection();
-            Device::subscribeToTopic($mqtt, $validated['subscribe_topic']);
         });
 
         return redirect()->route('admin.devices.index')->with('success', 'Device updated successfully.');
@@ -231,7 +225,8 @@ class DeviceController extends Controller
             // save publish action to device log
             DeviceLog::create([
                 'device_id' => $device->id,
-                'value' => $publish_action->value
+                'value' => $publish_action->value,
+                'type' => 'publish'
             ]);
 
             // @note : this is not needed
@@ -241,7 +236,9 @@ class DeviceController extends Controller
             // dashboard action only.
             // delete current device_status to point that i handled.
             if (!$request->is_testing) {
-                DeviceStatus::where('device_id', $device->id)->delete();
+                DeviceStatus::where('device_id', $device->id)->update([
+                    'marked_as_read' => true
+                ]);
             }
         });
 

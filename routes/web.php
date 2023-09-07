@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceLogController;
+use App\Http\Controllers\DeviceStatusController;
 use App\Http\Controllers\DeviceTypeController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusTypeController;
@@ -40,4 +41,5 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
 
     // Ajax routes
     Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
+    Route::post('/device_status/notes', [DeviceStatusController::class, 'notes'])->name('device_status.notes');
 });

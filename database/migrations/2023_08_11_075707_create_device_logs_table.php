@@ -17,6 +17,7 @@ class CreateDeviceLogsTable extends Migration
             $table->id();
             $table->foreignId('device_id')->nullable()->index('fk_device_logs_to_devices');
             $table->string('value');
+            $table->string('type');
             $table->timestamps();
         });
     }

@@ -21,15 +21,6 @@
           <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
         </a>
       </div>
-      <div class="ms-auto d-flex gap-3 py-3 bg-white">
-        <a href="{{ route('admin.dashboard.index') }}">All</a>
-        <span>|</span>
-        <a href="{{ route('admin.dashboard.index') }}?area=jakarta">Jakarta</a>
-        <span>|</span>
-        <a href="{{ route('admin.dashboard.index') }}?area=bandung">Bandung</a>
-        <span>|</span>
-        <a href="{{ route('admin.dashboard.index') }}?area=depok">Depok</a>
-      </div>
     </div>
   </div>
 @endpush
@@ -42,7 +33,7 @@
           <div class="card-body">
             <div class="d-flex">
               <h3 class="mb-0">
-                {{ $status_type_widget->status_type->device_status->where('device', '!=', null)->count() }}
+                {{ $status_type_widget->status_type->device_status->where('mark_as_read', false)->count() }}
               </h3>
             </div>
             <div>
@@ -57,8 +48,13 @@
     @endforeach
   </div>
   <div class="row gx-3">
+    <div class="col-12">
+      <button onclick="$('.table-component').hide()" class="btn btn-primary mb-3">
+        Hide All Table
+      </button>
+    </div>
     @foreach ($status_type_widgets as $status_type_widget)
-      <div class="col-md-6 col-12 table-component" id="{{ $status_type_widget->id }}">
+      <div class="col-12 table-component" id="{{ $status_type_widget->id }}">
         <div class="mb-3">
           <div class="bg-white p-4">
             <h6>{{ $status_type_widget->status_type->name }}</h6>
@@ -67,37 +63,118 @@
                 <tr>
                   <th>Time</th>
                   <th>Device ID</th>
+                  <th>Status</th>
                   <th>Location</th>
                   <th class="text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 @foreach ($status_type_widget->status_type->device_status as $key => $device_status)
+                  <div id="open_{{ $device_status->id }}" class="modal fade" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">OPEN NOTE -{{ $device_status->device->device_id }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h6 class="fw-semibold">Notes</h6>
+                          <p>{{ $device_status->notes }}</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="create_{{ $device_status->id }}" class="modal fade" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">CREATE NOTE - {{ $device_status->device->device_id }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h6 class="fw-semibold">Notes</h6>
+                          <textarea class="form-control">{{ $device_status->notes }}</textarea>
+                          <div class="d-flex gap-2 mt-3">
+                            <label for="marked_{{ $device_status->id }}">Set as marked?</label>
+                            <input {{ $device_status->marked_as_read ? 'checked' : '' }} type="checkbox"
+                              class="form-check-input" id="marked_{{ $device_status->id }}">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary"
+                            onclick="handleSubmitNotes('{{ $device_status->id }}')">Submit</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @if ($device_status->device)
+                    @if ($device_status->device->publish_action)
+                      @foreach ($device_status->device->publish_action as $publish_action)
+                        <div id="publish_{{ $device_status->id }}_{{ $publish_action->id }}" class="modal fade" tabindex="-1">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">PUBLISH - {{ $device_status->device->device_id }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                              </div>
+                              <div class="modal-body">
+                                <h6 class="fw-semibold">Notes</h6>
+                                <textarea class="form-control">{{ $device_status->notes }}</textarea>
+                                <div class="d-flex gap-2 mt-3">
+                                  <label for="marked_{{ $device_status->id }}">Set as marked?</label>
+                                  <input disabled checked type="checkbox" class="form-check-input"
+                                    id="marked_{{ $device_status->id }}">
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                  onclick="handlePublishAction('{{ $publish_action->id }}')">Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      @endforeach
+                    @endif
+                  @endif
                   @if ($device_status->device)
                     <tr>
                       <td>{{ $device_status->updated_at }}</td>
                       <td>{{ $device_status->device->device_id }}</td>
+                      <td>{!! $device_status->marked_as_read
+                          ? '<i class="ph-check-circle text-success"></i>'
+                          : '<i class="ph-question text-danger"></i>' !!}</td>
                       <td>{{ explode('/', $device_status->device->subscribe_topic)[1] }}</td>
                       <td class="text-center">
-                        @if ($device_status->device->publish_action)
-                          <div class="d-inline-flex">
-                            <div class="dropdown">
-                              <a class="text-body" data-bs-toggle="dropdown" href="#">
-                                <i class="ph-list"></i>
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-end">
+                        <div class="d-inline-flex">
+                          <div class="dropdown">
+                            <a class="text-body" data-bs-toggle="dropdown" href="#">
+                              <i class="ph-list"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                              @if ($device_status->device->publish_action)
                                 @foreach ($device_status->device->publish_action as $publish_action)
-                                  <button onclick="handlePublishAction('{{ $publish_action->id }}')"
-                                    class="dropdown-item">
+                                  <button class="dropdown-item"data-bs-toggle="modal"
+                                    data-bs-target="#publish_{{ $device_status->id }}_{{ $publish_action->id }}">
                                     {{ $publish_action->label }}
                                   </button>
                                 @endforeach
-                              </div>
+                              @endif
+                              <button class="dropdown-item" data-bs-toggle="modal"
+                                data-bs-target="#open_{{ $device_status->id }}">
+                                <i class="ph-newspaper me-1"></i> Open Note
+                              </button>
+                              <button class="dropdown-item" data-bs-toggle="modal"
+                                data-bs-target="#create_{{ $device_status->id }}">
+                                <i class="ph-note-pencil me-1"></i> Create Note
+                              </button>
                             </div>
                           </div>
-                        @else
-                          <span>No Publish Command Available</span>
-                        @endif
+                        </div>
                       </td>
                     </tr>
                   @endif
@@ -118,17 +195,43 @@
     }
 
     function handlePublishAction(id) {
+      if (!confirm('Are you sure want to publish?')) return false;
+
       $.ajax({
         url: '/admin/devices/publish',
         type: 'POST',
         data: {
           _token: '{{ csrf_token() }}',
           id: id,
+          notes: $(`#publish_${id} textarea`).val(),
         },
         success: function(response) {
           alert(response.message);
         },
         error: function(error) {
+          console.log(error);
+        }
+      })
+    }
+
+    function handleSubmitNotes(device_status_id) {
+      if (!confirm('Are you sure want to submit this notes?')) return false;
+
+      $.ajax({
+        url: '/admin/device_status/notes',
+        type: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}',
+          device_status_id: device_status_id,
+          notes: $(`#create_${device_status_id} textarea`).val(),
+          marked_as_read: $(`#marked_${device_status_id}`).is(':checked'),
+        },
+        success: function(response) {
+          alert(response.message);
+          $(`#create_${device_status_id} p`).html($(`#create_${device_status_id} textarea`).val());
+        },
+        error: function(error) {
+          alert("Something went wrong!");
           console.log(error);
         }
       })

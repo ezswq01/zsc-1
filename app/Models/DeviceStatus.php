@@ -20,6 +20,8 @@ class DeviceStatus extends Model
         'device_id',
         'status_type_id',
         'device_log_id',
+        'marked_as_read',
+        'notes',
         'created_at',
         'updated_at'
     ];

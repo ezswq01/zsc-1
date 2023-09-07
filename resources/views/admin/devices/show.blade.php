@@ -113,6 +113,7 @@
                         <tr>
                             <th>No</th>
                             <th>Command</th>
+                            <th>Type</th>
                             <th>Time</th>
                         </tr>
                     </thead>
@@ -324,6 +325,10 @@
                     {
                         data: 'value',
                         name: 'value'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
                     },
                     {
                         data: {
