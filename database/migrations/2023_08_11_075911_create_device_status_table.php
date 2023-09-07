@@ -15,6 +15,8 @@ class CreateDeviceStatusTable extends Migration
     {
         Schema::create('device_status', function (Blueprint $table) {
             $table->id();
+            $table->boolean('marked_as_read')->default(false);
+            $table->string('notes')->nullable()->default(null);
             $table->foreignId('device_id')->nullable()->index('fk_device_status_to_devices');
             $table->foreignId('status_type_id')->nullable()->index('fk_device_status_to_status_types');
             $table->foreignId('device_log_id')->nullable()->index('fk_device_status_to_device_logs');

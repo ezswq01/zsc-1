@@ -19,6 +19,7 @@ class DeviceStatusSeeder extends Seeder
                 'device_id' => 1,
                 'status_type_id' => 1,
                 'device_log_id' => 1,
+                'marked_as_read' => false,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -26,6 +27,7 @@ class DeviceStatusSeeder extends Seeder
                 'device_id' => 2,
                 'status_type_id' => 1,
                 'device_log_id' => 2,
+                'marked_as_read' => false,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],

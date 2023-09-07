@@ -18,12 +18,14 @@ class DeviceLogSeeder extends Seeder
             [
                 'device_id' => 1,
                 'value' => 'request',
+                'type' => 'subscribe',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'device_id' => 2,
                 'value' => 'request',
+                'type' => 'subscribe',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

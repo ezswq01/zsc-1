@@ -80,9 +80,12 @@ class Device extends Model
         foreach ($subscribe_expression as $val) {
             $expression = str_replace("{{value}}", "'$value'", $val->expression);
             if (eval("return $expression;")) {
-                DeviceStatus::updateOrCreate(
-                    ['device_id' => $device_id],
-                    ['status_type_id' => $val->status_type_id, 'device_log_id' => $device_log_id]
+                DeviceStatus::create(
+                    [
+                        'device_id' => $device_id,
+                        'status_type_id' => $val->status_type_id,
+                        'device_log_id' => $device_log_id
+                    ]
                 );
             }
         }
