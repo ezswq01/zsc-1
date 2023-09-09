@@ -8,6 +8,7 @@ use App\Http\Controllers\DeviceStatusController;
 use App\Http\Controllers\DeviceTypeController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusTypeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +36,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('status_types', StatusTypeController::class);
     Route::resource('device_logs', DeviceLogController::class);
     Route::resource('dashboard', DashboardController::class)->only(['index']);
+    Route::resource('users', UserController::class);
 
     // Logout
     Route::get('/logout', [AuthController::class, 'logoutPost'])->name('logout');
