@@ -94,6 +94,17 @@
               </span>
             </a>
           </li>
+          <li class="nav-item nav-item-submenu {{ $active == 'users' ? 'nav-item-expanded nav-item-open' : '' }}">
+            <a class="nav-link" href="#">
+              <i class="ph-users"></i>
+              <span>User</span>
+            </a>
+            <ul class="nav-group-sub collapse {{ $active == 'users' ? 'show' : '' }}">
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.index') }}">All</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.create') }}">Create</a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link {{ $active == 'settings' ? 'active' : '' }}"
               href="{{ route('admin.settings.index') }}">
