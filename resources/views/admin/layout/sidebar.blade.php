@@ -71,55 +71,55 @@
                             Device</div>
                         <i class="ph-dots-three sidebar-resize-show"></i>
                     </li>
+
+                    @can('device-types-read')
+                        <li
+                            class="nav-item nav-item-submenu {{ $active == 'device_types' ? 'nav-item-expanded nav-item-open' : '' }}">
+                            <a class="nav-link" href="#">
+                                <i class="ph-bookmarks-simple"></i>
+                                <span>Device Type</span>
+                            </a>
+                            <ul class="nav-group-sub collapse {{ $active == 'device_types' ? 'show' : '' }}">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.index') }}">All</a>
+                                </li>
+                                @can('device-types-create')
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="{{ route('admin.device_types.create') }}">Create</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('devices-read')
+                        <li
+                            class="nav-item nav-item-submenu {{ $active == 'devices' ? 'nav-item-expanded nav-item-open' : '' }}">
+                            <a class="nav-link" href="#">
+                                <i class="ph-atom"></i>
+                                <span>Device</span>
+                            </a>
+                            <ul class="nav-group-sub collapse {{ $active == 'devices' ? 'show' : '' }}">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.index') }}">All</a></li>
+                                @can('devices-create')
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.create') }}">Create</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('device-logs-read')
+                        <li class="nav-item">
+                            <a class="nav-link {{ $active == 'device_logs' ? 'active' : '' }}"
+                                href="{{ route('admin.device_logs.index') }}">
+                                <i class="ph-notebook"></i>
+                                <span>
+                                    Log and Report
+                                </span>
+                            </a>
+                        </li>
+                    @endcan
                 @endcanany()
-
-                @can('device-types-read')
-                    <li
-                        class="nav-item nav-item-submenu {{ $active == 'device_types' ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="ph-bookmarks-simple"></i>
-                            <span>Device Type</span>
-                        </a>
-                        <ul class="nav-group-sub collapse {{ $active == 'device_types' ? 'show' : '' }}">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.device_types.index') }}">All</a>
-                            </li>
-                            @can('device-types-create')
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{{ route('admin.device_types.create') }}">Create</a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcan
-
-                @can('devices-read')
-                    <li
-                        class="nav-item nav-item-submenu {{ $active == 'devices' ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="ph-atom"></i>
-                            <span>Device</span>
-                        </a>
-                        <ul class="nav-group-sub collapse {{ $active == 'devices' ? 'show' : '' }}">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.index') }}">All</a></li>
-                            @can('devices-create')
-                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.devices.create') }}">Create</a>
-                                </li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcan
-
-                @can('device-logs-read')
-                    <li class="nav-item">
-                        <a class="nav-link {{ $active == 'device_logs' ? 'active' : '' }}"
-                            href="{{ route('admin.device_logs.index') }}">
-                            <i class="ph-notebook"></i>
-                            <span>
-                                Log and Report
-                            </span>
-                        </a>
-                    </li>
-                @endcan
 
                 @canany(['users-read', 'roles-read', 'permissions-read'])
                     <li class="nav-item-header">
