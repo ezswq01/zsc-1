@@ -6,6 +6,8 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceLogController;
 use App\Http\Controllers\DeviceStatusController;
 use App\Http\Controllers\DeviceTypeController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StatusTypeController;
 use App\Http\Controllers\UserController;
@@ -37,6 +39,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('device_logs', DeviceLogController::class);
     Route::resource('dashboard', DashboardController::class)->only(['index']);
     Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
 
     // Logout
     Route::get('/logout', [AuthController::class, 'logoutPost'])->name('logout');
