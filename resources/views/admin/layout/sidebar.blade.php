@@ -121,22 +121,47 @@
                     </li>
                 @endcan
 
-                @can('users-read')
-                    <li
-                        class="nav-item nav-item-submenu {{ $active == 'users' ? 'nav-item-expanded nav-item-open' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="ph-users"></i>
-                            <span>User</span>
-                        </a>
-                        <ul class="nav-group-sub collapse {{ $active == 'users' ? 'show' : '' }}">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.index') }}">All</a></li>
-                            @can('users-create')
-                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.create') }}">Create</a>
-                                </li>
-                            @endcan
-                        </ul>
+                @canany(['users-read', 'roles-read', 'permissions-read'])
+                    <li class="nav-item-header">
+                        <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">
+                            User Management</div>
+                        <i class="ph-dots-three sidebar-resize-show"></i>
                     </li>
-                @endcan
+
+                    @can('users-read')
+                        <li
+                            class="nav-item nav-item-submenu {{ $active == 'users' ? 'nav-item-expanded nav-item-open' : '' }}">
+                            <a class="nav-link" href="#">
+                                <i class="ph-users"></i>
+                                <span>User</span>
+                            </a>
+                            <ul class="nav-group-sub collapse {{ $active == 'users' ? 'show' : '' }}">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.index') }}">All</a></li>
+                                @can('users-create')
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.users.create') }}">Create</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('roles-read')
+                        <li
+                            class="nav-item nav-item-submenu {{ $active == 'roles' ? 'nav-item-expanded nav-item-open' : '' }}">
+                            <a class="nav-link" href="#">
+                                <i class="ph-user-circle-gear"></i>
+                                <span>Role</span>
+                            </a>
+                            <ul class="nav-group-sub collapse {{ $active == 'roles' ? 'show' : '' }}">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.roles.index') }}">All</a></li>
+                                @can('roles-create')
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.roles.create') }}">Create</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                @endcanany()
 
                 @can('systems-control')
                     <li class="nav-item">
