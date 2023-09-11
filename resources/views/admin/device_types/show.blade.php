@@ -44,10 +44,12 @@
                                     placeholder="Type Name" required type="text">
                             </div>
                         </div>
-                        <div class="text-end">
-                            <a href="{{ route('admin.device_types.edit', $data->id) }}" class="btn btn-primary"
-                                type="submit">Edit</a>
-                        </div>
+                        @can('device-types-update')
+                            <div class="text-end">
+                                <a href="{{ route('admin.device_types.edit', $data->id) }}" class="btn btn-primary"
+                                    type="submit">Edit</a>
+                            </div>
+                        @endcan
                     </form>
                 </div>
             </div>

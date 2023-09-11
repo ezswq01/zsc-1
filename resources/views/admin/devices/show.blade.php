@@ -89,10 +89,12 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="text-end">
-                                    <a href="{{ route('admin.devices.edit', $data->id) }}" class="btn btn-primary"
-                                        type="submit">Edit</a>
-                                </div>
+                                @can('devices-update')
+                                    <div class="text-end">
+                                        <a href="{{ route('admin.devices.edit', $data->id) }}" class="btn btn-primary"
+                                            type="submit">Edit</a>
+                                    </div>
+                                @endcan
                             </form>
                         </div>
                     </div>

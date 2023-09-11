@@ -10,6 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class DeviceTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:device-types-create')->only(['create', 'store']);
+        $this->middleware('can:device-types-read')->only(['index', 'show']);
+        $this->middleware('can:device-types-update')->only(['edit', 'update']);
+        $this->middleware('can:device-types-delete')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -10,6 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:users-create')->only(['create', 'store']);
+        $this->middleware('can:users-read')->only(['index', 'show']);
+        $this->middleware('can:users-update')->only(['edit', 'update']);
+        $this->middleware('can:users-delete')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,10 +26,13 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(User::query())
+            return DataTables::eloquent(User::with('roles')->select('users.*'))
                 ->addIndexColumn()
                 ->editColumn('name', function ($model) {
                     return '<a href="' . route('admin.users.show', $model->id) . '">' . $model->name . '</a>';
+                })
+                ->addColumn('roles', function ($model) {
+                    return $model->roles[0]->name;
                 })
                 ->editColumn('created_at', function ($model) {
                     return [
@@ -35,7 +46,7 @@ class UserController extends Controller
                         return $model->id;
                     }
                 ])
-                ->rawColumns(['name', 'options'])
+                ->rawColumns(['name', 'roles', 'options'])
                 ->toJson();
         }
 
