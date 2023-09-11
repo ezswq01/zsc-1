@@ -149,13 +149,32 @@
                         <li
                             class="nav-item nav-item-submenu {{ $active == 'roles' ? 'nav-item-expanded nav-item-open' : '' }}">
                             <a class="nav-link" href="#">
-                                <i class="ph-user-circle-gear"></i>
+                                <i class="ph-user-gear"></i>
                                 <span>Role</span>
                             </a>
                             <ul class="nav-group-sub collapse {{ $active == 'roles' ? 'show' : '' }}">
                                 <li class="nav-item"><a class="nav-link" href="{{ route('admin.roles.index') }}">All</a></li>
                                 @can('roles-create')
                                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.roles.create') }}">Create</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('permissions-read')
+                        <li
+                            class="nav-item nav-item-submenu {{ $active == 'permissions' ? 'nav-item-expanded nav-item-open' : '' }}">
+                            <a class="nav-link" href="#">
+                                <i class="ph-key"></i>
+                                <span>Permission</span>
+                            </a>
+                            <ul class="nav-group-sub collapse {{ $active == 'permissions' ? 'show' : '' }}">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.permissions.index') }}">All</a>
+                                </li>
+                                @can('permissions-create')
+                                    <li class="nav-item"><a class="nav-link"
+                                            href="{{ route('admin.permissions.create') }}">Create</a>
                                     </li>
                                 @endcan
                             </ul>
