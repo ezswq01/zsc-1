@@ -58,7 +58,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            const exportOption = [0, 1, 2, 3];
+            const exportOption = [0, 1];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
