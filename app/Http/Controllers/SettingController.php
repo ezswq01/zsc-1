@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:systems-control')->only(['index', 'update']);
+    }
+
     public function index()
     {
         $data = Setting::first();

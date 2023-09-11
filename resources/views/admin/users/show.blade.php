@@ -57,10 +57,12 @@
                                     placeholder="Type Role" required disabled type="text">
                             </div>
                         </div>
-                        <div class="text-end">
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary"
-                                type="submit">Edit</a>
-                        </div>
+                        @can('users-update')
+                            <div class="text-end">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary"
+                                    type="submit">Edit</a>
+                            </div>
+                        @endcan
                     </form>
                 </div>
             </div>

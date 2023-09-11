@@ -8,6 +8,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class DeviceLogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:device-logs-read')->only('index');
+    }
+
     /**
      * Display a listing of the resource.
      *

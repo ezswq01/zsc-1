@@ -10,6 +10,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class StatusTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:status-types-create')->only(['create', 'store']);
+        $this->middleware('can:status-types-read')->only(['index', 'show']);
+        $this->middleware('can:status-types-update')->only(['edit', 'update']);
+        $this->middleware('can:status-types-delete')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *

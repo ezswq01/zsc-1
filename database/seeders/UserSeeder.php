@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -14,18 +14,18 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name'=> "Admin",
-            'email'=> "admin@admin.com",
-            'password'=> bcrypt('password'),
-            'role'=> "admin",
+        $admin = User::create([
+            'name' => "Admin",
+            'email' => "admin@admin.com",
+            'password' => bcrypt('password'),
         ]);
+        $admin->syncRoles(['admin']);
 
-        DB::table('users')->insert([
-            'name'=> "User",
-            'email'=> "observer@observer.com",
-            'password'=> bcrypt('password'),
-            'role'=> "observer",
+        $observer = User::create([
+            'name' => "User",
+            'email' => "observer@observer.com",
+            'password' => bcrypt('password'),
         ]);
+        $observer->syncRoles(['observer']);
     }
 }
