@@ -54,8 +54,13 @@
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Role</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('role') }}" class="form-control" name="role"
-                                    placeholder="Type Role" required type="text">
+                                <select class="form-control select" data-placeholder="Select Role" name="role">
+                                    <option></option>
+                                    @foreach ($roles as $role)
+                                        <option {{ old('role') == $role ? 'selected' : '' }} value="{{ $role }}">
+                                            {{ $role }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
