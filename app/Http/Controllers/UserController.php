@@ -6,6 +6,8 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -60,7 +62,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all()->pluck('name');
+
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -73,7 +77,13 @@ class UserController extends Controller
     {
         $validated = $request->all();
 
-        User::create($validated);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password'])
+        ]);
+
+        $user->syncRoles([$validated['role']]);
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
@@ -87,8 +97,9 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
+        $roles = Role::all()->pluck('name');
 
-        return view('admin.users.show', compact('user'));
+        return view('admin.users.show', compact('user', 'roles'));
     }
 
     /**
@@ -100,8 +111,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $roles = Role::all()->pluck('name');
 
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -115,7 +127,15 @@ class UserController extends Controller
     {
         $validated = $request->all();
 
-        User::find($id)->update($validated);
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password'])
+        ]);
+
+        $user->syncRoles([$validated['role']]);
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
