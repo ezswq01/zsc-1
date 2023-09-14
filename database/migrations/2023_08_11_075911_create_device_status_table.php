@@ -20,6 +20,7 @@ class CreateDeviceStatusTable extends Migration
             $table->foreignId('device_id')->nullable()->index('fk_device_status_to_devices');
             $table->foreignId('status_type_id')->nullable()->index('fk_device_status_to_status_types');
             $table->foreignId('device_log_id')->nullable()->index('fk_device_status_to_device_logs');
+            $table->foreignId('user_id')->nullable()->index('fk_device_status_to_users');
             $table->timestamps();
         });
     }
