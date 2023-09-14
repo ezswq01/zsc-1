@@ -38,4 +38,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function device_log()
+    {
+        return $this->hasMany(DeviceLog::class, 'user_id');
+    }
+
+    public function device_status()
+    {
+        return $this->hasMany(DeviceStatus::class, 'user_id');
+    }
 }

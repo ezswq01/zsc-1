@@ -40,4 +40,9 @@ class DeviceStatus extends Model
     {
         return $this->belongsTo(DeviceLog::class, 'device_log_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
