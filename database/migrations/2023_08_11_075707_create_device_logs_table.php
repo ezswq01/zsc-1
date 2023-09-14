@@ -16,6 +16,7 @@ class CreateDeviceLogsTable extends Migration
         Schema::create('device_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('device_id')->nullable()->index('fk_device_logs_to_devices');
+            $table->foreignId('user_id')->nullable()->index('fk_device_logs_to_users');
             $table->string('value');
             $table->string('type');
             $table->timestamps();

@@ -20,6 +20,7 @@ class DeviceStatus extends Model
         'device_id',
         'status_type_id',
         'device_log_id',
+        'user_id',
         'marked_as_read',
         'notes',
         'created_at',
@@ -39,5 +40,10 @@ class DeviceStatus extends Model
     public function device_log()
     {
         return $this->belongsTo(DeviceLog::class, 'device_log_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

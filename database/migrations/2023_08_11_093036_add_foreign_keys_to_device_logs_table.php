@@ -19,6 +19,12 @@ class AddForeignKeysToDeviceLogsTable extends Migration
                 ->on('devices')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
+
+            $table->foreign('user_id', 'fk_device_logs_to_users')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
@@ -31,6 +37,7 @@ class AddForeignKeysToDeviceLogsTable extends Migration
     {
         Schema::table('device_logs', function (Blueprint $table) {
             $table->dropForeign('fk_device_logs_to_devices');
+            $table->dropForeign('fk_device_logs_to_users');
         });
     }
 }

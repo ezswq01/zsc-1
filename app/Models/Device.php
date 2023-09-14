@@ -36,7 +36,7 @@ class Device extends Model
 
     public function device_status()
     {
-        return $this->hasOne(DeviceStatus::class, 'device_id');
+        return $this->hasMany(DeviceStatus::class, 'device_id');
     }
 
     public function publish_action()

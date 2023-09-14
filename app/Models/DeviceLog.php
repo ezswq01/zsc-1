@@ -16,6 +16,7 @@ class DeviceLog extends Model
 
     protected $fillable = [
         'device_id',
+        'user_id',
         'value',
         'type',
         'created_at',
@@ -30,5 +31,10 @@ class DeviceLog extends Model
     public function device_status()
     {
         return $this->hasOne(DeviceStatus::class, 'device_log_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
