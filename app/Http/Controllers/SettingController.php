@@ -46,6 +46,9 @@ class SettingController extends Controller
                     'public'
                 );
 
+                $data->logo = $path;
+                $data->save();
+
                 // delete old file
                 if (Storage::disk('public')->exists($old_photo)) {
                     Storage::disk('public')->delete($old_photo);
@@ -53,8 +56,7 @@ class SettingController extends Controller
             }
 
             $data->update([
-                'app_name' => $validated['app_name'],
-                'logo' => $path
+                'app_name' => $validated['app_name']
             ]);
 
             StatusTypeWidget::where('setting_id', $data->id)->delete();
