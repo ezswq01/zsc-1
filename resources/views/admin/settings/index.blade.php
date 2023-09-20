@@ -35,7 +35,7 @@
     <div class="card-body border-top">
       <div class="row g-lg-5 g-2">
         <div class="col-lg-8 col-12">
-          <form action="{{ route('admin.settings.update', $data->id) }}" method="POST">
+          <form action="{{ route('admin.settings.update', $data->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row mb-3">
@@ -58,6 +58,19 @@
                     <option {{ $selected }} value="{{ $status_type->id }}">{{ $status_type->name }}</option>
                   @endforeach
                 </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-lg-4 col-form-label">Logo</label>
+              <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <img src="{{ Storage::url($data->logo) }}" alt="logo" class="rounded img-fluid img-thumbnail" style="object-fit: cover; object-position: center;">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <input type="file" class="form-control h-auto" name="logo">
+                    </div>
+                </div>
               </div>
             </div>
             <div class="text-end">
