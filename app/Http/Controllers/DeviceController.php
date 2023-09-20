@@ -9,6 +9,7 @@ use App\Models\DeviceLog;
 use App\Models\DeviceStatus;
 use App\Models\DeviceType;
 use App\Models\PublishAction;
+use App\Models\Regency;
 use App\Models\StatusType;
 use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
@@ -76,9 +77,16 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request) {
+            $topics = explode('/', $validated['publish_topic']);
+            $branch = $topics[1];
+
+            $location = Regency::where('name', 'ILIKE', '%Kota ' . $branch . '%')->first();
+            if (!$location) $location = Regency::where('name', 'ILIKE', '%' . $branch . '%')->first();
+
             $device = Device::create([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
+                'location_id' => $location->id ?? null,
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
             ]);
@@ -168,9 +176,16 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request, $id) {
+            $topics = explode('/', $validated['publish_topic']);
+            $branch = $topics[1];
+
+            $location = Regency::where('name', 'ILIKE', '%Kota ' . $branch . '%')->first();
+            if (!$location) $location = Regency::where('name', 'ILIKE', '%' . $branch . '%')->first();
+
             Device::find($id)->update([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
+                'location_id' => $location->id,
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
             ]);

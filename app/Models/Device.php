@@ -18,6 +18,7 @@ class Device extends Model
     protected $fillable = [
         'device_id',
         'device_type_id',
+        'location_id',
         'publish_topic',
         'subscribe_topic',
         'created_at',
