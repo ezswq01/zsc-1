@@ -53,7 +53,7 @@
                   <option></option>
                   @foreach ($status_types as $status_type)
                     @php
-                      $selected = in_array($status_type->id, $status_type_widgets->pluck('id')->toArray()) ? 'selected' : '';
+                      $selected = in_array($status_type->id, $status_type_widgets->pluck('status_type_id')->toArray()) ? 'selected' : '';
                     @endphp
                     <option {{ $selected }} value="{{ $status_type->id }}">{{ $status_type->name }}</option>
                   @endforeach

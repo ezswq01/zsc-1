@@ -20,7 +20,7 @@ class SettingController extends Controller
     {
         $data = Setting::first();
         $status_types = StatusType::all(['id', 'name']);
-        $status_type_widgets = StatusTypeWidget::all(['id']);
+        $status_type_widgets = StatusTypeWidget::all(['status_type_id']);
         return view('admin.settings.index', compact('data', 'status_types', 'status_type_widgets'));
     }
 
