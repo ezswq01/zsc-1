@@ -16,7 +16,9 @@ class Province extends Model
 
     protected $fillable = [
         'id',
-        'name'
+        'name',
+        'created_at',
+        'updated_at'
     ];
 
     public function regency()

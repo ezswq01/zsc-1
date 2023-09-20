@@ -17,7 +17,9 @@ class SubDistrict extends Model
     protected $fillable = [
         'id',
         'name',
-        'regency_id'
+        'regency_id',
+        'created_at',
+        'updated_at'
     ];
 
     public function regency()
