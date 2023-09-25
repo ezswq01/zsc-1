@@ -47,5 +47,9 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
 
     // Ajax routes
     Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
+    Route::get('/api/devices/device_branches', [DeviceController::class, 'branches'])->name('devices.branches');
+    Route::get('/api/devices/device_buildings', [DeviceController::class, 'buildings'])->name('devices.buildings');
+    Route::get('/api/devices/device_types', [DeviceController::class, 'device_types'])->name('devices.device_types');
+    Route::get('/device_rooms', [DeviceController::class, 'rooms'])->name('devices.rooms');
     Route::post('/device_status/notes', [DeviceStatusController::class, 'notes'])->name('device_status.notes');
 });

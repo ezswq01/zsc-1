@@ -37,6 +37,34 @@
             List of All Registered Device.
         </div>
 
+        <div id="filter" class="row mt-2 px-3">
+            <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
+                <label for="branch" class="form-label fw-semibold">Branch</label>
+                <select class="form-control select" data-placeholder="Select Branch" name="branch" id="branch">
+                    <option></option>
+                </select>
+            </div>
+            <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
+                <label for="building" class="form-label fw-semibold">Building</label>
+                <select class="form-control select" data-placeholder="Select Building" name="building" id="building">
+                    <option></option>
+                </select>
+            </div>
+            <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
+                <label for="room" class="form-label fw-semibold">Room</label>
+                <select class="form-control select" data-placeholder="Select Room" name="room" id="room">
+                    <option></option>
+                </select>
+            </div>
+            <div class="mb-lg-0 col-sm-12 col-lg-3">
+                <label for="device_type" class="form-label fw-semibold">Device Type</label>
+                <select class="form-control select" data-placeholder="Select Device Type" name="device_type"
+                    id="device_type">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+
         <table id="datatable" class="table">
             <thead>
                 <tr>
@@ -59,6 +87,8 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            'use strict';
+
             const exportOption = [0, 1, 2, 3];
             const buttons = [{
                 extend: 'copyHtml5',
@@ -98,7 +128,17 @@
             const datatable = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('admin.devices.index') !!}',
+                ajax: {
+                    url: '{!! route('admin.devices.index') !!}',
+                    data: function(d) {
+                        d.branch = $('#branch').val();
+                        d.building = $('#building').val();
+                        d.room = $('#room').val();
+                        d.device_type = $('#device_type').val();
+                        d.search = $('input[type="search"]').val();
+                        return d;
+                    }
+                },
                 autoWidth: false,
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
@@ -133,6 +173,96 @@
                     targets: 4
                 }],
                 order: []
+            });
+
+            $('#branch, #building, #room, #device_type').change(function() {
+                datatable.draw();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            'use strict';
+
+            $('#branch').select2({
+                allowClear: true,
+                ajax: {
+                    url: '{!! route('admin.devices.branches') !!}',
+                    delay: 250,
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data,
+                        }
+                    },
+                    cache: true,
+                },
+            });
+
+            $('#building').select2({
+                allowClear: true,
+                ajax: {
+                    url: '{!! route('admin.devices.buildings') !!}',
+                    delay: 250,
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data,
+                        }
+                    },
+                    cache: true,
+                },
+            });
+
+            $('#room').select2({
+                allowClear: true,
+                ajax: {
+                    url: '{!! route('admin.devices.rooms') !!}',
+                    delay: 250,
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data,
+                        }
+                    },
+                    cache: true,
+                },
+            });
+
+            $('#device_type').select2({
+                allowClear: true,
+                ajax: {
+                    url: '{!! route('admin.devices.device_types') !!}',
+                    delay: 250,
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data,
+                        }
+                    },
+                    cache: true,
+                },
             });
         });
     </script>
