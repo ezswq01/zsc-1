@@ -45,6 +45,29 @@ class DeviceController extends Controller
                         return $model->id;
                     }
                 ])
+                ->filter(function ($query) {
+                    if (request()->get('branch')) {
+                        $query->where('branch', request()->get('branch'));
+                    }
+                    if (request()->get('building')) {
+                        $query->where('building', request()->get('building'));
+                    }
+                    if (request()->get('room')) {
+                        $query->where('room', request()->get('room'));
+                    }
+                    if (request()->get('device_type')) {
+                        $query->where('device_type_id', request()->get('device_type'));
+                    }
+
+                    if (!empty(request()->get('search'))) {
+                        $query->where(function ($w) {
+                            $search = request()->get('search');
+                            $w->orWhere('device_id', 'ILIKE', "%$search%")
+                                ->orWhere('subscribe_topic', 'ILIKE', "%$search%")
+                                ->orWhere('publish_topic', 'ILIKE', "%$search%");
+                        });
+                    }
+                })
                 ->rawColumns(['device_id', 'options'])
                 ->toJson();
         }
@@ -76,11 +99,20 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request) {
+            $topics = explode('/', $validated['publish_topic']);
+
+            $branch = $topics[1];
+            $building = $topics[2];
+            $room = $topics[3];
+
             $device = Device::create([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
+                'branch' => $branch,
+                'building' => $building,
+                'room' => $room
             ]);
 
             if ($request->subscribe_expressions) {
@@ -168,11 +200,20 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request, $id) {
+            $topics = explode('/', $validated['publish_topic']);
+
+            $branch = $topics[1];
+            $building = $topics[2];
+            $room = $topics[3];
+
             Device::find($id)->update([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
+                'branch' => $branch,
+                'building' => $building,
+                'room' => $room
             ]);
 
             SubscribeExpression::where('device_id', $id)->delete();
@@ -255,5 +296,107 @@ class DeviceController extends Controller
             'success' => true,
             'message' => 'Published successfully.',
         ]);
+    }
+
+    public function branches(Request $request)
+    {
+        abort_if(!$request->ajax(), 404);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $device_branches = Device::where('branch', 'ILIKE', '%' . $search . '%')
+                ->distinct()
+                ->get(['branch']);
+        } else {
+            $device_branches = Device::distinct()->get(['branch']);
+        }
+
+        $response = [];
+        foreach ($device_branches as $device_branch) {
+            $response[] = [
+                'id' => $device_branch->branch,
+                'text' => ucfirst($device_branch->branch)
+            ];
+        }
+
+        return response()->json($response);
+    }
+
+    public function buildings(Request $request)
+    {
+        abort_if(!$request->ajax(), 404);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $device_buildings = Device::where('building', 'ILIKE', '%' . $search . '%')
+                ->distinct()
+                ->get(['building']);
+        } else {
+            $device_buildings = Device::distinct()->get(['building']);
+        }
+
+        $response = [];
+        foreach ($device_buildings as $device_building) {
+            $response[] = [
+                'id' => $device_building->building,
+                'text' => ucfirst($device_building->building)
+            ];
+        }
+
+        return response()->json($response);
+    }
+
+    public function rooms(Request $request)
+    {
+        abort_if(!$request->ajax(), 404);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $device_rooms = Device::where('room', 'ILIKE', '%' . $search . '%')
+                ->distinct()
+                ->get(['room']);
+        } else {
+            $device_rooms = Device::distinct()
+                ->get(['room']);
+        }
+
+        $response = [];
+        foreach ($device_rooms as $device_room) {
+            $response[] = [
+                'id' => $device_room->room,
+                'text' => ucfirst($device_room->room)
+            ];
+        }
+
+        return response()->json($response);
+    }
+
+    public function device_types(Request $request)
+    {
+        abort_if(!$request->ajax(), 404);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+
+            $device_types = DeviceType::whereHas('device')
+                ->where('name', 'ILIKE', '%' . $search . '%')
+                ->get(['id', 'name']);
+        } else {
+            $device_types = DeviceType::whereHas('device')
+                ->get(['id', 'name']);
+        }
+
+        $response = [];
+        foreach ($device_types as $device_type) {
+            $response[] = [
+                'id' => $device_type->id,
+                'text' => $device_type->name
+            ];
+        }
+
+        return response()->json($response);
     }
 }

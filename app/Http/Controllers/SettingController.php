@@ -7,6 +7,7 @@ use App\Models\StatusType;
 use App\Models\StatusTypeWidget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -19,7 +20,7 @@ class SettingController extends Controller
     {
         $data = Setting::first();
         $status_types = StatusType::all(['id', 'name']);
-        $status_type_widgets = StatusTypeWidget::all(['id']);
+        $status_type_widgets = StatusTypeWidget::all(['status_type_id']);
         return view('admin.settings.index', compact('data', 'status_types', 'status_type_widgets'));
     }
 
@@ -33,7 +34,27 @@ class SettingController extends Controller
 
         $data = Setting::findOrFail($id);
 
-        DB::transaction(function () use ($validated, $data) {
+        DB::transaction(function () use ($validated, $request, $data) {
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+
+                $old_photo = $data->logo;
+
+                // store file
+                $path = $file->store(
+                    'settings/logo',
+                    'public'
+                );
+
+                $data->logo = $path;
+                $data->save();
+
+                // delete old file
+                if (Storage::disk('public')->exists($old_photo)) {
+                    Storage::disk('public')->delete($old_photo);
+                }
+            }
+
             $data->update([
                 'app_name' => $validated['app_name']
             ]);

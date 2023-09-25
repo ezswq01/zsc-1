@@ -20,6 +20,9 @@ class Device extends Model
         'device_type_id',
         'publish_topic',
         'subscribe_topic',
+        'branch',
+        'building',
+        'room',
         'created_at',
         'updated_at'
     ];

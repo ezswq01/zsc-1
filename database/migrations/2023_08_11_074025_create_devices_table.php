@@ -19,6 +19,9 @@ class CreateDevicesTable extends Migration
             $table->foreignId('device_type_id')->nullable()->index('fk_devices_to_device_types');
             $table->string('publish_topic');
             $table->string('subscribe_topic');
+            $table->string('branch');
+            $table->string('building');
+            $table->string('room');
             $table->timestamps();
         });
     }

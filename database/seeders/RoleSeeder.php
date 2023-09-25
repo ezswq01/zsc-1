@@ -23,7 +23,8 @@ class RoleSeeder extends Seeder
 
         $observer->syncPermissions([
             'users-create',
-            'users-read'
+            'users-read',
+            'device-logs-read'
         ]);
     }
 }
