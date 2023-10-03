@@ -86,7 +86,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">OPEN NOTE
-                                                            -{{ $device_status->device->device_id }}</h5>
+                                                            - {{ $device_status->device->device_id }}</h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal"></button>
                                                     </div>
