@@ -112,7 +112,7 @@
                     },
                     {
                         data: 'value',
-                        name: 'value'
+                        name: 'device_log.value'
                     },
                     {
                         data: 'type',

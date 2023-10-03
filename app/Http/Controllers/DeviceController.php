@@ -148,20 +148,35 @@ class DeviceController extends Controller
     public function show($id)
     {
         if (request()->ajax()) {
-            return DataTables::of(DeviceLog::query()->where('device_id', $id))
-                ->addIndexColumn()
+            $device_status = DeviceStatus::with('device', 'device_log')
+                ->select('device_status.*')
+                ->where('device_status.device_id', $id);
+
+            return DataTables::eloquent($device_status)
                 ->editColumn('created_at', function ($model) {
                     return [
                         'display' => date('Y-m-d H:i:s', strtotime($model->created_at)),
                         'timestamp' => strtotime($model->created_at)
                     ];
                 })
+                ->addColumn('command', function ($model) {
+                    return $model->device_log->value;
+                })
+                ->addColumn('status', function ($model) {
+                    return $model->marked_as_read
+                        ? '<i class="ph-check-circle text-success"></i>'
+                        : '<i class="ph-question text-danger"></i>';
+                })
+                ->addColumn('location', function ($model) {
+                    return explode('/', $model->device->publish_topic)[1];
+                })
+                ->addColumn('options', 'admin.devices.datatables.device-logs-options')
                 ->setRowAttr([
                     'data-model-id' => function ($model) {
                         return $model->id;
                     }
                 ])
-                ->rawColumns(['options'])
+                ->rawColumns(['status', 'options'])
                 ->toJson();
         }
 
