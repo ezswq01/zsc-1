@@ -173,7 +173,7 @@
                                         <tr>
                                             <td>{{ $device_status->updated_at }}</td>
                                             <td>{{ $device_status->device->device_id }}</td>
-                                            <td>{!! $device_status->marked_as_read
+                                            <td id="mark_{{$device_status->id}}">{!! $device_status->marked_as_read
                                                 ? '<i class="ph-check-circle text-success"></i>'
                                                 : '<i class="ph-question text-danger"></i>' !!}</td>
                                             <td>{{ explode('/', $device_status->device->subscribe_topic)[1] }}</td>
@@ -241,6 +241,7 @@
                     //
                     //
 
+                    $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
                     $(`#open_${device_status_id} p`).html(textarea);
                     $(`#create_${device_status_id} textarea`).val(textarea);
                     $(`.publish_${device_status_id} textarea`).val(textarea);
@@ -270,7 +271,11 @@
                     // @TODO : Change Icon to marked
                     //
                     //
-
+                    if ($(`#marked_${device_status_id}`).is(':checked')) {
+                        $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
+                    } else {
+                        $(`#mark_${device_status_id}`).html('<i class="ph-question text-danger"></i>');
+                    }
                     $(`#open_${device_status_id} p`).html(textarea);
                     alert(response.message);
                 },
