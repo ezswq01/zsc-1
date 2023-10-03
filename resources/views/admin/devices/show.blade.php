@@ -113,10 +113,11 @@
                 <table id="datatable" class="table" data-id="{{ $data->id }}">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Command</th>
-                            <th>Type</th>
                             <th>Time</th>
+                            <th>Command</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                 </table>
@@ -177,6 +178,10 @@
             </div>
         </div>
     </div>
+
+    @include('admin.components.modals.publish')
+    @include('admin.components.modals.open-note')
+    @include('admin.components.modals.create-note')
 @endsection
 
 @push('js')
@@ -310,10 +315,11 @@
                 },
             }, ];
 
-            let url = "{!! route('admin.devices.show', ':device_id') !!}"
-            url = url.replace(':device_id', $('#datatable').data('id'))
+            let url = "{!! route('admin.devices.show', ':device_id') !!}";
+            url = url.replace(':device_id', $('#datatable').data('id'));
 
-            const datatable = $('#datatable').DataTable({
+            const datatable = $('#datatable');
+            const _datatable = datatable.DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: url,
@@ -321,31 +327,161 @@
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                    },
-                    {
-                        data: 'value',
-                        name: 'value'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
-                    },
-                    {
                         data: {
                             '_': 'created_at.display',
                             'sort': 'created_at.timestamp'
                         },
                         name: 'created_at'
+                    },
+                    {
+                        data: 'command',
+                        name: 'device_log.value'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'location',
+                        name: 'device.branch'
+                    },
+                    {
+                        data: 'options',
+                        name: 'options',
+                        class: 'text-center'
                     }
                 ],
                 columnDefs: [{
                     orderable: false,
                     searchable: false,
-                    targets: 0
+                    targets: 2
+                }, {
+                    orderable: false,
+                    targets: [4]
                 }],
                 order: []
+            });
+
+            datatable.delegate('.open-note', 'click', function(e) {
+                let id = $(this).data('id');
+
+                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                url = url.replace(':id', id);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        const data = response.data;
+
+                        $('#open-note #device-id').text(data.device.device_id);
+                        $('#open-note #device-note').text(data.notes);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            datatable.delegate('.create-note', 'click', function(e) {
+                let id = $(this).data('id');
+
+                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                url = url.replace(':id', id);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        const data = response.data;
+
+                        $('#create-note #device-id').text(data.device.device_id);
+                        $('#create-note #device_status_id').val(data.id);
+                        $('#create-note #notes').val(data.notes);
+                        data.marked_as_read ?
+                            $('#create-note #marked_as_read').attr('checked', 'checked') :
+                            $('#create-note #marked_as_read').removeAttr('checked');
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $('#create-note-form').on('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(e.target);
+
+                $.ajax({
+                    url: '{!! route('admin.device_status.notes') !!}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // @TODO : Change Icon to marked
+                        //
+                        //
+
+                        alert(response.message);
+                        _datatable.draw();
+                    },
+                    error: function(error) {
+                        alert("Something went wrong!");
+                        console.log(error);
+                    }
+                });
+            });
+
+            datatable.delegate('.publish', 'click', function(e) {
+                let publishActionId = $(this).data('publishActionId');
+                let deviceStatusId = $(this).data('deviceStatusId');
+
+                $('#id').val(publishActionId);
+                $('#device_status_id').val(deviceStatusId);
+
+                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                url = url.replace(':id', deviceStatusId);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        const data = response.data;
+
+                        $('#publish #device-id').text(data.device.device_id);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $('#publish-form').on('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(e.target);
+
+                $.ajax({
+                    url: '{!! route('admin.devices.publish') !!}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // @TODO : Change Icon to marked
+                        //
+                        //
+
+                        alert(response.message);
+                        _datatable.draw();
+                    },
+                    error: function(error) {
+                        alert("Something went wrong!");
+                        console.log(error);
+                    }
+                });
             });
         });
     </script>

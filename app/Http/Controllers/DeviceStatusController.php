@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class DeviceStatusController extends Controller
 {
+    public function get_device_status($id)
+    {
+        $deviceStatus = DeviceStatus::with(['device'])->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $deviceStatus
+        ]);
+    }
+
     public function notes(Request $request)
     {
         $deviceStatus = DeviceStatus::find($request->device_status_id);

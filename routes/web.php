@@ -51,5 +51,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::get('/api/devices/device_buildings', [DeviceController::class, 'buildings'])->name('devices.buildings');
     Route::get('/api/devices/device_types', [DeviceController::class, 'device_types'])->name('devices.device_types');
     Route::get('/device_rooms', [DeviceController::class, 'rooms'])->name('devices.rooms');
+
     Route::post('/device_status/notes', [DeviceStatusController::class, 'notes'])->name('device_status.notes');
+    Route::get('/device_status/{id}', [DeviceStatusController::class, 'get_device_status'])->name('device_status.get_device_status');
 });
