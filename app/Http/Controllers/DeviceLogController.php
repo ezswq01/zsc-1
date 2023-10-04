@@ -26,9 +26,6 @@ class DeviceLogController extends Controller
                 ->addColumn('device_id', function ($model) {
                     return $model->device->device_id;
                 })
-                ->addColumn('type', function ($model) {
-                    return $model->type;
-                })
                 ->editColumn('created_at', function ($model) {
                     return [
                         'display' => date('Y-m-d H:i:s', strtotime($model->created_at)),
