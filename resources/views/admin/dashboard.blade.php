@@ -11,7 +11,7 @@
         </div>
 
         <div class="page-header-content d-lg-flex border-top">
-            <div class="d-flex">
+            <div class="d-flex flex-fill w-xl-75 w-100">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
                     <a class="breadcrumb-item" href="#">Dashboard</a>
@@ -21,12 +21,16 @@
                     <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
                 </a>
             </div>
-            <div class="d-flex ms-auto gap-3 py-2 bg-white">
-                <select class="form-control select" data-placeholder="All Location" name="location" id="location">
+            <div class="d-flex flex-fill flex-shrink-1 ms-auto py-2 bg-white">
+                <select class="form-control select" data-placeholder="All Locations" name="locations" id="locations"
+                    multiple="multiple">
                     <option></option>
                     @foreach ($device_locations as $device_location)
-                        <option {{ request()->location == $device_location->branch ? 'selected' : '' }}
-                            value="{{ $device_location->branch }}">{{ ucfirst($device_location->branch) }}</option>
+                        @php
+                            $selected = in_array($device_location->branch, request()->locations ?? []) ? 'selected' : '';
+                        @endphp
+                        <option {{ $selected }} value="{{ $device_location->branch }}">
+                            {{ ucfirst($device_location->branch) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -173,7 +177,7 @@
                                         <tr>
                                             <td>{{ $device_status->updated_at }}</td>
                                             <td>{{ $device_status->device->device_id }}</td>
-                                            <td id="mark_{{$device_status->id}}">{!! $device_status->marked_as_read
+                                            <td id="mark_{{ $device_status->id }}">{!! $device_status->marked_as_read
                                                 ? '<i class="ph-check-circle text-success"></i>'
                                                 : '<i class="ph-question text-danger"></i>' !!}</td>
                                             <td>{{ explode('/', $device_status->device->subscribe_topic)[1] }}</td>
@@ -291,19 +295,24 @@
         $(document).ready(function() {
             'use strict';
 
-            $('#location').select2({
-                width: '100%',
-                allowClear: true
+            $('#locations').select2({
+                width: '100%'
             });
 
-            $('#location').change(function() {
-                let location = $(this).val();
+            $('#locations').change(function() {
+                let locations = $(this).val();
 
-                if (location !== '') {
-                    window.location = `{{ route('admin.dashboard.index') }}?location=${location}`
-                } else {
-                    window.location = `{{ route('admin.dashboard.index') }}`;
-                }
+                let url = '{{ route('admin.dashboard.index') }}';
+
+                locations.forEach(element => {
+                    if (url.indexOf('?') === -1) {
+                        url = `${url}?locations[]=${element}`
+                    } else {
+                        url = `${url}&locations[]=${element}`
+                    }
+                });
+
+                window.location = url;
             });
         })
     </script>
