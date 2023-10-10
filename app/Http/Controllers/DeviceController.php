@@ -46,17 +46,40 @@ class DeviceController extends Controller
                     }
                 ])
                 ->filter(function ($query) {
-                    if (request()->get('branch')) {
-                        $query->where('branch', request()->get('branch'));
+                    if (!empty(request()->get('locations'))) {
+                        $query->where(function ($w) {
+                            $locations = request()->get('locations');
+                            foreach ($locations as $location) {
+                                $w->orWhere('branch', $location);
+                            }
+                        });
                     }
-                    if (request()->get('building')) {
-                        $query->where('building', request()->get('building'));
+
+                    if (!empty(request()->get('buildings'))) {
+                        $query->where(function ($w) {
+                            $buildings = request()->get('buildings');
+                            foreach ($buildings as $building) {
+                                $w->orWhere('building', $building);
+                            }
+                        });
                     }
-                    if (request()->get('room')) {
-                        $query->where('room', request()->get('room'));
+
+                    if (!empty(request()->get('rooms'))) {
+                        $query->where(function ($w) {
+                            $rooms = request()->get('rooms');
+                            foreach ($rooms as $room) {
+                                $w->orWhere('room', $room);
+                            }
+                        });
                     }
-                    if (request()->get('device_type')) {
-                        $query->where('device_type_id', request()->get('device_type'));
+
+                    if (!empty(request()->get('device_types'))) {
+                        $query->where(function ($w) {
+                            $device_types = request()->get('device_types');
+                            foreach ($device_types as $device_type) {
+                                $w->orWhere('device_type_id', $device_type);
+                            }
+                        });
                     }
 
                     if (!empty(request()->get('search'))) {

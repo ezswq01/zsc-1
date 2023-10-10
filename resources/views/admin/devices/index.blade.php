@@ -39,27 +39,30 @@
 
         <div id="filter" class="row mt-2 px-3">
             <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
-                <label for="branch" class="form-label fw-semibold">Branch</label>
-                <select class="form-control select" data-placeholder="Select Branch" name="branch" id="branch">
+                <label for="locations" class="form-label fw-semibold">Locations</label>
+                <select class="form-control select" data-placeholder="Select Locations" name="locations[]" id="locations"
+                    multiple="multiple">
                     <option></option>
                 </select>
             </div>
             <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
-                <label for="building" class="form-label fw-semibold">Building</label>
-                <select class="form-control select" data-placeholder="Select Building" name="building" id="building">
+                <label for="buildings" class="form-label fw-semibold">Buildings</label>
+                <select class="form-control select" data-placeholder="Select Buildings" name="buildings" id="buildings"
+                    multiple="multiple">
                     <option></option>
                 </select>
             </div>
             <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
-                <label for="room" class="form-label fw-semibold">Room</label>
-                <select class="form-control select" data-placeholder="Select Room" name="room" id="room">
+                <label for="rooms" class="form-label fw-semibold">Rooms</label>
+                <select class="form-control select" data-placeholder="Select Rooms" name="rooms" id="rooms"
+                    multiple="multiple">
                     <option></option>
                 </select>
             </div>
             <div class="mb-lg-0 col-sm-12 col-lg-3">
-                <label for="device_type" class="form-label fw-semibold">Device Type</label>
-                <select class="form-control select" data-placeholder="Select Device Type" name="device_type"
-                    id="device_type">
+                <label for="device_types" class="form-label fw-semibold">Device Types</label>
+                <select class="form-control select" data-placeholder="Select Device Types" name="device_types"
+                    id="device_types" multiple="multiple">
                     <option></option>
                 </select>
             </div>
@@ -131,10 +134,10 @@
                 ajax: {
                     url: '{!! route('admin.devices.index') !!}',
                     data: function(d) {
-                        d.branch = $('#branch').val();
-                        d.building = $('#building').val();
-                        d.room = $('#room').val();
-                        d.device_type = $('#device_type').val();
+                        d.locations = $('#locations').val();
+                        d.buildings = $('#buildings').val();
+                        d.rooms = $('#rooms').val();
+                        d.device_types = $('#device_types').val();
                         d.search = $('input[type="search"]').val();
                         return d;
                     }
@@ -175,7 +178,7 @@
                 order: []
             });
 
-            $('#branch, #building, #room, #device_type').change(function() {
+            $('#locations, #buildings, #rooms, #device_types').change(function() {
                 datatable.draw();
             });
         });
@@ -185,8 +188,7 @@
         $(document).ready(function() {
             'use strict';
 
-            $('#branch').select2({
-                allowClear: true,
+            $('#locations').select2({
                 ajax: {
                     url: '{!! route('admin.devices.branches') !!}',
                     delay: 250,
@@ -205,8 +207,7 @@
                 },
             });
 
-            $('#building').select2({
-                allowClear: true,
+            $('#buildings').select2({
                 ajax: {
                     url: '{!! route('admin.devices.buildings') !!}',
                     delay: 250,
@@ -225,8 +226,7 @@
                 },
             });
 
-            $('#room').select2({
-                allowClear: true,
+            $('#rooms').select2({
                 ajax: {
                     url: '{!! route('admin.devices.rooms') !!}',
                     delay: 250,
@@ -245,8 +245,7 @@
                 },
             });
 
-            $('#device_type').select2({
-                allowClear: true,
+            $('#device_types').select2({
                 ajax: {
                     url: '{!! route('admin.devices.device_types') !!}',
                     delay: 250,
