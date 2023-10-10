@@ -13,8 +13,13 @@ class DashboardController extends Controller
         // filter by area get unique device_status
         $status_type_widgets = StatusTypeWidget::with('status_type.device_status.device.publish_action')
             ->with(['status_type.device_status.device' => function ($query) use ($request) {
-                if ($request->location) {
-                    return $query->where('branch', $request->location);
+                if (!empty($request->locations)) {
+                    return $query->where(function ($w) use ($request) {
+                        $locations = $request->locations;
+                        foreach ($locations as $location) {
+                            $w->orWhere('branch', $location);
+                        }
+                    });
                 }
                 return $query;
             }])
