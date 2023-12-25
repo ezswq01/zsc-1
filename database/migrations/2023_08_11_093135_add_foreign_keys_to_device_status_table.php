@@ -32,11 +32,11 @@ class AddForeignKeysToDeviceStatusTable extends Migration
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
 
-            $table->foreign('user_id', 'fk_device_status_to_users')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('CASCADE')
-                ->onDelete('CASCADE');
+            // $table->foreign('user_id', 'fk_device_status_to_users')
+            //     ->references('id')
+            //     ->on('users')
+            //     ->onUpdate('CASCADE')
+            //     ->onDelete('CASCADE');
         });
     }
 
@@ -51,7 +51,7 @@ class AddForeignKeysToDeviceStatusTable extends Migration
             $table->dropForeign('fk_device_status_to_devices');
             $table->dropForeign('fk_device_status_to_status_types');
             $table->dropForeign('fk_device_status_to_device_logs');
-            $table->dropForeign('fk_device_status_to_users');
+            // $table->dropForeign('fk_device_status_to_users');
         });
     }
 }

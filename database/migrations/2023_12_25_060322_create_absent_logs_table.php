@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeviceLogsTable extends Migration
+class CreateAbsentLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateDeviceLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('device_logs', function (Blueprint $table) {
+        Schema::create('absent_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('device_id')->nullable()->index('fk_device_logs_to_devices');
-            // $table->foreignId('user_id')->nullable()->index('fk_device_logs_to_users');
+            $table->unsignedBigInteger('absent_device_id');
             $table->string('value');
-            $table->string('type');
+            $table->string('status');
             $table->timestamps();
+
+            $table->foreign('absent_device_id')->references('id')->on('absent_devices')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateDeviceLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('device_logs');
+        Schema::dropIfExists('absent_logs');
     }
 }

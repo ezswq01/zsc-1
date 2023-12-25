@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
         $admin = User::create([
             'name' => "Admin",
             'email' => "admin@admin.com",
+            'user_code' => "admin",
             'password' => bcrypt('password'),
         ]);
         $admin->syncRoles(['admin']);
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
         $observer = User::create([
             'name' => "User",
             'email' => "observer@observer.com",
+            'user_code' => "observer",
             'password' => bcrypt('password'),
         ]);
         $observer->syncRoles(['observer']);

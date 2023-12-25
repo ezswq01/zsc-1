@@ -62,6 +62,13 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">User Code</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old('user_code', $user->user_code) }}" class="form-control" name="user_code"
+                                    placeholder="Type User Code" required type="text">
+                            </div>
+                        </div>
                         @can('users-update')
                             <div class="text-end">
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary"

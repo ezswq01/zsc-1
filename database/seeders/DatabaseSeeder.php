@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             DeviceSeeder::class,
             PublishActionSeeder::class,
             SubscribeExpressionSeeder::class,
+            AbsentDeviceSeeder::class,
             DeviceLogSeeder::class,
             DeviceStatusSeeder::class
         ]);

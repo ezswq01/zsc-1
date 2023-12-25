@@ -64,6 +64,13 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">User Code</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old('user_code') }}" class="form-control" name="user_code"
+                                    placeholder="Type User Code" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Password</label>
                             <div class="col-lg-8">
                                 <input value="{{ old('password') }}" class="form-control" name="password"

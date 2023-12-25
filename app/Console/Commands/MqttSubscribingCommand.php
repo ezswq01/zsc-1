@@ -2,8 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\AbsentDevice;
+use App\Models\AbsentLastLog;
+use App\Models\AbsentLog;
+use App\Models\AbsentReceivedLog;
 use App\Models\Device;
 use App\Models\DeviceLog;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use PhpMqtt\Client\Facades\MQTT;
@@ -47,14 +52,35 @@ class MqttSubscribingCommand extends Command
             echo "Received message with payload: {$message}\n";
             try {
                 DB::transaction(function () use ($topic, $message) {
+
                     /* Get Device */
                     $device = Device::where('subscribe_topic', $topic)->first();
-                    /* Create Log */
-                    $device_log = DeviceLog::create(['device_id' => $device->id, 'value' => $message, 'type' => 'subscribe']);
-                    /* Get Expressions */
-                    $subscribe_expression = $device->subscribe_expression;
-                    /* Device Alert Logic */
-                    Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
+                    $absent_device = AbsentDevice::where('subscribe_topic', $topic)->first();
+
+                    if ($device) {
+                        $device_log = DeviceLog::create(['device_id' => $device->id, 'value' => $message, 'type' => 'subscribe']);
+                        $subscribe_expression = $device->subscribe_expression;
+                        Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
+                    }
+
+                    if ($absent_device) {
+                        $absent_log = AbsentLog::create(
+                            ['absent_device_id' => $absent_device->id, 'value' => $message, 'status' => 'Request Open']
+                        );
+                        AbsentLastLog::updateOrCreate(
+                            ['absent_device_id' => $absent_device->id],
+                            ['value' => $message, 'absent_log_id' => $absent_log->id, 'status' => 'Request Open']
+                        );
+                        AbsentReceivedLog::create(
+                            [
+                                'absent_device_id' => $absent_device->id,
+                                'absent_log_id' => $absent_log->id,
+                                'value' => $message,
+                                'status' => 'Request Open',
+                                'marked_as_read' => false
+                            ]
+                        );
+                    }
                 });
                 echo "Received message success!\n";
             } catch (\Exception $e) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsentDeviceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
@@ -41,12 +42,14 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::resource('absent_devices', AbsentDeviceController::class);
 
     // Logout
     Route::get('/logout', [AuthController::class, 'logoutPost'])->name('logout');
 
     // Ajax routes
     Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
+    Route::post('/absent_devices/publish', [AbsentDeviceController::class, 'publish'])->name('absent_devices.publish');
     Route::get('/api/devices/device_branches', [DeviceController::class, 'branches'])->name('devices.branches');
     Route::get('/api/devices/device_buildings', [DeviceController::class, 'buildings'])->name('devices.buildings');
     Route::get('/api/devices/device_types', [DeviceController::class, 'device_types'])->name('devices.device_types');

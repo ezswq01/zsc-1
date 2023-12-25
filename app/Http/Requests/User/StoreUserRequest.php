@@ -27,7 +27,9 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'user_code' => 'required|string|max:255|unique:users',
             'role' => 'required|string|max:255',
+            'absent_device_id' => 'required',
             'password' => ['required', Password::default()]
         ];
     }

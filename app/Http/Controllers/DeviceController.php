@@ -133,8 +133,8 @@ class DeviceController extends Controller
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
-                'branch' => $branch,
-                'building' => $building,
+                'branch' => strtolower($branch),
+                'building' => strtolower($building),
                 'room' => $room
             ]);
 
@@ -249,8 +249,8 @@ class DeviceController extends Controller
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($validated['publish_topic']),
                 'subscribe_topic' => strtolower($validated['subscribe_topic']),
-                'branch' => $branch,
-                'building' => $building,
+                'branch' => strtolower($branch),
+                'building' => strtolower($building),
                 'room' => $room
             ]);
 

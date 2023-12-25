@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AbsentReceivedLog;
 use App\Models\Device;
 use App\Models\StatusTypeWidget;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class DashboardController extends Controller
         $device_locations = Device::distinct()->get(['branch']);
 
         $status_types = [];
+
         foreach ($status_type_widgets as $key => $status_type_widget) {
             $status_types[$status_type_widget->status_type_id] = [
                 'widget_id' => $status_type_widget->id,
@@ -42,8 +44,28 @@ class DashboardController extends Controller
                 }
             }
         }
+
         $status_types = json_decode(json_encode($status_types));
 
-        return view('admin.dashboard', compact('status_type_widgets', 'device_locations', 'status_types'));
+        $absent_received_logs = AbsentReceivedLog::with([
+            'absent_device' => function ($query) use ($request) {
+                if (!empty($request->locations)) {
+                    return $query->where(function ($w) use ($request) {
+                        $locations = $request->locations;
+                        foreach ($locations as $location) {
+                            $w->orWhere('branch', $location);
+                        }
+                    });
+                }
+                return $query;
+            }
+        ])->get();
+
+        return view('admin.dashboard', compact(
+            'status_type_widgets',
+            'device_locations',
+            'status_types',
+            'absent_received_logs'
+        ));
     }
 }

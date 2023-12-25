@@ -44,6 +44,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>User Code</th>
                     <th>Created At</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -118,6 +119,10 @@
                     {
                         data: 'roles',
                         name: 'roles.name'
+                    },
+                    {
+                        data: 'user_code',
+                        name: 'user_code'
                     },
                     {
                         data: {

@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'user_code'
+        'name', 'email', 'password', 'user_code', 'absent_device_id'
     ];
 
     /**
@@ -39,13 +39,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function device_log()
+    public function absent_device()
     {
-        return $this->hasMany(DeviceLog::class, 'user_id');
-    }
-
-    public function device_status()
-    {
-        return $this->hasMany(DeviceStatus::class, 'user_id');
+        return $this->belongsTo(Device::class, 'absent_device_id');
     }
 }
