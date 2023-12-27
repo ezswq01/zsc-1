@@ -10,7 +10,7 @@ class AbsentDevice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'device_id',
+        'absent_device_id',
         'publish_topic',
         'subscribe_topic',
         'branch',

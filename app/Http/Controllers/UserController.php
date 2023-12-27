@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\AbsentDevice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -63,8 +64,9 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all()->pluck('name');
+        $absent_devices = AbsentDevice::all();
 
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create', compact('roles', 'absent_devices'));
     }
 
     /**
@@ -100,8 +102,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = Role::all()->pluck('name');
+        $absent_devices = AbsentDevice::all();
 
-        return view('admin.users.show', compact('user', 'roles'));
+        return view('admin.users.show', compact('user', 'roles', 'absent_devices'));
     }
 
     /**
@@ -114,8 +117,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = Role::all()->pluck('name');
+        $absent_devices = AbsentDevice::all();
 
-        return view('admin.users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles', 'absent_devices'));
     }
 
     /**

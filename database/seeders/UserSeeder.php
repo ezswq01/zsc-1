@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'email' => "admin@admin.com",
             'user_code' => "admin",
             'password' => bcrypt('password'),
+            'absent_device_id' => 1,
         ]);
         $admin->syncRoles(['admin']);
 
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
             'email' => "observer@observer.com",
             'user_code' => "observer",
             'password' => bcrypt('password'),
+            'absent_device_id' => 1,
         ]);
         $observer->syncRoles(['observer']);
     }

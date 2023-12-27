@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">Create User</h5>
@@ -35,19 +35,19 @@
         <div class="card-body border-top">
             <div class="row g-lg-5 g-2">
                 <div class="col-lg-8 col-12">
-                    <form action="{{ route('admin.users.store') }}" method="POST">
+                    <form action="{{ route("admin.users.store") }}" method="POST">
                         @csrf
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Name</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('name') }}" class="form-control" name="name"
+                                <input value="{{ old("name") }}" class="form-control" name="name"
                                     placeholder="Type Name" required type="text">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Email</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('email') }}" class="form-control" name="email"
+                                <input value="{{ old("email") }}" class="form-control" name="email"
                                     placeholder="Type Email" required type="email">
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                                 <select class="form-control select" data-placeholder="Select Role" name="role">
                                     <option></option>
                                     @foreach ($roles as $role)
-                                        <option {{ old('role') == $role ? 'selected' : '' }} value="{{ $role }}">
+                                        <option {{ old("role") == $role ? "selected" : "" }} value="{{ $role }}">
                                             {{ $role }}</option>
                                     @endforeach
                                 </select>
@@ -66,15 +66,28 @@
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">User Code</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('user_code') }}" class="form-control" name="user_code"
+                                <input value="{{ old("user_code") }}" class="form-control" name="user_code"
                                     placeholder="Type User Code" required type="text">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Password</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('password') }}" class="form-control" name="password"
+                                <input value="{{ old("password") }}" class="form-control" name="password"
                                     placeholder="•••••••••••" required type="password">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Absent Device</label>
+                            <div class="col-lg-8">
+                                <select class="form-control select" data-placeholder="Select Absent Device Type"
+                                    name="absent_device_id">
+                                    <option></option>
+                                    @foreach ($absent_devices as $absent_device)
+                                        <option {{ old("absent_device_id") == $absent_device->id ? "selected" : "" }}
+                                            value="{{ $absent_device->id }}">{{ $absent_device->absent_device_id }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="text-end">

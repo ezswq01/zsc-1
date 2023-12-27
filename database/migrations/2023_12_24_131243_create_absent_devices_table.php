@@ -15,7 +15,7 @@ class CreateAbsentDevicesTable extends Migration
     {
         Schema::create('absent_devices', function (Blueprint $table) {
             $table->id();
-            $table->string('device_id');
+            $table->string('absent_device_id');
             $table->string('publish_topic');
             $table->string('subscribe_topic');
             $table->string('branch');

@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="{{ route('admin.users.index') }}">User</a>
+                    <a class="breadcrumb-item" href="{{ route("admin.users.index") }}">User</a>
                     <span class="breadcrumb-item active">{{ $user->name }}</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">Detail User</h5>
@@ -39,14 +39,14 @@
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Name</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('name', $user->name) }}" class="form-control" name="name"
+                                <input value="{{ old("name", $user->name) }}" class="form-control" name="name"
                                     placeholder="Type Name" required disabled type="text">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Email</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('email', $user->email) }}" class="form-control" name="email"
+                                <input value="{{ old("email", $user->email) }}" class="form-control" name="email"
                                     placeholder="Type Email" required disabled type="email">
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="col-lg-8">
                                 <select class="form-control select" data-placeholder="Select Role" name="role" disabled>
                                     @foreach ($roles as $role)
-                                        <option {{ $user->roles[0]->name == $role ? 'selected' : '' }}
+                                        <option {{ $user->roles[0]->name == $role ? "selected" : "" }}
                                             value="{{ $role }}">
                                             {{ $role }}</option>
                                     @endforeach
@@ -65,13 +65,28 @@
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">User Code</label>
                             <div class="col-lg-8">
-                                <input value="{{ old('user_code', $user->user_code) }}" class="form-control" name="user_code"
-                                    placeholder="Type User Code" required type="text">
+                                <input value="{{ old("user_code", $user->user_code) }}" class="form-control"
+                                    name="user_code" placeholder="Type User Code" required disabled type="text">
                             </div>
                         </div>
-                        @can('users-update')
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Absent Device</label>
+                            <div class="col-lg-8">
+                                <select disabled class="form-control select" data-placeholder="Select Absent Device Type"
+                                    name="absent_device_id">
+                                    <option></option>
+                                    @foreach ($absent_devices as $absent_device)
+                                        <option
+                                            {{ old("absent_device_id", $user->absent_device_id) == $absent_device->id ? "selected" : "" }}
+                                            value="{{ $absent_device->id }}">{{ $absent_device->absent_device_id }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @can("users-update")
                             <div class="text-end">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary"
+                                <a href="{{ route("admin.users.edit", $user->id) }}" class="btn btn-primary"
                                     type="submit">Edit</a>
                             </div>
                         @endcan

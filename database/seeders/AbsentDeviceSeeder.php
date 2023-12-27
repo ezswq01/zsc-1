@@ -14,8 +14,8 @@ class AbsentDeviceSeeder extends Seeder
      */
     public function run()
     {
-        $AbsentDevice = AbsentDevice::create([
-            'device_id' => 'AD1',
+        AbsentDevice::create([
+            'absent_device_id' => 'AD1',
             'publish_topic' => 'mcc/jakarta/bank/meeting/door/door-2/pub',
             'subscribe_topic' => 'mcc/jakarta/bank/meeting/door/door-2/sub',
             'branch' => 'jakarta',

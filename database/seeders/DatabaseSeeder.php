@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             RoleSeeder::class,
+            AbsentDeviceSeeder::class,
             UserSeeder::class,
             DeviceTypeSeeder::class,
             StatusTypeSeeder::class,
@@ -23,7 +24,6 @@ class DatabaseSeeder extends Seeder
             DeviceSeeder::class,
             PublishActionSeeder::class,
             SubscribeExpressionSeeder::class,
-            AbsentDeviceSeeder::class,
             DeviceLogSeeder::class,
             DeviceStatusSeeder::class
         ]);
