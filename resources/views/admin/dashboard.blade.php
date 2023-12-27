@@ -114,7 +114,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <h6 class="fw-semibold">Notes</h6>
-                                                    <textarea disabled="{{ $absent_received_log->marked_as_read ? "true" : "false" }}" class="form-control">{{ $absent_received_log->notes }}</textarea>
+                                                    <textarea {{ $absent_received_log->marked_as_read ? "disabled" : "" }} class="form-control">{{ $absent_received_log->notes }}</textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-link"
