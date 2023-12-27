@@ -20,6 +20,7 @@ class AbsentReceivedLog extends Model
         'status',
         'value',
         'marked_as_read',
+        'notes',
         'created_at',
         'updated_at'
     ];

@@ -114,13 +114,15 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <h6 class="fw-semibold">Notes</h6>
-                                                    <textarea class="form-control">{{ $absent_received_log->notes }}</textarea>
+                                                    <textarea disabled="{{ $absent_received_log->marked_as_read ? "true" : "false" }}" class="form-control">{{ $absent_received_log->notes }}</textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-link"
                                                         data-bs-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="openDoor('{{ $absent_received_log->id }}')">Submit</button>
+                                                    @if (!$absent_received_log->marked_as_read)
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="handleOpenDoor('{{ $absent_received_log->id }}')">Submit</button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -145,12 +147,14 @@
                                                     <i class="ph-list"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    @if ($absent_received_log->status == "Request Open")
-                                                        <button class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#open_absent_device_{{ $absent_received_log->id }}">
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#open_absent_device_{{ $absent_received_log->id }}">
+                                                        @if (!$absent_received_log->marked_as_read)
                                                             <i class="ph-newspaper me-1"></i> Respond Request
-                                                        </button>
-                                                    @endif
+                                                        @else
+                                                            <i class="ph-newspaper me-1"></i> Open Note
+                                                        @endif
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -344,6 +348,37 @@
                     $(`#open_${device_status_id} p`).html(textarea);
                     $(`#create_${device_status_id} textarea`).val(textarea);
                     $(`.publish_${device_status_id} textarea`).val(textarea);
+                    alert(response.message);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        function handleOpenDoor(absent_device_received_log_id) {
+            if (!confirm('Are you sure want to publish?')) return false;
+
+            const textarea = $(`#open_absent_device_${absent_device_received_log_id} textarea`).val()
+
+            $.ajax({
+                url: '/admin/absent_devices/publish',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    absent_device_received_log_id: absent_device_received_log_id,
+                    notes: textarea,
+                },
+                success: function(response) {
+                    // @TODO : Change Icon to marked
+                    //
+                    //
+                    $(`#mark_absent_received_log_${absent_device_received_log_id}`).html(
+                        '<i class="ph-check-circle text-success"></i>'
+                    );
+                    $(`#open_absent_device_${absent_device_received_log_id} textarea`).prop(
+                        'disabled', true
+                    );
                     alert(response.message);
                 },
                 error: function(error) {

@@ -77,6 +77,7 @@ class MqttSubscribingCommand extends Command
                                 'absent_log_id' => $absent_log->id,
                                 'value' => $message,
                                 'status' => 'Request Open',
+                                'notes' => null,
                                 'marked_as_read' => false
                             ]
                         );

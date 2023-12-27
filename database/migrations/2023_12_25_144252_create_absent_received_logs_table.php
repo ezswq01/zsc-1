@@ -20,6 +20,7 @@ class CreateAbsentReceivedLogsTable extends Migration
             $table->boolean('marked_as_read')->default(false);
             $table->string('value');
             $table->string('status');
+            $table->string('notes')->nullable()->default(null);
             $table->timestamps();
 
             $table->foreign('absent_device_id')->references('id')->on('absent_devices')->onDelete('cascade');
