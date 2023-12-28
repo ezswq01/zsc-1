@@ -24,7 +24,7 @@ class DashboardController extends Controller
                 }
                 return $query;
             }])
-            ->get();
+            ->get()->sortByDesc('created_at');;
 
         $device_locations = Device::distinct()->get(['branch']);
 
@@ -59,7 +59,7 @@ class DashboardController extends Controller
                 }
                 return $query;
             }
-        ])->get();
+        ])->get()->sortByDesc('created_at');
 
         return view('admin.dashboard', compact(
             'status_type_widgets',

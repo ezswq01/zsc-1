@@ -41,7 +41,9 @@ const DatatableBasic = function() {
         });
 
         // Basic datatable
-        $('.datatable-basic').DataTable();
+        $('.datatable-basic').DataTable({
+            order: []
+        });
 
         // Alternative pagination
         $('.datatable-pagination').DataTable({

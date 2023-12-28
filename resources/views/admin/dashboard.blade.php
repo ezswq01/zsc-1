@@ -108,7 +108,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">RESPOND REQUEST
-                                                        - {{ $absent_received_log->absent_device->device_id }}</h5>
+                                                        - {{ $absent_received_log->absent_device->absent_device_id }}</h5>
                                                     <button type="button" class="btn-close"
                                                         data-bs-dismiss="modal"></button>
                                                 </div>
@@ -130,7 +130,7 @@
                                 @endif
                                 <tr>
                                     <td>{{ $absent_received_log->created_at }}</td>
-                                    <td>{{ $absent_received_log->absent_device->device_id }}</td>
+                                    <td>{{ $absent_received_log->absent_device->absent_device_id }}</td>
                                     <td>
                                         {{ \App\Models\User::where("user_code", $absent_received_log->value)->first()->name }}
                                     </td>
