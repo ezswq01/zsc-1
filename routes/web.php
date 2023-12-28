@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsentDeviceController;
+use App\Http\Controllers\AbsentDeviceLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
@@ -37,7 +38,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('devices', DeviceController::class);
     Route::resource('device_types', DeviceTypeController::class);
     Route::resource('status_types', StatusTypeController::class);
-    Route::resource('device_logs', DeviceLogController::class);
+    Route::resource('device_logs', DeviceLogController::class)->only(['index']);
+    Route::resource('absent_device_logs', AbsentDeviceLogController::class)->only(['index']);
     Route::resource('dashboard', DashboardController::class)->only(['index']);
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);

@@ -127,6 +127,7 @@
                 <span>Log and Report</span>
               </a>
               <ul class="nav-group-sub collapse {{ $active == "device_logs" ? "show" : "" }}">
+                <li class="nav-item"><a class="nav-link" href="{{ route("admin.absent_device_logs.index") }}">Absent Devices</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route("admin.device_logs.index") }}">Devices</a></li>
               </ul>
             </li>

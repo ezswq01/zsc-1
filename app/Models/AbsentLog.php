@@ -21,4 +21,9 @@ class AbsentLog extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function absent_device()
+    {
+        return $this->belongsTo(AbsentDevice::class);
+    }
 }
