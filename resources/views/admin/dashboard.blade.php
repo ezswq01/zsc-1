@@ -44,8 +44,8 @@
             <div class="card text-white bg-primary">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h3 class="mb-0">
-                            {{ $absent_received_logs->count() }}
+                        <h3 class="mb-0 absent_door_request_qty">
+                            {{ $absent_received_logs->where("marked_as_read", false)->count() }}
                         </h3>
                         <button onclick="toggleTable('absent-doors')" type="button" class="btn btn-white p-1">
                             <i class="ph-table"></i>
@@ -88,9 +88,10 @@
             <div class="mb-3">
                 <div class="bg-white p-4">
                     <h6>User Door Absent Request</h6>
-                    <table class="table datatable-basic">
+                    <table class="table absent_received_logs">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Time</th>
                                 <th>Device ID</th>
                                 <th>User</th>
@@ -99,70 +100,20 @@
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($absent_received_logs as $key => $absent_received_log)
-                                @if ($absent_received_log->absent_device)
-                                    <div id="open_absent_device_{{ $absent_received_log->id }}" class="modal fade"
-                                        tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">RESPOND REQUEST
-                                                        - {{ $absent_received_log->absent_device->absent_device_id }}</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h6 class="fw-semibold">Notes</h6>
-                                                    <textarea {{ $absent_received_log->marked_as_read ? "disabled" : "" }} class="form-control">{{ $absent_received_log->notes }}</textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-link"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    @if (!$absent_received_log->marked_as_read)
-                                                        <button type="button" class="btn btn-primary"
-                                                            onclick="handleOpenDoor('{{ $absent_received_log->id }}')">Submit</button>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                                <tr>
-                                    <td>{{ $absent_received_log->created_at }}</td>
-                                    <td>{{ $absent_received_log->absent_device->absent_device_id }}</td>
-                                    <td>
-                                        {{ \App\Models\User::where("user_code", $absent_received_log->value)->first()->name }}
-                                    </td>
-                                    <td id="mark_absent_received_log_{{ $absent_received_log->id }}">
-                                        {!! $absent_received_log->status == "Open"
-                                            ? '<i class="ph-check-circle text-success"></i>'
-                                            : '<i class="ph-question text-danger"></i>' !!}
-                                    </td>
-                                    <td>{{ $absent_received_log->absent_device->branch }}</td>
-                                    <td class="text-center">
-                                        <div class="d-inline-flex">
-                                            <div class="dropdown">
-                                                <a class="text-body" data-bs-toggle="dropdown" href="#">
-                                                    <i class="ph-list"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#open_absent_device_{{ $absent_received_log->id }}">
-                                                        @if (!$absent_received_log->marked_as_read)
-                                                            <i class="ph-newspaper me-1"></i> Respond Request
-                                                        @else
-                                                            <i class="ph-newspaper me-1"></i> Open Note
-                                                        @endif
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                        <tbody></tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        <div id="open_absent_device" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer"></div>
                 </div>
             </div>
         </div>
@@ -320,6 +271,117 @@
 @endsection
 
 @push("js")
+    <script src="/js/app.js"></script>
+    <script src="/assets_2/js/dashboard.js"></script>
+
+    {{-- Absent Door --}}
+    <script>
+        let absent_device_logs = @json($absent_received_logs);
+
+        $(document).ready(function() {
+            initDatatableAbsent(absent_device_logs)
+        });
+
+        function handleOpenModalAbsent(device_id) {
+            const item = absent_device_logs.find(item => item.id == device_id)
+
+            const modalEl = $("#open_absent_device")
+
+            modalEl.find(".modal-title").html(
+                `RESPOND REQUEST - ${item.absent_device.absent_device_id}`
+            )
+            modalEl.find(".modal-body").html(
+                `<h6 class="fw-semibold">Notes</h6>
+                <textarea ${item.marked_as_read && "disabled"} class="form-control">${
+                    item.notes ? item.notes : ""
+                }</textarea>`
+            )
+            modalEl.find(".modal-footer").html(
+                `
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                    ${
+                        !item.marked_as_read
+                        ? `<button type="button" class="btn btn-primary" onclick="handleOpenDoor('${item.id}')">Submit</button>`
+                        : ""
+                    }
+                `
+            )
+        }
+
+        function handleOpenDoor(absent_device_received_log_id) {
+            if (!confirm('Are you sure want to publish?')) return false;
+
+            const textarea = $(`#open_absent_device textarea`).val()
+
+            $.ajax({
+                url: '/admin/absent_devices/publish',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    absent_device_received_log_id: absent_device_received_log_id,
+                    notes: textarea,
+                },
+                success: function(response) {
+                    $(`.absent_badge_${absent_device_received_log_id}`).html(`
+                        <span class="badge bg-success">Opened</span>
+                    `);
+
+                    $(`#open_absent_device textarea`).prop(
+                        'disabled', true
+                    );
+
+                    absent_device_logs = absent_device_logs.map(item => {
+                        if (item.id == absent_device_received_log_id) {
+                            return {
+                                ...item,
+                                marked_as_read: true,
+                                status: "Open",
+                            }
+                        }
+                        return {
+                            ...item
+                        }
+                    })
+
+                    const absent_device_logs_requested = absent_device_logs.filter(item => item.status != "Open")
+                    $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
+
+                    alert(response.message);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        window.Echo.channel('laravel_database_new-data-channel').listen('.new-data-event', (e) => {
+            const item = e.message;
+
+            if (item.type == "absent_device") {
+
+                absent_device_logs = [
+                    item.data,
+                    ...absent_device_logs
+                ]
+
+                const absent_device_logs_requested = absent_device_logs.filter(item => item.status != "Open")
+                $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
+
+                initDatatableAbsent(absent_device_logs)
+
+                $(`.notification_main`).append(`
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="flex-fill">
+                            New open door request
+                            <div class="fs-sm text-muted mt-1">Just now</div>
+                        </div>
+                    </div> 
+                `)
+            }
+        });
+    </script>
+
+    {{-- Device Dynamic --}}
     <script>
         function toggleTable(id) {
             $(`#${id}`).toggle();
@@ -340,45 +402,10 @@
                     notes: textarea,
                 },
                 success: function(response) {
-                    // @TODO : Change Icon to marked
-                    //
-                    //
-
                     $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
                     $(`#open_${device_status_id} p`).html(textarea);
                     $(`#create_${device_status_id} textarea`).val(textarea);
                     $(`.publish_${device_status_id} textarea`).val(textarea);
-                    alert(response.message);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            })
-        }
-
-        function handleOpenDoor(absent_device_received_log_id) {
-            if (!confirm('Are you sure want to publish?')) return false;
-
-            const textarea = $(`#open_absent_device_${absent_device_received_log_id} textarea`).val()
-
-            $.ajax({
-                url: '/admin/absent_devices/publish',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    absent_device_received_log_id: absent_device_received_log_id,
-                    notes: textarea,
-                },
-                success: function(response) {
-                    // @TODO : Change Icon to marked
-                    //
-                    //
-                    $(`#mark_absent_received_log_${absent_device_received_log_id}`).html(
-                        '<i class="ph-check-circle text-success"></i>'
-                    );
-                    $(`#open_absent_device_${absent_device_received_log_id} textarea`).prop(
-                        'disabled', true
-                    );
                     alert(response.message);
                 },
                 error: function(error) {

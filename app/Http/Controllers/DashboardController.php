@@ -47,8 +47,9 @@ class DashboardController extends Controller
 
         $status_types = json_decode(json_encode($status_types));
 
-        $absent_received_logs = AbsentReceivedLog::with([
-            'absent_device' => function ($query) use ($request) {
+        $absent_received_logs = AbsentReceivedLog::with('absent_device')->whereHas(
+            'absent_device',
+            function ($query) use ($request) {
                 if (!empty($request->locations)) {
                     return $query->where(function ($w) use ($request) {
                         $locations = $request->locations;
@@ -59,7 +60,7 @@ class DashboardController extends Controller
                 }
                 return $query;
             }
-        ])->get()->sortByDesc('created_at');
+        )->get();
 
         return view('admin.dashboard', compact(
             'status_type_widgets',

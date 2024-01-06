@@ -64,24 +64,32 @@ class MqttSubscribingCommand extends Command
                     }
 
                     if ($absent_device) {
-                        echo "Absent Device\n";
-                        $absent_log = AbsentLog::create(
-                            ['absent_device_id' => $absent_device->id, 'value' => $message, 'status' => 'Request Open']
-                        );
-                        AbsentLastLog::updateOrCreate(
-                            ['absent_device_id' => $absent_device->id],
-                            ['value' => $message, 'absent_log_id' => $absent_log->id, 'status' => 'Request Open']
-                        );
-                        AbsentReceivedLog::create(
-                            [
-                                'absent_device_id' => $absent_device->id,
-                                'absent_log_id' => $absent_log->id,
-                                'value' => $message,
-                                'status' => 'Request Open',
-                                'notes' => null,
-                                'marked_as_read' => false
-                            ]
-                        );
+                        $user = User::where('user_code', $message)->first();
+                        if ($user) {
+                            echo "Absent Device\n";
+                            $absent_log = AbsentLog::create(
+                                ['absent_device_id' => $absent_device->id, 'value' => $message, 'status' => 'Request Open']
+                            );
+                            AbsentLastLog::updateOrCreate(
+                                ['absent_device_id' => $absent_device->id],
+                                ['value' => $message, 'absent_log_id' => $absent_log->id, 'status' => 'Request Open']
+                            );
+                            $absent_received_log = AbsentReceivedLog::create(
+                                [
+                                    'absent_device_id' => $absent_device->id,
+                                    'absent_log_id' => $absent_log->id,
+                                    'value' => $message,
+                                    'status' => 'Request Open',
+                                    'notes' => null,
+                                    'marked_as_read' => false
+                                ]
+                            );
+                            // event to NewDataEvent
+                            event(new \App\Events\NewDataEvent([
+                                'type' => 'absent_device',
+                                'data' => $absent_received_log->load('absent_device')
+                            ]));
+                        }
                     }
                 });
                 echo "Received message success!\n";

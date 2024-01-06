@@ -16,8 +16,8 @@ class AbsentDeviceSeeder extends Seeder
     {
         AbsentDevice::create([
             'absent_device_id' => 'AD1',
-            'publish_topic' => 'mcc/jakarta/bank/meeting/door/door-2/pub',
-            'subscribe_topic' => 'mcc/jakarta/bank/meeting/door/door-2/sub',
+            'publish_topic' => 'mcc/jakarta/bank/meeting/door/door-2/receiver',
+            'subscribe_topic' => 'mcc/jakarta/bank/meeting/door/door-2/sender',
             'branch' => 'jakarta',
             'building' => 'bank',
             'room' => 'meeting',
