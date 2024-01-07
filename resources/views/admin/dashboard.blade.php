@@ -91,7 +91,6 @@
                     <table class="table absent_received_logs">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Time</th>
                                 <th>Device ID</th>
                                 <th>User</th>
@@ -122,7 +121,7 @@
                 <div class="mb-3">
                     <div class="bg-white p-4">
                         <h6>{{ $status_type_widget->status_type->name }}</h6>
-                        <table class="table datatable-basic">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -132,137 +131,46 @@
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($status_type_widget->status_type->device_status as $key => $device_status)
-                                    @if ($device_status->device)
-                                        <div id="open_{{ $device_status->id }}" class="modal fade" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">OPEN NOTE
-                                                            - {{ $device_status->device->device_id }}</h5>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h6 class="fw-semibold">Notes</h6>
-                                                        <p>{{ $device_status->notes }}</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-link"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if ($device_status->device)
-                                        <div id="create_{{ $device_status->id }}" class="modal fade" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">CREATE NOTE -
-                                                            {{ $device_status->device->device_id }}</h5>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h6 class="fw-semibold">Notes</h6>
-                                                        <textarea class="form-control">{{ $device_status->notes }}</textarea>
-                                                        <div class="d-flex gap-2 mt-3">
-                                                            <label for="marked_{{ $device_status->id }}">Set as
-                                                                marked?</label>
-                                                            <input {{ $device_status->marked_as_read ? "checked" : "" }}
-                                                                type="checkbox" class="form-check-input"
-                                                                id="marked_{{ $device_status->id }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-link"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary"
-                                                            onclick="handleSubmitNotes('{{ $device_status->id }}')">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if ($device_status->device)
-                                        @if ($device_status->device->publish_action)
-                                            @foreach ($device_status->device->publish_action as $publish_action)
-                                                <div id="publish_{{ $device_status->id }}_{{ $publish_action->id }}"
-                                                    class="publish_{{ $device_status->id }} modal fade" tabindex="-1">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">PUBLISH -
-                                                                    {{ $device_status->device->device_id }}</h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <h6 class="fw-semibold">Notes</h6>
-                                                                <textarea class="form-control">{{ $device_status->notes }}</textarea>
-                                                                <div class="d-flex gap-2 mt-3">
-                                                                    <label for="marked_{{ $device_status->id }}">Set as
-                                                                        marked?</label>
-                                                                    <input disabled checked type="checkbox"
-                                                                        class="form-check-input"
-                                                                        id="marked_{{ $device_status->id }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-link"
-                                                                    data-bs-dismiss="modal">Close</button>
-                                                                <button type="button" class="btn btn-primary"
-                                                                    onclick="handlePublishAction('{{ $device_status->id }}', '{{ $publish_action->id }}')">Submit</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    @endif
-                                    @if ($device_status->device)
-                                        <tr>
-                                            <td>{{ $device_status->updated_at }}</td>
-                                            <td>{{ $device_status->device->device_id }}</td>
-                                            <td id="mark_{{ $device_status->id }}">{!! $device_status->marked_as_read
-                                                ? '<i class="ph-check-circle text-success"></i>'
-                                                : '<i class="ph-question text-danger"></i>' !!}</td>
-                                            <td>{{ explode("/", $device_status->device->subscribe_topic)[1] }}</td>
-                                            <td class="text-center">
-                                                <div class="d-inline-flex">
-                                                    <div class="dropdown">
-                                                        <a class="text-body" data-bs-toggle="dropdown" href="#">
-                                                            <i class="ph-list"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            @if ($device_status->device->publish_action)
-                                                                @foreach ($device_status->device->publish_action as $publish_action)
-                                                                    <button class="dropdown-item"data-bs-toggle="modal"
-                                                                        data-bs-target="#publish_{{ $device_status->id }}_{{ $publish_action->id }}">
-                                                                        {{ $publish_action->label }}
-                                                                    </button>
-                                                                @endforeach
-                                                            @endif
-                                                            <button class="dropdown-item" data-bs-toggle="modal"
-                                                                data-bs-target="#open_{{ $device_status->id }}">
-                                                                <i class="ph-newspaper me-1"></i> Open Note
-                                                            </button>
-                                                            <button class="dropdown-item" data-bs-toggle="modal"
-                                                                data-bs-target="#create_{{ $device_status->id }}">
-                                                                <i class="ph-note-pencil me-1"></i> Create Note
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div id="open_note" class="modal fade" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="create_note" class="modal fade" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="publish_action" class="publish_action modal fade" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer"></div>
                     </div>
                 </div>
             </div>
@@ -277,9 +185,11 @@
     {{-- Absent Door --}}
     <script>
         let absent_device_logs = @json($absent_received_logs);
+        let status_type_widgets = @json($status_type_widgets);
 
         $(document).ready(function() {
             initDatatableAbsent(absent_device_logs)
+            initDatatableStatusType(status_type_widgets)
         });
 
         function handleOpenModalAbsent(device_id) {
@@ -288,22 +198,89 @@
             const modalEl = $("#open_absent_device")
 
             modalEl.find(".modal-title").html(
-                `RESPOND REQUEST - ${item.absent_device.absent_device_id}`
+                `
+                  RESPOND REQUEST - ${item.absent_device.absent_device_id}
+                `
             )
+
             modalEl.find(".modal-body").html(
-                `<h6 class="fw-semibold">Notes</h6>
-                <textarea ${item.marked_as_read && "disabled"} class="form-control">${
-                    item.notes ? item.notes : ""
-                }</textarea>`
+                `
+                  <h6 class="fw-semibold">Notes</h6>
+                  <textarea ${item.marked_as_read && "disabled"} class="form-control">${
+                      item.notes ? item.notes : ""
+                  }</textarea>
+                `
             )
+
             modalEl.find(".modal-footer").html(
                 `
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                    ${
-                        !item.marked_as_read
-                        ? `<button type="button" class="btn btn-primary" onclick="handleOpenDoor('${item.id}')">Submit</button>`
-                        : ""
-                    }
+                  <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                  ${
+                      !item.marked_as_read
+                      ? `<button type="button" class="btn btn-primary" onclick="handleOpenDoor('${item.id}')">Submit</button>`
+                      : ""
+                  }
+                `
+            )
+        }
+
+        function handleOpenModalNote(status_type_widget_id, device_status_id) {
+            const item = status_type_widgets.find((item) => item.id == status_type_widget_id)
+            const device_status = item.status_type?.device_status?.find((item) => item.id == device_status_id)
+
+            const modalEl = $(`#open_note`)
+
+            modalEl.find(".modal-title").html(
+                `
+                  OPEN NOTE - Device : ${device_status.device.device_id}
+                `
+            )
+
+            modalEl.find(".modal-body").html(
+                `
+                  <h6 class="fw-semibold">Notes</h6>
+                  <p>${device_status.notes ? device_status.notes : ""}</p>
+                `
+            )
+
+            modalEl.find(".modal-footer").html(
+                `
+                  <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                `
+            )
+        }
+
+        function handleCreateModalNote(status_type_widget_id, device_status_id) {
+            const item = status_type_widgets.find((item) => item.id == status_type_widget_id)
+            const device_status = item.status_type?.device_status?.find((item) => item.id == device_status_id)
+
+            const modalEl = $(`#create_note`)
+
+            modalEl.find(".modal-title").html(
+                `
+                  CREATE NOTE - Device : ${device_status.device.device_id}
+                `
+            )
+
+            modalEl.find(".modal-body").html(
+                `
+                  <h6 class="fw-semibold">Notes</h6>
+                  <textarea class="form-control">${device_status.notes ? device_status.notes : ""}</textarea>
+                  <div class="d-flex gap-2 mt-3">
+                      <label for="marked_${device_status_id}">Set as marked?</label>
+                      <input 
+                        type="checkbox"
+                        ${device_status.marked_as_read ? "checked" : ""}
+                        class="form-check-input" id="marked_${device_status_id}"
+                      >
+                  </div>
+                `
+            )
+
+            modalEl.find(".modal-footer").html(
+                `
+                  <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="handleSubmitNotes('${device_status_id}')">Submit</button>
                 `
             )
         }
@@ -317,9 +294,9 @@
                 url: '/admin/absent_devices/publish',
                 type: 'POST',
                 data: {
+                    notes: textarea,
                     _token: '{{ csrf_token() }}',
                     absent_device_received_log_id: absent_device_received_log_id,
-                    notes: textarea,
                 },
                 success: function(response) {
                     $(`.absent_badge_${absent_device_received_log_id}`).html(`
@@ -336,6 +313,7 @@
                                 ...item,
                                 marked_as_read: true,
                                 status: "Open",
+                                notes: textarea,
                             }
                         }
                         return {
@@ -343,9 +321,122 @@
                         }
                     })
 
-                    const absent_device_logs_requested = absent_device_logs.filter(item => item.status != "Open")
+                    const absent_device_logs_requested = absent_device_logs.filter(
+                        item => item.status != "Open"
+                    )
                     $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
 
+                    alert(response.message);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        function handleSubmitNotes(device_status_id) {
+            if (!confirm('Are you sure want to submit this notes?')) return false;
+            const textarea = $(`#create_note textarea`).val()
+            const is_checked = $(`#marked_${device_status_id}`).is(':checked')
+
+            $.ajax({
+                url: '/admin/device_status/notes',
+                type: 'POST',
+                data: {
+                    notes: textarea,
+                    _token: '{{ csrf_token() }}',
+                    device_status_id: device_status_id,
+                    marked_as_read: is_checked,
+                },
+                success: function(response) {
+                    const status_type_widget_id = response.status_type_widget.id
+                    status_type_widgets = status_type_widgets.map(item => {
+                        if (item.id == status_type_widget_id) {
+                            return {
+                                ...item,
+                                status_type: {
+                                    ...item.status_type,
+                                    device_status: item.status_type.device_status.map(item => {
+                                        if (item.id == device_status_id) {
+                                            return {
+                                                ...item,
+                                                notes: textarea,
+                                                marked_as_read: is_checked,
+                                            }
+                                        }
+                                        return {
+                                            ...item
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                        return {
+                            ...item
+                        }
+                    })
+
+                    if (is_checked) {
+                        $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
+                    } else {
+                        $(`#mark_${device_status_id}`).html('<i class="ph-question text-danger"></i>');
+                    }
+
+                    alert(response.message);
+                },
+                error: function(error) {
+                    alert("Something went wrong!");
+                    console.log(error);
+                }
+            })
+        }
+
+        function handlePublishModalNote(status_type_widget_id, device_status_id, publish_action_id) {
+            const item = status_type_widgets.find((item) => item.id == status_type_widget_id)
+            const device_status = item.status_type?.device_status?.find((item) => item.id == device_status_id)
+
+            const modalEl = $(`#publish_action`)
+
+            modalEl.find(".modal-title").html(
+                `
+                    PUBLISH NOTE - Device : ${device_status.device.device_id}
+                `
+            )
+
+            modalEl.find(".modal-body").html(
+                `
+                    <h6 class="fw-semibold">Notes</h6>
+                    <textarea class="form-control">${device_status.notes ? device_status.notes : ""}</textarea>
+                `
+            )
+
+            modalEl.find(".modal-footer").html(
+                `
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="handlePublishAction(${device_status_id}, ${publish_action_id})">
+                        Submit
+                    </button>
+                `
+            )
+        }
+
+        function handlePublishAction(device_status_id, publish_action_id) {
+            if (!confirm('Are you sure want to publish?')) return false;
+            const textarea = $(`#publish_action textarea`).val()
+            console.log(device_status_id, publish_action_id)
+            console.log(textarea)
+
+            $.ajax({
+                url: '/admin/devices/publish',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: publish_action_id,
+                    device_status_id: device_status_id,
+                    notes: textarea,
+                },
+                success: function(response) {
+                    $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
                     alert(response.message);
                 },
                 error: function(error) {
@@ -364,7 +455,9 @@
                     ...absent_device_logs
                 ]
 
-                const absent_device_logs_requested = absent_device_logs.filter(item => item.status != "Open")
+                const absent_device_logs_requested = absent_device_logs.filter(
+                    item => item.status != "Open"
+                )
                 $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
 
                 initDatatableAbsent(absent_device_logs)
@@ -386,70 +479,11 @@
         function toggleTable(id) {
             $(`#${id}`).toggle();
         }
-
-        function handlePublishAction(device_status_id, publish_action_id) {
-            if (!confirm('Are you sure want to publish?')) return false;
-
-            const textarea = $(`#publish_${device_status_id}_${publish_action_id} textarea`).val()
-
-            $.ajax({
-                url: '/admin/devices/publish',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    id: publish_action_id,
-                    device_status_id: device_status_id,
-                    notes: textarea,
-                },
-                success: function(response) {
-                    $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
-                    $(`#open_${device_status_id} p`).html(textarea);
-                    $(`#create_${device_status_id} textarea`).val(textarea);
-                    $(`.publish_${device_status_id} textarea`).val(textarea);
-                    alert(response.message);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            })
-        }
-
-        function handleSubmitNotes(device_status_id) {
-            if (!confirm('Are you sure want to submit this notes?')) return false;
-
-            const textarea = $(`#create_${device_status_id} textarea`).val()
-
-            $.ajax({
-                url: '/admin/device_status/notes',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    device_status_id: device_status_id,
-                    notes: textarea,
-                    marked_as_read: $(`#marked_${device_status_id}`).is(':checked'),
-                },
-                success: function(response) {
-                    // @TODO : Change Icon to marked
-                    //
-                    //
-                    if ($(`#marked_${device_status_id}`).is(':checked')) {
-                        $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
-                    } else {
-                        $(`#mark_${device_status_id}`).html('<i class="ph-question text-danger"></i>');
-                    }
-                    $(`#open_${device_status_id} p`).html(textarea);
-                    alert(response.message);
-                },
-                error: function(error) {
-                    alert("Something went wrong!");
-                    console.log(error);
-                }
-            })
-        }
     </script>
 
     <script>
         'use strict';
+
         $('#locations').select2({
             width: '100%'
         });

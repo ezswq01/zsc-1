@@ -80,17 +80,21 @@ class Device extends Model
 
     public static function evalValue($device_id, $device_log_id, $subscribe_expression, $value)
     {
+        $status_responses = [];
         foreach ($subscribe_expression as $val) {
             $expression = str_replace("{{value}}", "'$value'", $val->expression);
             if (eval("return $expression;")) {
-                DeviceStatus::create(
+                $status_response = DeviceStatus::create(
                     [
                         'device_id' => $device_id,
-                        'status_type_id' => $val->status_type_id,
-                        'device_log_id' => $device_log_id
+                        'device_log_id' => $device_log_id,
+                        'status_type_id' => $val->status_type_id
                     ]
                 );
+                $status_response = $status_response->load('status_type');
+                $status_responses[] = $status_response;
             }
         }
+        return $status_responses;
     }
 }
