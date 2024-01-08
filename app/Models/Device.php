@@ -88,10 +88,12 @@ class Device extends Model
                     [
                         'device_id' => $device_id,
                         'device_log_id' => $device_log_id,
-                        'status_type_id' => $val->status_type_id
+                        'status_type_id' => $val->status_type_id,
+                        'marked_as_read' => false,
+                        'notes' => null
                     ]
                 );
-                $status_response = $status_response->load('status_type');
+                $status_response = $status_response->load('status_type', 'device.publish_action');
                 $status_responses[] = $status_response;
             }
         }

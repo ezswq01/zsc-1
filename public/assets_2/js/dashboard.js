@@ -80,7 +80,8 @@ function initDatatableAbsent(absent_device_logs) {
 
 function initDatatableStatusType(status_type_widgets) {
     status_type_widgets.map((status_type_widget) => {
-        const table = $(`#${status_type_widget.id} table`).DataTable({
+        $(`#${status_type_widget.id} table`).DataTable().destroy();
+        $(`#${status_type_widget.id} table`).DataTable({
             data: status_type_widget.status_type.device_status,
             order: [[0, "desc"]],
             columnDefs: [
@@ -151,13 +152,17 @@ function initDatatableStatusType(status_type_widgets) {
                                                 )
                                         }
                                         <button 
-                                            onclick="handleOpenModalNote(${status_type_widget.id}, ${data})" 
+                                            onclick="handleOpenModalNote(${
+                                                status_type_widget.id
+                                            }, ${data})" 
                                             class="dropdown-item" data-bs-toggle="modal"
                                             data-bs-target="#open_note">
                                             <i class="ph-newspaper me-1"></i> Open Note
                                         </button>
                                         <button
-                                            onclick="handleCreateModalNote(${status_type_widget.id}, ${data})" 
+                                            onclick="handleCreateModalNote(${
+                                                status_type_widget.id
+                                            }, ${data})" 
                                             class="dropdown-item"
                                             data-bs-toggle="modal"
                                             data-bs-target="#create_note">

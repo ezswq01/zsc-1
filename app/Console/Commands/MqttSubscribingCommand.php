@@ -90,6 +90,7 @@ class MqttSubscribingCommand extends Command
                                     'marked_as_read' => false
                                 ]
                             );
+                            
                             // event to NewDataEvent
                             event(new \App\Events\NewDataEvent([
                                 'type' => 'absent_device',

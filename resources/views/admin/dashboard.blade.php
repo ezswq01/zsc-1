@@ -349,7 +349,7 @@
                     marked_as_read: is_checked,
                 },
                 success: function(response) {
-                    const status_type_widget_id = response.status_type_widget.id
+                    const status_type_widget_id = response.status_type_widget.status_type_id
                     status_type_widgets = status_type_widgets.map(item => {
                         if (item.id == status_type_widget_id) {
                             return {
@@ -423,8 +423,6 @@
         function handlePublishAction(device_status_id, publish_action_id) {
             if (!confirm('Are you sure want to publish?')) return false;
             const textarea = $(`#publish_action textarea`).val()
-            console.log(device_status_id, publish_action_id)
-            console.log(textarea)
 
             $.ajax({
                 url: '/admin/devices/publish',
@@ -436,6 +434,32 @@
                     notes: textarea,
                 },
                 success: function(response) {
+                    const status_type_widget_id = response.status_type_widget.status_type_id
+                    status_type_widgets = status_type_widgets.map(item => {
+                        if (item.id == status_type_widget_id) {
+                            return {
+                                ...item,
+                                status_type: {
+                                    ...item.status_type,
+                                    device_status: item.status_type.device_status.map(item => {
+                                        if (item.id == device_status_id) {
+                                            return {
+                                                ...item,
+                                                notes: textarea,
+                                                marked_as_read: true,
+                                            }
+                                        }
+                                        return {
+                                            ...item
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                        return {
+                            ...item
+                        }
+                    })
                     $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
                     alert(response.message);
                 },
@@ -465,23 +489,55 @@
                 $(`.notification_main`).append(`
                     <div class="d-flex align-items-start mb-3">
                         <div class="flex-fill">
-                            New open door request
+                            New open door request from device: ${item.data.absent_device.absent_device_id}
                             <div class="fs-sm text-muted mt-1">Just now</div>
                         </div>
                     </div> 
                 `)
             }
+
+            if (item.type == "dynamic_device" && item.data.length > 0) {
+                item.data.map((item) => {
+                    status_type_widgets = status_type_widgets.map((status_type_widget) => {
+                        if (status_type_widget.id == item.status_type_id) {
+                            return {
+                                ...status_type_widget,
+                                status_type: {
+                                    ...status_type_widget.status_type,
+                                    device_status: [
+                                        ...status_type_widget.status_type.device_status,
+                                        item
+                                    ]
+                                }
+                            }
+                        }
+                        return {
+                            ...status_type_widget
+                        }
+                    })
+
+                    $(`.notification_main`).append(`
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="flex-fill">
+                                New message from device: ${item.device.device_id}
+                                <div class="fs-sm text-muted mt-1">Just now</div>
+                            </div>
+                        </div> 
+                    `)
+
+                })
+
+                initDatatableStatusType(status_type_widgets)
+            }
+
         });
     </script>
 
-    {{-- Device Dynamic --}}
     <script>
         function toggleTable(id) {
             $(`#${id}`).toggle();
         }
-    </script>
 
-    <script>
         'use strict';
 
         $('#locations').select2({

@@ -298,6 +298,7 @@ class DeviceController extends Controller
     {
         $publish_action = PublishAction::find($request->id);
         $device = $publish_action->device;
+        $device_status = DeviceStatus::find($request->device_status_id);
         // $subscribe_expression = $device->subscribe_expression;
 
         // create mqtt connection
@@ -307,7 +308,7 @@ class DeviceController extends Controller
         $mqtt->publish($device->publish_topic, $publish_action->value, 1);
         $mqtt->loop(true, true);
 
-        DB::transaction(function () use ($publish_action, $device, $request) {
+        DB::transaction(function () use ($publish_action, $device, $request, &$device_status) {
 
             // save publish action to device log
             DeviceLog::create([
@@ -323,7 +324,7 @@ class DeviceController extends Controller
             // dashboard action only.
             // delete current device_status to point that i handled.
             if (!$request->is_testing) {
-                DeviceStatus::find($request->device_status_id)->update([
+                $device_status->update([
                     'marked_as_read' => true,
                     'notes' => $request->notes
                 ]);
@@ -333,6 +334,7 @@ class DeviceController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Published successfully.',
+            'status_type_widget' => $device_status->load('status_type')
         ]);
     }
 
