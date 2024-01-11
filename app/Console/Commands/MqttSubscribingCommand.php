@@ -12,6 +12,7 @@ use App\Models\Notif;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 
 class MqttSubscribingCommand extends Command
@@ -119,6 +120,7 @@ class MqttSubscribingCommand extends Command
                 echo "Received message success!\n";
             } catch (\Exception $e) {
                 echo "Received message failed!\n" . $e->getMessage() . "\n";
+                Log::error($e->getMessage());
             }
         }, 0);
         $mqtt->loop(true);
