@@ -68,10 +68,12 @@ class MqttSubscribingCommand extends Command
                         $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
 
                         try {
+                            Log::info("Event to NewDataEvent");
                             NewDataEvent::dispatch([
                                 'type' => 'dynamic_device',
                                 'data' => $subscribe_responses
                             ]);
+                            Log::info("Event Done");
                         } catch (\Exception $e) {
                             Log::error($e->getMessage());
                         }
@@ -107,11 +109,12 @@ class MqttSubscribingCommand extends Command
                             );
 
                             try {
-                                // event to NewDataEvent
+                                Log::info("Event to NewDataEvent");
                                 NewDataEvent::dispatch([
                                     'type' => 'absent_device',
                                     'data' => $absent_received_log->load('absent_device')
                                 ]);
+                                Log::info("Event Done");
                             } catch (\Exception $e) {
                                 Log::error($e->getMessage());
                             }
