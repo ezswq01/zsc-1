@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\NewDataEvent;
 use App\Models\AbsentDevice;
 use App\Models\AbsentLastLog;
 use App\Models\AbsentLog;
@@ -66,11 +67,10 @@ class MqttSubscribingCommand extends Command
                         $subscribe_expression = $device->subscribe_expression;
                         $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
 
-                        // event to NewDataEvent
-                        event(new \App\Events\NewDataEvent([
+                        NewDataEvent::dispatch([
                             'type' => 'dynamic_device',
                             'data' => $subscribe_responses
-                        ]));
+                        ]);
 
                         Notif::create([
                             'notif_type' => 'dynamic_device',
@@ -102,12 +102,12 @@ class MqttSubscribingCommand extends Command
                                     'marked_as_read' => false
                                 ]
                             );
-                            
+
                             // event to NewDataEvent
-                            event(new \App\Events\NewDataEvent([
+                            NewDataEvent::dispatch([
                                 'type' => 'absent_device',
                                 'data' => $absent_received_log->load('absent_device')
-                            ]));
+                            ]);
 
                             Notif::create([
                                 'notif_type' => 'dynamic_device',
