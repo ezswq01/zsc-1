@@ -186,6 +186,7 @@
     <script>
         let absent_device_logs = @json($absent_received_logs);
         let status_type_widgets = @json($status_type_widgets);
+        let audio = new Audio('/mcc-notification.wav');
 
         $(document).ready(function() {
             initDatatableAbsent(absent_device_logs)
@@ -516,20 +517,15 @@
                         }
                     })
 
-                    $(`.notification_main`).append(`
-                        <div class="d-flex align-items-start mb-3">
-                            <div class="flex-fill">
-                                New message from device: ${item.device.device_id}
-                                <div class="fs-sm text-muted mt-1">Just now</div>
-                            </div>
-                        </div> 
-                    `)
-
                 })
 
                 initDatatableStatusType(status_type_widgets)
             }
 
+            getData(limit);
+
+            // play sound
+            audio.play();
         });
     </script>
 

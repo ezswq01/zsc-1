@@ -109,7 +109,7 @@
                             <div class="d-flex gap-2">
                               ${
                                 item.notif_status == "unread"
-                                  ? `<button onclick="handleRead('${item.id}')" class="btn btn-success notif-id-${item.id}">Mark as read ${item.id}</button>`
+                                  ? `<button onclick="handleRead('${item.id}')" class="btn btn-success notif-id-${item.id}">Mark as read</button>`
                                   : `<button class="btn btn-danger">Already read</button>`
                               }
                             </div>
