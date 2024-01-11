@@ -55,6 +55,8 @@ class MqttSubscribingCommand extends Command
             try {
                 DB::transaction(function () use ($topic, $message) {
 
+                    Log::info("Received message on topic: {$topic}");
+
                     /* Get Device */
                     $device = Device::where('subscribe_topic', $topic)->first();
                     $absent_device = AbsentDevice::where('subscribe_topic', $topic)->first();
