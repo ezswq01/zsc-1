@@ -8,6 +8,7 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceLogController;
 use App\Http\Controllers\DeviceStatusController;
 use App\Http\Controllers\DeviceTypeController;
+use App\Http\Controllers\NotifController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
@@ -59,4 +60,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
 
     Route::post('/device_status/notes', [DeviceStatusController::class, 'notes'])->name('device_status.notes');
     Route::get('/device_status/{id}', [DeviceStatusController::class, 'get_device_status'])->name('device_status.get_device_status');
+
+    Route::resource('/notifications', NotifController::class)->only(['index']);
+    Route::get('/notifications/{id}/read', [NotifController::class, 'read'])->name('notifications.read');
 });

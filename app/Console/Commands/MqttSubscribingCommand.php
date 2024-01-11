@@ -8,6 +8,7 @@ use App\Models\AbsentLog;
 use App\Models\AbsentReceivedLog;
 use App\Models\Device;
 use App\Models\DeviceLog;
+use App\Models\Notif;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -67,6 +68,14 @@ class MqttSubscribingCommand extends Command
                             'type' => 'dynamic_device',
                             'data' => $subscribe_responses
                         ]));
+
+                        Notif::create([
+                            'notif_type' => 'dynamic_device',
+                            'notif_status' => 'unread',
+                            'device_id' => $device->id,
+                            'absent_device_id' => null,
+                            'message' => "Device {$device->device_id} has new data."
+                        ]);
                     }
 
                     if ($absent_device) {
@@ -96,6 +105,14 @@ class MqttSubscribingCommand extends Command
                                 'type' => 'absent_device',
                                 'data' => $absent_received_log->load('absent_device')
                             ]));
+
+                            Notif::create([
+                                'notif_type' => 'dynamic_device',
+                                'notif_status' => 'unread',
+                                'absent_device_id' => $absent_device->id,
+                                'device_id' => null,
+                                'message' => "Device {$absent_device->absent_device_id} has new data."
+                            ]);
                         }
                     }
                 });

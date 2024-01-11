@@ -18,9 +18,9 @@
                 <a href="#" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="offcanvas"
                     data-bs-target="#notifications">
                     <i class="ph-bell"></i>
-                    <span
-                        class="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">
-                        0</span>
+                    <span class="notification-count badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">
+                        0
+                    </span>
                 </a>
             </li>
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
