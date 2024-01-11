@@ -67,10 +67,14 @@ class MqttSubscribingCommand extends Command
                         $subscribe_expression = $device->subscribe_expression;
                         $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
 
-                        NewDataEvent::dispatch([
-                            'type' => 'dynamic_device',
-                            'data' => $subscribe_responses
-                        ]);
+                        try {
+                            NewDataEvent::dispatch([
+                                'type' => 'dynamic_device',
+                                'data' => $subscribe_responses
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error($e->getMessage());
+                        }
 
                         Notif::create([
                             'notif_type' => 'dynamic_device',
@@ -103,11 +107,15 @@ class MqttSubscribingCommand extends Command
                                 ]
                             );
 
-                            // event to NewDataEvent
-                            NewDataEvent::dispatch([
-                                'type' => 'absent_device',
-                                'data' => $absent_received_log->load('absent_device')
-                            ]);
+                            try {
+                                // event to NewDataEvent
+                                NewDataEvent::dispatch([
+                                    'type' => 'absent_device',
+                                    'data' => $absent_received_log->load('absent_device')
+                                ]);
+                            } catch (\Exception $e) {
+                                Log::error($e->getMessage());
+                            }
 
                             Notif::create([
                                 'notif_type' => 'dynamic_device',
