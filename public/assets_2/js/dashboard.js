@@ -66,7 +66,7 @@ function initDatatableAbsent(absent_device_logs) {
                                         data-bs-toggle="modal" 
                                         data-bs-target="#open_absent_device"
                                     >
-                                        <i class="ph-newspaper me-1"></i> Open Note
+                                        <i class="ph-newspaper me-1"></i> Open Door
                                     </button>
                                 </div>
                             </div>
