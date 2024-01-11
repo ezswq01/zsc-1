@@ -470,7 +470,7 @@
             })
         }
 
-        window.Echo.channel('laravel_database_new-data-channel').listen('.new-data-event', (e) => {
+        window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
             const item = e.message;
 
             if (item.type == "absent_device") {

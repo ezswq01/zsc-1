@@ -88,7 +88,6 @@ class MqttSubscribingCommand extends Command
                     if ($absent_device) {
                         $user = User::where('user_code', $message)->first();
                         if ($user) {
-                            echo "Absent Device\n";
                             $absent_log = AbsentLog::create(
                                 ['absent_device_id' => $absent_device->id, 'value' => $message, 'status' => 'Request Open']
                             );

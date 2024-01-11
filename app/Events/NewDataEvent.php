@@ -23,12 +23,12 @@ class NewDataEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('new-data-channel');
+        return new Channel('newDataChannel');
     }
 
     public function broadcastAs()
     {
-        return 'new-data-event';
+        return 'newDataEvent';
     }
 
     public function broadcastWith()
