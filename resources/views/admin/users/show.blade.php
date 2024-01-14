@@ -70,9 +70,9 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-lg-4 col-form-label">Absent Device</label>
+                            <label class="col-lg-4 col-form-label">Access Device</label>
                             <div class="col-lg-8">
-                                <select disabled class="form-control select" data-placeholder="Select Absent Device Type"
+                                <select disabled class="form-control select" data-placeholder="Select Access Device Type"
                                     name="absent_device_id">
                                     <option></option>
                                     @foreach ($absent_devices as $absent_device)
