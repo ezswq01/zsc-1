@@ -30,7 +30,9 @@ class StoreUserRequest extends FormRequest
             'user_code' => 'required|string|max:255|unique:users',
             'role' => 'required|string|max:255',
             'absent_device_id' => 'required',
-            'password' => ['required', Password::default()]
+            'password' => ['required', Password::default()],
+            'job_position' => 'required|string|max:255',
+            'work_area' => 'required|string|max:255',
         ];
     }
 }

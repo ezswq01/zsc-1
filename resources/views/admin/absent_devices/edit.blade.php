@@ -5,7 +5,7 @@
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
-                    Absent Devices - <span class="fw-normal">Detail</span>
+                    Access Devices - <span class="fw-normal">Detail</span>
                 </h4>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="{{ route("admin.absent_devices.index") }}">Absent Devices</a>
+                    <a class="breadcrumb-item" href="{{ route("admin.absent_devices.index") }}">Access Devices</a>
                     <span class="breadcrumb-item active">{{ $data->absent_device_id }}</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -29,7 +29,7 @@
 @section("content")
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Edit Absent Devices</h5>
+            <h5 class="mb-0">Edit Access Devices</h5>
         </div>
 
         <div class="card-body border-top">
@@ -39,10 +39,10 @@
                         @csrf
                         @method("PUT")
                         <div class="row mb-3">
-                            <label class="col-lg-4 col-form-label">Absent Devices ID</label>
+                            <label class="col-lg-4 col-form-label">Access Devices ID</label>
                             <div class="col-lg-8">
                                 <input class="form-control" value="{{ $data->absent_device_id }}" name="absent_device_id"
-                                    placeholder="Type Absent Devices ID" required type="text">
+                                    placeholder="Type Access Devices ID" required type="text">
                             </div>
                         </div>
                         <div class="row mb-3">

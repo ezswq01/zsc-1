@@ -85,6 +85,8 @@ class UserController extends Controller
             'user_code' => $validated['user_code'],
             'password' => Hash::make($validated['password']),
             'absent_device_id' => $validated['absent_device_id'],
+            'job_position' => $validated['job_position'],
+            'work_area' => $validated['work_area'],
         ]);
 
         $user->syncRoles([$validated['role']]);
@@ -141,6 +143,8 @@ class UserController extends Controller
             'user_code' => $validated['user_code'],
             'password' => Hash::make($validated['password']),
             'absent_device_id' => $validated['absent_device_id'],
+            'job_position' => $validated['job_position'],
+            'work_area' => $validated['work_area'],
         ]);
 
         $user->syncRoles([$validated['role']]);

@@ -17,6 +17,7 @@ class RoleSeeder extends Seeder
         // create role
         $admin = Role::create(['name' => 'admin']);
         $observer = Role::create(['name' => 'observer']);
+        $employee = Role::create(['name' => 'employee']);
 
         // sync permissions
         $admin->syncPermissions(['admin-access']);

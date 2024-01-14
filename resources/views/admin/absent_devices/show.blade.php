@@ -5,7 +5,7 @@
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
-                    Absent Device - <span class="fw-normal">Detail</span>
+                    Access Device - <span class="fw-normal">Detail</span>
                 </h4>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="{{ route('admin.absent_devices.index') }}">Absent Device</a>
+                    <a class="breadcrumb-item" href="{{ route('admin.absent_devices.index') }}">Access Device</a>
                     <span class="breadcrumb-item active">{{ $data->absent_device_id }}</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -31,7 +31,7 @@
         <div class="col-xl-8 col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Detail Absent Device</h5>
+                    <h5 class="mb-0">Detail Access Device</h5>
                 </div>
 
                 <div class="card-body border-top">
@@ -40,10 +40,10 @@
                             <form action="{{ route('admin.absent_devices.store') }}" method="POST">
                                 @csrf
                                 <div class="row mb-3">
-                                    <label class="col-lg-4 col-form-label">Absent Device ID</label>
+                                    <label class="col-lg-4 col-form-label">Access Device ID</label>
                                     <div class="col-lg-8">
                                         <input disabled class="form-control" value="{{ $data->absent_device_id }}" name="absent_device_id"
-                                            placeholder="Type Absent Device ID" required type="text">
+                                            placeholder="Type Access Device ID" required type="text">
                                     </div>
                                 </div>
                                 <div class="row mb-3">

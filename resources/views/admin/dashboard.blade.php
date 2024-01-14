@@ -87,13 +87,16 @@
         <div class="col-12 table-component" id="absent-doors">
             <div class="mb-3">
                 <div class="bg-white p-4">
-                    <h6>User Door Absent Request</h6>
+                    <h6>User Door Access Request</h6>
                     <table class="table absent_received_logs">
                         <thead>
                             <tr>
                                 <th>Time</th>
                                 <th>Device ID</th>
                                 <th>User</th>
+                                <th>User Code</th>
+                                <th>Job Position</th>
+                                <th>Working Area</th>
                                 <th>Status</th>
                                 <th>Location</th>
                                 <th class="text-center">Actions</th>

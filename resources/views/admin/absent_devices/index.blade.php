@@ -5,7 +5,7 @@
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
-                    Absent Device - <span class="fw-normal">All</span>
+                    Access Device - <span class="fw-normal">All</span>
                 </h4>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="#">Absent Device</a>
+                    <a class="breadcrumb-item" href="#">Access Device</a>
                     <span class="breadcrumb-item active">All</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -30,18 +30,18 @@
     <!-- Basic datatable -->
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">Absent Device</h5>
+            <h5 class="mb-0">Access Device</h5>
         </div>
 
         <div class="card-header">
-            List of All Registered Absent Device.
+            List of All Registered Access Device.
         </div>
 
         <table class="table datatable-basic">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Absent Device ID</th>
+                    <th>Access Device ID</th>
                     <th>Subscribe Topic</th>
                     <th>Publish Topic</th>
                     <th class="text-center">Actions</th>

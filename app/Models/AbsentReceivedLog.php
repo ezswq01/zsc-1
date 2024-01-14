@@ -29,4 +29,9 @@ class AbsentReceivedLog extends Model
     {
         return $this->belongsTo(AbsentDevice::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'value', 'user_code');
+    }
 }

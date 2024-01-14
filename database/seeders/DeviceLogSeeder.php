@@ -39,7 +39,7 @@ class DeviceLogSeeder extends Seeder
         $absent_logs = [
             [
                 'absent_device_id' => 1,
-                'value' => 'observer',
+                'value' => 'employee',
                 'status' => 'Request Open',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
@@ -50,7 +50,7 @@ class DeviceLogSeeder extends Seeder
             [
                 'absent_log_id' => 1,
                 'absent_device_id' => 1,
-                'value' => 'observer',
+                'value' => 'employee',
                 'status' => 'Request Open',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
@@ -61,7 +61,7 @@ class DeviceLogSeeder extends Seeder
             [
                 'absent_log_id' => 1,
                 'absent_device_id' => 1,
-                'value' => 'observer',
+                'value' => 'employee',
                 'status' => 'Request Open',
                 'marked_as_read' => false,
                 'created_at' => date('Y-m-d H:i:s'),

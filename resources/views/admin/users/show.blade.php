@@ -84,6 +84,20 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Job Position</label>
+                            <div class="col-lg-8">
+                                <input disabled value="{{ old("job_position", $user->job_position) }}" class="form-control" name="job_position"
+                                    placeholder="Type Job Position" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Work Area</label>
+                            <div class="col-lg-8">
+                                <input disabled value="{{ old("work_area", $user->work_area) }}" class="form-control" name="work_area"
+                                    placeholder="Type Work Area" required type="text">
+                            </div>
+                        </div>
                         @can("users-update")
                             <div class="text-end">
                                 <a href="{{ route("admin.users.edit", $user->id) }}" class="btn btn-primary"

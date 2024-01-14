@@ -108,7 +108,7 @@
               class="nav-item nav-item-submenu {{ $active == "absent_devices" ? "nav-item-expanded nav-item-open" : "" }}">
               <a class="nav-link" href="#">
                 <i class="ph-barcode"></i>
-                <span>Absent Device</span>
+                <span>Access Device</span>
               </a>
               <ul class="nav-group-sub collapse {{ $active == "absent_devices" ? "show" : "" }}">
                 <li class="nav-item"><a class="nav-link" href="{{ route("admin.absent_devices.index") }}">All</a></li>

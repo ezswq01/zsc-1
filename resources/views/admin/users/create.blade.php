@@ -90,6 +90,20 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Position</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old("job_position") }}" class="form-control" name="job_position"
+                                    placeholder="Type Position" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Work Area</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old("work_area") }}" class="form-control" name="work_area"
+                                    placeholder="Type Work Area" required type="text">
+                            </div>
+                        </div>
                         <div class="text-end">
                             <button class="btn btn-primary" type="submit">Submit form <i
                                     class="ph-paper-plane-tilt ms-2"></i></button>

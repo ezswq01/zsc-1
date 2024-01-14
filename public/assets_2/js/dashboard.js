@@ -25,9 +25,27 @@ function initDatatableAbsent(absent_device_logs) {
                 },
             },
             {
-                data: "value",
+                data: "user",
                 render: function (data, type, row) {
-                    return data;
+                    return data.name;
+                },
+            },
+            {
+                data: "user",
+                render: function (data, type, row) {
+                    return data.user_code;
+                },
+            },
+            {
+                data: "user",
+                render: function (data, type, row) {
+                    return data.job_position;
+                },
+            },
+            {
+                data: "user",
+                render: function (data, type, row) {
+                    return data.work_area;
                 },
             },
             {

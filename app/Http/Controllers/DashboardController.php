@@ -47,7 +47,7 @@ class DashboardController extends Controller
 
         $status_types = json_decode(json_encode($status_types));
 
-        $absent_received_logs = AbsentReceivedLog::with('absent_device')->whereHas(
+        $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')->whereHas(
             'absent_device',
             function ($query) use ($request) {
                 if (!empty($request->locations)) {

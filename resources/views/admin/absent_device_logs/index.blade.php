@@ -34,14 +34,14 @@
         </div>
 
         <div class="card-header">
-            List of All Absent Device Logs.
+            List of All Access Device Logs.
         </div>
 
         <table id="datatable" class="table">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Absent Device ID</th>
+                    <th>Access Device ID</th>
                     <th>Command</th>
                     <th>Time</th>
                 </tr>
