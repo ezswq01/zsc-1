@@ -98,42 +98,41 @@ class DashboardController extends Controller
 
         $absent_received_logs = [];
         if (Setting::first()->is_access_device) {
-            $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')->whereHas(
-                'absent_device',
-                function ($query) use ($request) {
-                    if (!empty($request->branches)) {
-                        return $query->where(function ($w) use ($request) {
-                            $branches = $request->branches;
-                            foreach ($branches as $branch) {
-                                $w->orWhere('branch', $branch);
-                            }
-                        });
+            $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')
+                ->whereHas('absent_device', function ($query) use ($request) {
+                        if (!empty($request->branches)) {
+                            return $query->where(function ($w) use ($request) {
+                                $branches = $request->branches;
+                                foreach ($branches as $branch) {
+                                    $w->orWhere('branch', $branch);
+                                }
+                            });
+                        }
+                        if (!empty($request->buildings)) {
+                            return $query->where(function ($w) use ($request) {
+                                $buildings = $request->buildings;
+                                foreach ($buildings as $building) {
+                                    $w->orWhere('building', $building);
+                                }
+                            });
+                        }
+                        if (!empty($request->rooms)) {
+                            return $query->where(function ($w) use ($request) {
+                                $rooms = $request->rooms;
+                                foreach ($rooms as $room) {
+                                    $w->orWhere('room', $room);
+                                }
+                            });
+                        }
+                        if (!empty($request->get('search'))) {
+                            $query->where(function ($w) use ($request) {
+                                $search = $request->get('search');
+                                $w->orWhere('absent_device_id', 'ILIKE', "%$search%");
+                            });
+                        }
+                        return $query;
                     }
-                    if (!empty($request->buildings)) {
-                        return $query->where(function ($w) use ($request) {
-                            $buildings = $request->buildings;
-                            foreach ($buildings as $building) {
-                                $w->orWhere('building', $building);
-                            }
-                        });
-                    }
-                    if (!empty($request->rooms)) {
-                        return $query->where(function ($w) use ($request) {
-                            $rooms = $request->rooms;
-                            foreach ($rooms as $room) {
-                                $w->orWhere('room', $room);
-                            }
-                        });
-                    }
-                    if (!empty($request->get('search'))) {
-                        $query->where(function ($w) use ($request) {
-                            $search = $request->get('search');
-                            $w->orWhere('device_id', 'ILIKE', "%$search%");
-                        });
-                    }
-                    return $query;
-                }
-            )->get();
+                )->get();
         }
 
         return response()->json([

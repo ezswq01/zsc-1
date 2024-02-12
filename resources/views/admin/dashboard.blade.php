@@ -74,15 +74,13 @@
     @php
         $setting = App\Models\Setting::first();
     @endphp
-    <div class="row gx-3">
+    <div class="row gx-3" id="status_types">
         @if ($setting->is_access_device)
             <div class="col-lg-3 col-12">
                 <div class="card text-white bg-primary">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h3 class="mb-0 absent_door_request_qty">
-                                {{ $absent_received_logs->where("marked_as_read", false)->count() }}
-                            </h3>
+                            <h3 class="mb-0 absent_door_request_qty"></h3>
                             <button onclick="toggleTable('absent-doors')" type="button" class="btn btn-white p-1">
                                 <i class="ph-table"></i>
                             </button>
@@ -94,9 +92,6 @@
                 </div>
             </div>
         @endif
-        <div class="col-12">
-            <div class="row gx-3" id="status_types"></div>
-        </div>
     </div>
     <div class="row gx-3">
         <div class="col-12">
@@ -328,12 +323,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                                                                                                                                                                                                                                                                onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                                                                                                                                                                                                                                                                class="dropdown-item" 
-                                                                                                                                                                                                                                                                                                                                                                data-bs-toggle="modal"
-                                                                                                                                                                                                                                                                                                                                                                data-bs-target="#publish_action">
-                                                                                                                                                                                                                                                                                                                                                                ${item.label}
-                                                                                                                                                                                                                                                                                                                                                            </button>`
+                                                                                                                                                                                                                                                                                                                                                                                                    onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                                                                                                                                                                                                                                                                                                                                    class="dropdown-item" 
+                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-toggle="modal"
+                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-target="#publish_action">
+                                                                                                                                                                                                                                                                                                                                                                                                    ${item.label}
+                                                                                                                                                                                                                                                                                                                                                                                                </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -446,6 +441,26 @@
                             </div>
                             <div>
                                 ${name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
+
+        function absent_device_logs_html() {
+            return `
+                <div class="col-lg-3 col-12">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="mb-0 absent_door_request_qty"></h3>
+                                <button onclick="toggleTable('absent-doors')" type="button" class="btn btn-white p-1">
+                                    <i class="ph-table"></i>
+                                </button>
+                            </div>
+                            <div>
+                                Access Request
                             </div>
                         </div>
                     </div>
@@ -756,11 +771,34 @@
 
         async function getFetch(url = "/api/dashboard") {
             try {
+                // reset
+                $("#status_types").html("");
+                $("#status_type_widgets_tables").html("");
+
+                // loading
                 statusTypeLoading();
                 statusTypeWidgetLoading();
 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                });
                 const data = await response.json();
+
+                // erase loading
+                $("#status_types").html("");
+                $("#status_type_widgets_tables").html("");
+
+                // Absent Device Logs
+                @if ($setting->is_access_device)
+                    $("#status_types").append(absent_device_logs_html());
+                    absent_device_logs = data.absent_received_logs;
+                    const countAbsent = absent_device_logs.filter((a) => a.marked_as_read == false).length
+                    $(".absent_door_request_qty").html(countAbsent)
+                    initDatatableAbsent(absent_device_logs)
+                @endif
 
                 // Status Type Widgets
                 status_types = [];
@@ -802,14 +840,7 @@
                 status_types.map((st) => {
                     status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name);
                 })
-                $("#status_types").html(status_type_html_append);
-
-
-                // Absent Device Logs
-                @if ($setting->is_access_device)
-                    absent_device_logs = data.absent_received_logs;
-                    initDatatableAbsent(absent_device_logs)
-                @endif
+                $("#status_types").append(status_type_html_append);
 
             } catch (error) {
                 console.log(error);
@@ -948,7 +979,7 @@
         });
 
         $('#device_id').on('input', function() {
-            if ($(this).val().length >= 3) {
+            if ($(this).val().length >= 3 || $(this).val().length == 0) {
                 triggerFetch()
             }
         })
