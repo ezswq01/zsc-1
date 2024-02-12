@@ -30,6 +30,7 @@ class SettingController extends Controller
             'app_name' => 'required',
             'status_types' => 'array',
             'status_types.*' => 'string',
+            'is_access_device' => 'sometimes'
         ]);
 
         $data = Setting::findOrFail($id);
@@ -56,7 +57,8 @@ class SettingController extends Controller
             }
 
             $data->update([
-                'app_name' => $validated['app_name']
+                'app_name' => $validated['app_name'],
+                'is_access_device' => isset($validated['is_access_device']) && $validated['is_access_device'] == "on" ? true : false
             ]);
 
             StatusTypeWidget::where('setting_id', $data->id)->delete();

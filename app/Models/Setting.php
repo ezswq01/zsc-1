@@ -17,6 +17,7 @@ class Setting extends Model
     protected $fillable = [
         'app_name',
         'logo',
+        'is_access_device',
         'created_at',
         'updated_at'
     ];

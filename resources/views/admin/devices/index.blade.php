@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <!-- Basic datatable -->
     <div class="card">
         <div class="card-header">
@@ -46,15 +46,15 @@
                 </select>
             </div>
             <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
-                <label for="buildings" class="form-label fw-semibold">Buildings</label>
-                <select class="form-control select" data-placeholder="Select Buildings" name="buildings" id="buildings"
+                <label for="buildings" class="form-label fw-semibold">Sub-location</label>
+                <select class="form-control select" data-placeholder="Select Sub-location" name="buildings" id="buildings"
                     multiple="multiple">
                     <option></option>
                 </select>
             </div>
             <div class="mb-lg-0 mb-3 col-sm-12 col-lg-3">
-                <label for="rooms" class="form-label fw-semibold">Rooms</label>
-                <select class="form-control select" data-placeholder="Select Rooms" name="rooms" id="rooms"
+                <label for="rooms" class="form-label fw-semibold">Location-id</label>
+                <select class="form-control select" data-placeholder="Select Location-id" name="rooms" id="rooms"
                     multiple="multiple">
                     <option></option>
                 </select>
@@ -83,10 +83,10 @@
     <!-- /basic datatable -->
 @endsection
 
-@push('js')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
+@push("js")
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/buttons.min.js") }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -132,13 +132,13 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{!! route('admin.devices.index') !!}',
+                    url: '{!! route("admin.devices.index") !!}',
                     data: function(d) {
                         d.locations = $('#locations').val();
                         d.buildings = $('#buildings').val();
                         d.rooms = $('#rooms').val();
                         d.device_types = $('#device_types').val();
-                        d.search = $('input[type="search"]').val();
+                        d.search = $('.form-control-feedback .form-control').val();
                         return d;
                     }
                 },
@@ -181,6 +181,10 @@
             $('#locations, #buildings, #rooms, #device_types').change(function() {
                 datatable.draw();
             });
+
+            $('input[type="search"]').change(function() {
+                datatable.draw();
+            });
         });
     </script>
 
@@ -190,8 +194,8 @@
 
             $('#locations').select2({
                 ajax: {
-                    url: '{!! route('admin.devices.branches') !!}',
-                    delay: 250,
+                    url: '{!! route("admin.devices.branches") !!}',
+                    delay: 500,
                     dataType: 'json',
                     data: function(params) {
                         return {
@@ -205,12 +209,14 @@
                     },
                     cache: true,
                 },
+                placeholder: 'Minimum input 3 characters to search.',
+                minimumInputLength: 3,
             });
 
             $('#buildings').select2({
                 ajax: {
-                    url: '{!! route('admin.devices.buildings') !!}',
-                    delay: 250,
+                    url: '{!! route("admin.devices.buildings") !!}',
+                    delay: 500,
                     dataType: 'json',
                     data: function(params) {
                         return {
@@ -224,12 +230,14 @@
                     },
                     cache: true,
                 },
+                placeholder: 'Minimum input 3 characters to search.',
+                minimumInputLength: 3,
             });
 
             $('#rooms').select2({
                 ajax: {
-                    url: '{!! route('admin.devices.rooms') !!}',
-                    delay: 250,
+                    url: '{!! route("admin.devices.rooms") !!}',
+                    delay: 500,
                     dataType: 'json',
                     data: function(params) {
                         return {
@@ -243,11 +251,13 @@
                     },
                     cache: true,
                 },
+                placeholder: 'Minimum input 3 characters to search.',
+                minimumInputLength: 3,
             });
 
             $('#device_types').select2({
                 ajax: {
-                    url: '{!! route('admin.devices.device_types') !!}',
+                    url: '{!! route("admin.devices.device_types") !!}',
                     delay: 250,
                     dataType: 'json',
                     data: function(params) {
@@ -262,6 +272,8 @@
                     },
                     cache: true,
                 },
+                placeholder: 'Minimum input 3 characters to search.',
+                minimumInputLength: 3,
             });
         });
     </script>

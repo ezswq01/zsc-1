@@ -1,4 +1,4 @@
-<div class="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10">
+<div class="navbar navbar-expand-lg navbar-static border-bottom border-opacity-10">
     <div class="container-fluid">
         <div class="d-flex d-lg-none me-2">
             <button class="navbar-toggler sidebar-mobile-main-toggle rounded-pill" type="button">
@@ -6,10 +6,10 @@
             </button>
         </div>
 
-        <div class="navbar-brand flex-1 flex-lg-0">
+        <div class="navbar-brand flex-1 flex-lg-0 p-0">
             <a class="d-inline-flex align-items-center" href="/">
                 <img src="{{ App\Models\Setting::first()?->logo ? Storage::url(App\Models\Setting::first()?->logo) : "/assets/images/logo_icon.svg" }}"
-                    alt="logo">
+                    alt="logo" style="min-height: 75px">
             </a>
         </div>
 
