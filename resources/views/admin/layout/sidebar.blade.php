@@ -140,7 +140,7 @@
                             <ul class="nav-group-sub collapse {{ $active == "device_logs" ? "show" : "" }}">
                                 @if ($setting->is_access_device)
                                     <li class="nav-item"><a class="nav-link"
-                                            href="{{ route("admin.absent_device_logs.index") }}">Absent Devices</a></li>
+                                            href="{{ route("admin.absent_device_logs.index") }}">Access Devices</a></li>
                                 @endif
                                 <li class="nav-item"><a class="nav-link"
                                         href="{{ route("admin.device_logs.index") }}">Devices</a></li>

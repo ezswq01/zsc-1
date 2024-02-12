@@ -1,5 +1,13 @@
 @extends("admin.layout.main")
 
+@push("style")
+    <style>
+        .select2-search__field {
+            width: 100% !important
+        }
+    </style>
+@endpush
+
 @push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
@@ -22,8 +30,8 @@
                 </a>
             </div>
             <div class="d-flex w-100 py-2 bg-white gap-2">
-                <input value="" class="form-control" id="device_id" name="device_id" placeholder="Type Device ID" required
-                    type="text">
+                <input value="" class="form-control w-100" id="device_id" name="device_id"
+                    placeholder="Type Device ID" required type="text">
                 <select class="form-control select" data-placeholder="All Locations" name="branches" id="branches"
                     multiple="multiple">
                     <option></option>
@@ -320,12 +328,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                                                                                                                                                                                                                                                            onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                                                                                                                                                                                                                                                            class="dropdown-item" 
-                                                                                                                                                                                                                                                                                                                                                            data-bs-toggle="modal"
-                                                                                                                                                                                                                                                                                                                                                            data-bs-target="#publish_action">
-                                                                                                                                                                                                                                                                                                                                                            ${item.label}
-                                                                                                                                                                                                                                                                                                                                                        </button>`
+                                                                                                                                                                                                                                                                                                                                                                onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                                                                                                                                                                                                                                                                                                class="dropdown-item" 
+                                                                                                                                                                                                                                                                                                                                                                data-bs-toggle="modal"
+                                                                                                                                                                                                                                                                                                                                                                data-bs-target="#publish_action">
+                                                                                                                                                                                                                                                                                                                                                                ${item.label}
+                                                                                                                                                                                                                                                                                                                                                            </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr

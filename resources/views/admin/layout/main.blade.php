@@ -32,6 +32,8 @@
     <script src="/assets/js/vendor/ui/moment/moment.min.js"></script>
     <!-- /theme JS files -->
 
+    @stack('style')
+
 </head>
 
 <!-- Main navbar -->
