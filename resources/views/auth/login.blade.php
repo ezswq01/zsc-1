@@ -46,10 +46,6 @@
           <button class="btn btn-primary w-100"
             type="submit">Sign in</button>
         </div>
-
-        <div class="text-center">
-          <a href="/register">Register</a>
-        </div>
       </div>
     </div>
   </form>
