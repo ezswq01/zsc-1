@@ -334,7 +334,7 @@ class DeviceController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Published successfully.',
-            'status_type_widget' => $device_status->load('status_type')
+            'status_type_widget' => $device_status?->load('status_type')
         ]);
     }
 

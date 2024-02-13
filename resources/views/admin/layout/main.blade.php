@@ -30,6 +30,7 @@
     <script src="/assets/js/vendor/editors/ckeditor/ckeditor_classic.js"></script>
     <script src="/assets/demo/pages/editor_ckeditor_classic.js"></script>
     <script src="/assets/js/vendor/ui/moment/moment.min.js"></script>
+    <script src="/js/app.js"></script>
     <!-- /theme JS files -->
 
     @stack('style')

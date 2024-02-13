@@ -136,4 +136,9 @@
     $(document).ready(function() {
         getData(limit);
     });
+
+    window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
+        console.log("notif received");
+        getData(limit);
+    });
 </script>
