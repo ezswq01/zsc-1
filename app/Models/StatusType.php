@@ -32,6 +32,6 @@ class StatusType extends Model
 
     public function status_type_widget()
     {
-        return $this->hasMany(StatusTypeWidget::class, 'status_type_id');
+        return $this->hasOne(StatusTypeWidget::class, 'status_type_id');
     }
 }

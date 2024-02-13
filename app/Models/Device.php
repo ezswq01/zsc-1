@@ -93,7 +93,7 @@ class Device extends Model
                         'notes' => null
                     ]
                 );
-                $status_response = $status_response->load('status_type', 'device.publish_action');
+                $status_response = $status_response->load('status_type.status_type_widget', 'device.publish_action');
                 $status_responses[] = $status_response;
             }
         }
