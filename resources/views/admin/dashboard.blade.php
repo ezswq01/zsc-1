@@ -810,6 +810,7 @@
                     // status_types
                     status_types.push({
                         widget_id: stw.id,
+                        status_type_id: stw.status_type.id,
                         name: stw.status_type.name,
                         color: stw.status_type.color,
                         count: 0,
@@ -817,7 +818,7 @@
                     stw.status_type.device_status.map((ds) => {
                         if (ds.device && ds.marked_as_read == false) {
                             status_types = status_types.map((st) => {
-                                if (st.widget_id == ds.status_type_id) {
+                                if (st.status_type_id == ds.status_type_id) {
                                     return {
                                         ...st,
                                         count: st.count + 1
@@ -930,7 +931,7 @@
 
                             // Update Cards
                             status_types = status_types.map((st) => {
-                                if (st.widget_id == status_type_widget.id) {
+                                if (st.status_type_id == status_type_widget.id) {
                                     $(`.status_type_${status_type_widget.id}`).html(
                                         st.count + 1
                                     );
