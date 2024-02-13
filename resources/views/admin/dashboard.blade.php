@@ -422,16 +422,16 @@
             `
         }
 
-        function status_type_html(color, count, widget_id, name) {
+        function status_type_html(color, count, status_type_id, name) {
             return `
                 <div class="col-lg-3 col-12">
                     <div class="card text-white" style="background-color: ${color};">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <h3 class="mb-0 status_type_${widget_id}">
+                                <h3 class="mb-0 status_type_${status_type_id}">
                                     ${count}
                                 </h3>
-                                <button onclick="toggleTable('${widget_id}')" type="button"
+                                <button onclick="toggleTable('${status_type_id}')" type="button"
                                     class="btn btn-white p-1">
                                     <i class="ph-table"></i>
                                 </button>
@@ -836,7 +836,7 @@
                 // status_types
                 let status_type_html_append = "";
                 status_types.map((st) => {
-                    status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name);
+                    status_type_html_append += status_type_html(st.color, st.count, st.status_type_id, st.name);
                 })
                 $("#status_types").append(status_type_html_append);
 
