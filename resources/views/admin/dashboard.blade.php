@@ -931,8 +931,8 @@
 
                             // Update Cards
                             status_types = status_types.map((st) => {
-                                if (st.status_type_id == status_type_widget.id) {
-                                    $(`.status_type_${status_type_widget.id}`).html(
+                                if (st.status_type_id == status_type_widget.status_type_id) {
+                                    $(`.status_type_${status_type_widget.status_type_id}`).html(
                                         st.count + 1
                                     );
                                     return {
