@@ -55,7 +55,10 @@
                             <span>Status Type</span>
                         </a>
                         <ul class="nav-group-sub collapse {{ $active == "status_types" ? "show" : "" }}">
-                            <li class="nav-item"><a class="nav-link" href="{{ route("admin.status_types.index") }}">All</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route("admin.status_types.index") }}">
+                                    All
+                                </a>
                             </li>
                             @can("status-types-create")
                                 <li class="nav-item"><a class="nav-link"

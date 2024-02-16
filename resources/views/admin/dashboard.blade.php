@@ -76,7 +76,7 @@
     @endphp
     <div class="row gx-3" id="status_types">
         @if ($setting->is_access_device)
-            <div class="col-lg-3 col-12">
+            <div class="col-lg-4 col-12">
                 <div class="card text-white bg-primary">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -191,13 +191,13 @@
                     {
                         data: "user",
                         render: function(data, type, row) {
-                            return data?.job_position;
+                            return data?.job_position || "-";
                         },
                     },
                     {
                         data: "user",
                         render: function(data, type, row) {
-                            return data?.work_area;
+                            return data?.work_area || "-";
                         },
                     },
                     {
@@ -320,12 +320,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="dropdown-item" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-bs-toggle="modal"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-bs-target="#publish_action">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ${item.label}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    class="dropdown-item" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-toggle="modal"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-target="#publish_action">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ${item.label}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -424,7 +424,7 @@
 
         function status_type_html(color, count, widget_id, name) {
             return `
-                <div class="col-lg-3 col-12">
+                <div class="col-lg-4 col-12">
                     <div class="card text-white" style="background-color: ${color};">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -447,7 +447,7 @@
 
         function absent_device_logs_html() {
             return `
-                <div class="col-lg-3 col-12">
+                <div class="col-lg-4 col-12">
                     <div class="card text-white bg-primary">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -748,7 +748,7 @@
 
         function statusTypeLoading() {
             $("#status_types").html(`
-                <div class="p-5 d-flex justify-content-center">
+                <div class="p-5 bg-white m-2 rounded-md d-flex justify-content-center">
                     <div class="spinner-border spinner-border-lg" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -758,7 +758,7 @@
 
         function statusTypeWidgetLoading() {
             $("#status_type_widgets_tables").html(`
-                <div class="p-5 d-flex justify-content-center">
+                <div class="p-5 bg-white m-2 rounded-md d-flex justify-content-center">
                     <div class="spinner-border spinner-border-lg" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -892,8 +892,6 @@
                 }
             }
 
-            console.log(url)
-
             await getFetch(url);
         }
 
@@ -905,17 +903,24 @@
         window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
             const item = e.message;
 
-            console.log(item)
-
             @if ($setting->is_access_device)
                 if (item.type == "absent_device") {
+                    console.log(item.data)
+
+                    // add items to absent_device_logs
                     absent_device_logs = [
                         item.data,
-                        ...absent_device_logs
+                        ...absent_device_logs.filter(
+                            (adl) => adl.absent_device_id != item.data.absent_device_id
+                        )
                     ]
+
+                    // filter absent_device_logs
                     const absent_device_logs_requested = absent_device_logs.filter(
                         item => item.status != "Open"
                     )
+
+                    // update absent_device_logs
                     $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
                     initDatatableAbsent(absent_device_logs)
 
@@ -925,20 +930,30 @@
             @endif
 
             if (item.type == "dynamic_device" && item.data.length > 0) {
-                item.data.map((item) => {
+                item.data.map((item) => { // item == device_status
+
+                    // loop all stw
                     status_type_widgets = status_type_widgets.map((status_type_widget) => {
                         if (status_type_widget.id == item.status_type.status_type_widget.id) {
+
+                            // table records update
+                            const countDeviceStatus = [
+                                ...status_type_widget.status_type.device_status.filter(
+                                    (ds) => ds.device_id != item.device_id
+                                ),
+                                item
+                            ].length;
 
                             // Update Cards
                             status_types = status_types.map((st) => {
                                 if (st.widget_id == status_type_widget.id) {
                                     $(`.status_type_${status_type_widget.id}`)
                                         .html(
-                                            st.count + 1
+                                            countDeviceStatus
                                         );
                                     return {
                                         ...st,
-                                        count: st.count + 1
+                                        count: countDeviceStatus
                                     }
                                 } else {
                                     return st
@@ -949,10 +964,7 @@
                                 ...status_type_widget,
                                 status_type: {
                                     ...status_type_widget.status_type,
-                                    device_status: [
-                                        ...status_type_widget.status_type.device_status,
-                                        item
-                                    ]
+                                    device_status: countDeviceStatus
                                 }
                             }
                         }

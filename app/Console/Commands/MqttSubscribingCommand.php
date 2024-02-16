@@ -112,7 +112,7 @@ class MqttSubscribingCommand extends Command
                                 Log::info("Event to NewDataEvent");
                                 NewDataEvent::dispatch([
                                     'type' => 'absent_device',
-                                    'data' => $absent_received_log->load('absent_device')
+                                    'data' => $absent_received_log->load('absent_device', 'user')
                                 ]);
                                 Log::info("Event Done");
                             } catch (\Exception $e) {

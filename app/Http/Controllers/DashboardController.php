@@ -62,6 +62,29 @@ class DashboardController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+        // group by device_id
+        if ($status_type_widgets->count() > 0) {
+            $status_type_widgets = $status_type_widgets->map(function ($val, $key) {
+                $device_status = $val?->status_type?->device_status?->sortByDesc('id')
+                    ->groupBy('device_id')
+                    ->map(function ($val) {
+                        return !$val->first()->marked_as_read ? $val->first() : null;
+                    })
+                    ->filter(function ($val) {
+                        return !is_null($val);
+                    })
+                    ->toArray();
+
+                return [
+                    ...$val->toArray(),
+                    'status_type' => [
+                        ...$val->status_type->toArray(),
+                        'device_status' => count($device_status) > 0 ? array_values($device_status) : []
+                    ]
+                ];
+            });
+        }
+
         $absent_received_logs = [];
 
         if (Setting::first()->is_access_device) {
@@ -102,11 +125,24 @@ class DashboardController extends Controller
                         return $query;
                     }
                 )->get();
+
+            // group by device_id
+            if ($absent_received_logs->count() > 0) {
+                $absent_received_logs = $absent_received_logs->sortByDesc('id')
+                    ->groupBy('absent_device_id')
+                    ->map(function ($val) {
+                        return !$val->first()->marked_as_read ? $val->first() : null;
+                    })
+                    ->filter(function ($val) {
+                        return !is_null($val);
+                    })
+                    ->toArray();
+            }
         }
 
         return response()->json([
             'status_type_widgets' => $status_type_widgets,
-            'absent_received_logs' => $absent_received_logs
+            'absent_received_logs' => count($absent_received_logs) > 0 ? array_values($absent_received_logs) : [],
         ], 200);
     }
 }
