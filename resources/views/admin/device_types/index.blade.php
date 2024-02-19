@@ -122,7 +122,9 @@
                     orderable: false,
                     targets: 2
                 }],
-                order: []
+                order: [
+                    [1, 'desc']
+                ]
             });
         });
     </script>

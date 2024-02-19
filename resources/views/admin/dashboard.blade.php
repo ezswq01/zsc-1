@@ -74,25 +74,7 @@
     @php
         $setting = App\Models\Setting::first();
     @endphp
-    <div class="row gx-3" id="status_types">
-        @if ($setting->is_access_device)
-            <div class="col-lg-4 col-12">
-                <div class="card text-white bg-primary">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h3 class="mb-0 absent_door_request_qty"></h3>
-                            <button onclick="toggleTable('absent-doors')" type="button" class="btn btn-white p-1">
-                                <i class="ph-table"></i>
-                            </button>
-                        </div>
-                        <div>
-                            Access Request
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-    </div>
+    <div class="row gx-3" id="status_types"></div>
     <div class="row gx-3">
         <div class="col-12">
             <button onclick="$('.table-component').hide()" class="btn btn-primary mb-3">
@@ -320,12 +302,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="dropdown-item" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-bs-toggle="modal"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-bs-target="#publish_action">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${item.label}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </button>`
+                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                        class="dropdown-item" 
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#publish_action">
+                                                                        ${item.label}
+                                                                    </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -428,7 +410,7 @@
                     <div class="card text-white status_type_bg_color_${widget_id}" style="background-color: ${count == 0 ? color : trigger_color};">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <h3 class="mb-0 status_type_${widget_id}">
+                                <h3 class="mb-0 status_type_${widget_id} display-3">
                                     ${count}
                                 </h3>
                                 <button onclick="toggleTable('${widget_id}')" type="button"
@@ -451,7 +433,7 @@
                     <div class="card text-white bg-primary">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
-                                <h3 class="mb-0 absent_door_request_qty"></h3>
+                                <h3 class="mb-0 absent_door_request_qty display-3"></h3>
                                 <button onclick="toggleTable('absent-doors')" type="button" class="btn btn-white p-1">
                                     <i class="ph-table"></i>
                                 </button>

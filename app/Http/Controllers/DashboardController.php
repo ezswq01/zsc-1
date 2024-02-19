@@ -124,7 +124,7 @@ class DashboardController extends Controller
                         }
                         return $query;
                     }
-                )->get();
+                )->orderBy('created_at', 'desc')->get();
 
             // group by device_id
             if ($absent_received_logs->count() > 0) {

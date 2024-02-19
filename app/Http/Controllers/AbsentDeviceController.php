@@ -16,7 +16,7 @@ class AbsentDeviceController extends Controller
 {
     public function index()
     {
-        $data = AbsentDevice::all();
+        $data = AbsentDevice::orderBy('created_at','desc')->get();
         return view('admin.absent_devices.index', compact('data'));
     }
 

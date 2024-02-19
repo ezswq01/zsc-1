@@ -126,7 +126,9 @@
                     searchable: false,
                     targets: 0
                 }],
-                order: []
+                order: [
+                    [3, 'desc']
+                ]
             });
         });
     </script>

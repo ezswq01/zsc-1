@@ -27,7 +27,7 @@
   @endif
 </div>
 
-<div class="position-absolute top-0 start-50 translate-middle-x mt-5">
+<div class="position-absolute top-0 start-50 translate-middle-x mt-5" style="z-index: 9999;">
   @if (session('errors'))
     <div class="alert alert-danger alert-dismissible fade show">
       <ul class="m-0">

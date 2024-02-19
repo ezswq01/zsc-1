@@ -48,6 +48,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('absent_devices', AbsentDeviceController::class);
 
     // Logout
+    Route::get('/change-password', [AuthController::class, 'changePassword']);
+    Route::put('/change-password', [AuthController::class, 'changePasswordStore']);
     Route::get('/logout', [AuthController::class, 'logoutPost'])->name('logout');
 
     // Ajax routes

@@ -10,6 +10,7 @@ use App\Models\AbsentReceivedLog;
 use App\Models\Device;
 use App\Models\DeviceLog;
 use App\Models\Notif;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -49,8 +50,9 @@ class MqttSubscribingCommand extends Command
      */
     public function handle()
     {
+        $mqtt_main_topic = Setting::first()->mqtt_main_topic;
         $mqtt = MQTT::connection();
-        $mqtt->subscribe("mcc/#", function (string $topic, string $message) {
+        $mqtt->subscribe("{$mqtt_main_topic}/#", function (string $topic, string $message) {
             echo "Received message on topic: {$topic}\n";
             echo "Received message with payload: {$message}\n";
             try {

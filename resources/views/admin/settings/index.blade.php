@@ -47,6 +47,13 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">MQTT Main Topic</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" value="{{ $data->mqtt_main_topic }}" name="mqtt_main_topic"
+                                    placeholder="Type MQTT Main Topic" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Access Device Feature</label>
                             <div class="col-lg-8">
                                 <label class="form-check form-check-inline">

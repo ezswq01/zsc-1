@@ -32,6 +32,10 @@
                     <span class="d-none d-lg-inline-block mx-lg-2">{{ auth()->user()->name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="/admin/change-password">
+                        <i class="ph-wrench me-2"></i>
+                        Change Password
+                    </a>
                     <a class="dropdown-item" href="/admin/logout">
                         <i class="ph-sign-out me-2"></i>
                         Logout

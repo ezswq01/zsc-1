@@ -131,7 +131,9 @@
                     searchable: false,
                     targets: 0
                 }],
-                order: []
+                order: [
+                    [1, 'desc']
+                ]
             });
         });
     </script>

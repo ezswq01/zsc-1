@@ -31,4 +31,27 @@ class AuthController extends Controller
         auth()->logout();
         return redirect()->route('login');
     }
+
+    public function changePassword()
+    {
+        return view('admin.change_password');
+    }
+
+    public function changePasswordStore(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|min:8',
+            'password' => 'required|min:8|same:password',
+        ]);
+
+        if (!password_verify($request->old_password, auth()->user()->password)) {
+            return redirect()->back()->with('error', 'Old password is incorrect');
+        }
+
+        auth()->user()->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->back()->with('success', 'Password changed successfully');
+    }
 }

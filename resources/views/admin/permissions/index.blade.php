@@ -127,7 +127,9 @@
                     orderable: false,
                     targets: 3
                 }],
-                order: []
+                order: [
+                    [1, 'desc']
+                ]
             });
         });
     </script>

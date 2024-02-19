@@ -145,7 +145,9 @@
                     orderable: false,
                     targets: 5
                 }],
-                order: []
+                order: [
+                    [1, 'desc']
+                ]
             });
         });
     </script>

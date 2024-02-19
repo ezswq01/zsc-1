@@ -175,7 +175,9 @@
                     orderable: false,
                     targets: 4
                 }],
-                order: []
+                order: [
+                    [1, 'desc']
+                ]
             });
 
             $('#locations, #buildings, #rooms, #device_types').change(function() {
