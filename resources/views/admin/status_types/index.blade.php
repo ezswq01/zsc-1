@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <!-- Basic datatable -->
     <div class="card">
         <div class="card-header">
@@ -43,6 +43,7 @@
                     <th>No</th>
                     <th>Name</th>
                     <th>Color</th>
+                    <th>Trigger Color</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -51,10 +52,10 @@
     <!-- /basic datatable -->
 @endsection
 
-@push('js')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
+@push("js")
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/buttons.min.js") }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -97,7 +98,7 @@
             const datatable = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('admin.status_types.index') !!}',
+                ajax: '{!! route("admin.status_types.index") !!}',
                 autoWidth: false,
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
@@ -112,6 +113,10 @@
                     {
                         data: 'color',
                         name: 'color'
+                    },
+                    {
+                        data: 'trigger_color',
+                        name: 'trigger_color'
                     },
                     {
                         data: 'options',

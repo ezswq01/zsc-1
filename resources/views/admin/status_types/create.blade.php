@@ -50,6 +50,12 @@
                 <input class="form-control form-control-color" value="{{ old('color') }}" type="color" name="color">
               </div>
             </div>
+            <div class="row mb-3">
+              <label class="col-lg-4 col-form-label">Trigger Color</label>
+              <div class="col-lg-8">
+                <input class="form-control form-control-color" value="{{ old('trigger_color') }}" type="color" name="trigger_color">
+              </div>
+            </div>
             <div class="text-end">
               <button class="btn btn-primary" type="submit">Submit form <i class="ph-paper-plane-tilt ms-2"></i></button>
             </div>

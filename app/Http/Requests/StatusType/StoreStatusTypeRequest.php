@@ -25,7 +25,8 @@ class StoreStatusTypeRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'color' => 'required|string|max:255'
+            'color' => 'required|string|max:255',
+            'trigger_color' => 'nullable|string|max:255'
         ];
     }
 }

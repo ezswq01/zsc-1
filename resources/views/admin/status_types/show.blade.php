@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="{{ route('admin.status_types.index') }}">Status Type</a>
+                    <a class="breadcrumb-item" href="{{ route("admin.status_types.index") }}">Status Type</a>
                     <span class="breadcrumb-item active">{{ $data->name }}</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">Detail Status Type</h5>
@@ -35,12 +35,12 @@
         <div class="card-body border-top">
             <div class="row g-lg-5 g-2">
                 <div class="col-lg-8 col-12">
-                    <form action="{{ route('admin.status_types.store') }}" method="POST">
+                    <form action="{{ route("admin.status_types.store") }}" method="POST">
                         @csrf
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Name</label>
                             <div class="col-lg-8">
-                                <input disabled value="{{ old('name', $data->name) }}" class="form-control" name="name"
+                                <input disabled value="{{ old("name", $data->name) }}" class="form-control" name="name"
                                     placeholder="Type Name" required type="text">
                             </div>
                         </div>
@@ -48,12 +48,20 @@
                             <label class="col-lg-4 col-form-label">Color</label>
                             <div class="col-lg-8">
                                 <input class="form-control form-control-color" disabled
-                                    value="{{ old('color', $data->color) }}" type="color" name="color">
+                                    value="{{ old("color", $data->color) }}" type="color" name="color">
                             </div>
                         </div>
-                        @can('status-types-update')
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Trigger Color</label>
+                            <div class="col-lg-8">
+                                <input class="form-control form-control-color"
+                                    value="{{ old("trigger_color", $data->trigger_color) }}" type="color"
+                                    name="trigger_color">
+                            </div>
+                        </div>
+                        @can("status-types-update")
                             <div class="text-end">
-                                <a href="{{ route('admin.status_types.edit', $data->id) }}" class="btn btn-primary"
+                                <a href="{{ route("admin.status_types.edit", $data->id) }}" class="btn btn-primary"
                                     type="submit">Edit</a>
                             </div>
                         @endcan

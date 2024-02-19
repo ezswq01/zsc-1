@@ -320,12 +320,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    class="dropdown-item" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-toggle="modal"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data-bs-target="#publish_action">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ${item.label}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="dropdown-item" 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-bs-toggle="modal"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-bs-target="#publish_action">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${item.label}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -422,10 +422,10 @@
             `
         }
 
-        function status_type_html(color, count, widget_id, name) {
+        function status_type_html(color, count, widget_id, name, trigger_color) {
             return `
                 <div class="col-lg-4 col-12">
-                    <div class="card text-white" style="background-color: ${color};">
+                    <div class="card text-white status_type_bg_color_${widget_id}" style="background-color: ${count == 0 ? color : trigger_color};">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h3 class="mb-0 status_type_${widget_id}">
@@ -560,9 +560,7 @@
 
         function handleOpenDoor(absent_device_received_log_id) {
             if (!confirm('Are you sure want to publish?')) return false;
-
             const textarea = $(`#open_absent_device textarea`).val()
-
             $.ajax({
                 url: '/admin/absent_devices/publish',
                 type: 'POST',
@@ -572,14 +570,6 @@
                     absent_device_received_log_id: absent_device_received_log_id,
                 },
                 success: function(response) {
-                    $(`.absent_badge_${absent_device_received_log_id}`).html(`
-                        <span class="badge bg-success">Opened</span>
-                    `);
-
-                    $(`#open_absent_device textarea`).prop(
-                        'disabled', true
-                    );
-
                     absent_device_logs = absent_device_logs.map(item => {
                         if (item.id == absent_device_received_log_id) {
                             return {
@@ -593,72 +583,13 @@
                             ...item
                         }
                     })
-
-                    const absent_device_logs_requested = absent_device_logs.filter(
+                    absent_device_logs = absent_device_logs.filter(
                         item => item.status != "Open"
                     )
-                    $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
-
+                    initializeHtml()
                     alert(response.message);
                 },
                 error: function(error) {
-                    console.log(error);
-                }
-            })
-        }
-
-        function handleSubmitNotes(device_status_id) {
-            if (!confirm('Are you sure want to submit this notes?')) return false;
-            const textarea = $(`#create_note textarea`).val()
-            const is_checked = $(`#marked_${device_status_id}`).is(':checked')
-
-            $.ajax({
-                url: '/admin/device_status/notes',
-                type: 'POST',
-                data: {
-                    notes: textarea,
-                    _token: '{{ csrf_token() }}',
-                    device_status_id: device_status_id,
-                    marked_as_read: is_checked,
-                },
-                success: function(response) {
-                    const status_type_widget_id = response.status_type_widget.status_type_id
-                    status_type_widgets = status_type_widgets.map(item => {
-                        if (item.id == status_type_widget_id) {
-                            return {
-                                ...item,
-                                status_type: {
-                                    ...item.status_type,
-                                    device_status: item.status_type.device_status.map(item => {
-                                        if (item.id == device_status_id) {
-                                            return {
-                                                ...item,
-                                                notes: textarea,
-                                                marked_as_read: is_checked,
-                                            }
-                                        }
-                                        return {
-                                            ...item
-                                        }
-                                    })
-                                }
-                            }
-                        }
-                        return {
-                            ...item
-                        }
-                    })
-
-                    if (is_checked) {
-                        $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
-                    } else {
-                        $(`#mark_${device_status_id}`).html('<i class="ph-question text-danger"></i>');
-                    }
-
-                    alert(response.message);
-                },
-                error: function(error) {
-                    alert("Something went wrong!");
                     console.log(error);
                 }
             })
@@ -693,10 +624,61 @@
             )
         }
 
+        function handleSubmitNotes(device_status_id) {
+            if (!confirm('Are you sure want to submit this notes?')) return false;
+            const textarea = $(`#create_note textarea`).val()
+            const is_checked = $(`#marked_${device_status_id}`).is(':checked')
+            $.ajax({
+                url: '/admin/device_status/notes',
+                type: 'POST',
+                data: {
+                    notes: textarea,
+                    _token: '{{ csrf_token() }}',
+                    device_status_id: device_status_id,
+                    marked_as_read: is_checked,
+                },
+                success: function(response) {
+                    const status_type_widget_id = response.device_status?.status_type?.status_type_widget?.id
+                    status_type_widgets = status_type_widgets.map(item => {
+                        if (item.id == status_type_widget_id) {
+                            return {
+                                ...item,
+                                status_type: {
+                                    ...item.status_type,
+                                    device_status: !is_checked ? item.status_type.device_status.map(
+                                        item => {
+                                            if (item.id == device_status_id) {
+                                                return {
+                                                    ...item,
+                                                    notes: textarea,
+                                                    marked_as_read: is_checked,
+                                                }
+                                            }
+                                            return {
+                                                ...item
+                                            }
+                                        }) : item.status_type.device_status.filter(item => item
+                                        .id != device_status_id)
+                                }
+                            }
+                        }
+                        return {
+                            ...item
+                        }
+                    })
+                    initializeHtml()
+                    alert(response.message);
+                },
+                error: function(error) {
+                    alert("Something went wrong!");
+                    console.log(error);
+                }
+            })
+        }
+
         function handlePublishAction(device_status_id, publish_action_id) {
             if (!confirm('Are you sure want to publish?')) return false;
             const textarea = $(`#publish_action textarea`).val()
-
             $.ajax({
                 url: '/admin/devices/publish',
                 type: 'POST',
@@ -707,33 +689,25 @@
                     notes: textarea,
                 },
                 success: function(response) {
-                    const status_type_widget_id = response.status_type_widget.status_type_id
-                    status_type_widgets = status_type_widgets.map(item => {
-                        if (item.id == status_type_widget_id) {
+                    const status_type_widget_id = response.device_status?.status_type?.status_type_widget?.id
+                    status_type_widgets = status_type_widgets.map((stw) => {
+                        if (stw.id == status_type_widget_id) {
                             return {
-                                ...item,
+                                ...stw,
                                 status_type: {
-                                    ...item.status_type,
-                                    device_status: item.status_type.device_status.map(item => {
-                                        if (item.id == device_status_id) {
-                                            return {
-                                                ...item,
-                                                notes: textarea,
-                                                marked_as_read: true,
-                                            }
-                                        }
-                                        return {
-                                            ...item
-                                        }
-                                    })
+                                    ...stw.status_type,
+                                    device_status: stw.status_type.device_status.filter(
+                                        (item) => item.id != device_status_id
+                                    )
                                 }
                             }
-                        }
-                        return {
-                            ...item
+                        } else {
+                            return {
+                                ...stw
+                            }
                         }
                     })
-                    $(`#mark_${device_status_id}`).html('<i class="ph-check-circle text-success"></i>');
+                    initializeHtml()
                     alert(response.message);
                 },
                 error: function(error) {
@@ -766,6 +740,71 @@
             `);
         }
 
+        function initializeHtml() {
+            // erase loading
+            $("#status_types").html("");
+            $("#status_type_widgets_tables").html("");
+            $(".modal-backdrop").remove();
+            $("#open_absent_device").modal("hide");
+            // Status Type Widgets
+            initializeHtmlAccess();
+            initializeHtmlTable();
+        }
+
+        function initializeHtmlAccess() {
+            // Absent Device Logs
+            @if ($setting->is_access_device)
+                $("#status_types").append(absent_device_logs_html());
+                const countAbsent = absent_device_logs.filter((a) => a.marked_as_read == false).length
+                $(".absent_door_request_qty").html(countAbsent)
+                initDatatableAbsent(absent_device_logs)
+            @endif
+        }
+
+        function initializeHtmlTable(data) {
+            // Status Type Widgets
+            status_types = [];
+            let status_type_widget_html = "";
+            status_type_widgets.map((stw) => {
+                status_type_widget_html += status_type_widgets_html(
+                    stw.id,
+                    stw.status_type.name
+                );
+                // status_types
+                status_types.push({
+                    widget_id: stw.id,
+                    name: stw.status_type.name,
+                    color: stw.status_type.color,
+                    trigger_color: stw.status_type.trigger_color,
+                    count: 0,
+                })
+                stw.status_type.device_status.map((ds) => {
+                    if (ds.device && ds.marked_as_read == false) {
+                        status_types = status_types.map((st) => {
+                            if (st.widget_id == stw.id) {
+                                return {
+                                    ...st,
+                                    count: st.count + 1
+                                }
+                            } else {
+                                return st
+                            }
+                        })
+                    }
+                })
+            });
+            $("#status_type_widgets_tables").html(status_type_widget_html);
+            initDatatableStatusTypeWidgets(status_type_widgets)
+
+            // status_types
+            let status_type_html_append = "";
+            status_types.map((st) => {
+                status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name, st
+                    .trigger_color);
+            })
+            $("#status_types").append(status_type_html_append);
+        }
+
         async function getFetch(url = "/api/dashboard") {
             try {
                 // reset
@@ -782,61 +821,15 @@
                         'Content-Type': 'application/json'
                     },
                 });
+
                 const data = await response.json();
 
-                // erase loading
-                $("#status_types").html("");
-                $("#status_type_widgets_tables").html("");
+                absent_device_logs = data.absent_received_logs || [];
+                status_type_widgets = data.status_type_widgets || [];
+                console.log(status_type_widgets)
 
-                // Absent Device Logs
-                @if ($setting->is_access_device)
-                    $("#status_types").append(absent_device_logs_html());
-                    absent_device_logs = data.absent_received_logs;
-                    const countAbsent = absent_device_logs.filter((a) => a.marked_as_read == false).length
-                    $(".absent_door_request_qty").html(countAbsent)
-                    initDatatableAbsent(absent_device_logs)
-                @endif
-
-                // Status Type Widgets
-                status_types = [];
-                status_type_widgets = data.status_type_widgets;
-                let status_type_widget_html = "";
-                status_type_widgets.map((stw) => {
-                    status_type_widget_html += status_type_widgets_html(
-                        stw.id,
-                        stw.status_type.name
-                    );
-                    // status_types
-                    status_types.push({
-                        widget_id: stw.id,
-                        name: stw.status_type.name,
-                        color: stw.status_type.color,
-                        count: 0,
-                    })
-                    stw.status_type.device_status.map((ds) => {
-                        if (ds.device && ds.marked_as_read == false) {
-                            status_types = status_types.map((st) => {
-                                if (st.widget_id == stw.id) {
-                                    return {
-                                        ...st,
-                                        count: st.count + 1
-                                    }
-                                } else {
-                                    return st
-                                }
-                            })
-                        }
-                    })
-                });
-                $("#status_type_widgets_tables").html(status_type_widget_html);
-                initDatatableStatusTypeWidgets(status_type_widgets)
-
-                // status_types
-                let status_type_html_append = "";
-                status_types.map((st) => {
-                    status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name);
-                })
-                $("#status_types").append(status_type_html_append);
+                // initialize
+                initializeHtml(data);
 
             } catch (error) {
                 console.log(error);
@@ -905,7 +898,6 @@
 
             @if ($setting->is_access_device)
                 if (item.type == "absent_device") {
-                    console.log(item.data)
 
                     // add items to absent_device_logs
                     absent_device_logs = [
@@ -916,13 +908,9 @@
                     ]
 
                     // filter absent_device_logs
-                    const absent_device_logs_requested = absent_device_logs.filter(
+                    absent_device_logs = absent_device_logs.filter(
                         item => item.status != "Open"
                     )
-
-                    // update absent_device_logs
-                    $(`.absent_door_request_qty`).html(absent_device_logs_requested.length)
-                    initDatatableAbsent(absent_device_logs)
 
                     // play sound
                     audio.play();
@@ -942,18 +930,14 @@
                                     (ds) => ds.device_id != item.device_id
                                 ),
                                 item
-                            ].length;
+                            ];
 
                             // Update Cards
                             status_types = status_types.map((st) => {
                                 if (st.widget_id == status_type_widget.id) {
-                                    $(`.status_type_${status_type_widget.id}`)
-                                        .html(
-                                            countDeviceStatus
-                                        );
                                     return {
                                         ...st,
-                                        count: countDeviceStatus
+                                        count: countDeviceStatus.length
                                     }
                                 } else {
                                     return st
@@ -974,11 +958,14 @@
                     })
 
                 })
+                console.log(status_type_widgets)
                 initDatatableStatusTypeWidgets(status_type_widgets)
 
                 // play sound
                 audio.play();
             }
+
+            initializeHtml()
         });
     </script>
 

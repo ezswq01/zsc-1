@@ -95,6 +95,20 @@ class Device extends Model
                 );
                 $status_response = $status_response->load('status_type.status_type_widget', 'device.publish_action');
                 $status_responses[] = $status_response;
+
+                // notification
+                $status_type = StatusType::find($val->status_type_id);
+                $setting = Setting::first();
+                $status_type_widgets = StatusTypeWidget::where('status_type_id', $status_type->id)->where('setting_id', $setting->id)->get();
+                if ($status_type_widgets->count() > 0) {
+                    Notif::create([
+                        'notif_type' => 'dynamic_device',
+                        'notif_status' => 'unread',
+                        'device_id' => $device_id,
+                        'absent_device_id' => null,
+                        'message' => "Device {$device_id} has new {$status_type->name}."
+                    ]);
+                }
             }
         }
         return $status_responses;

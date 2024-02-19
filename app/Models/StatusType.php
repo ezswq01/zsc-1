@@ -16,6 +16,7 @@ class StatusType extends Model
     protected $fillable = [
         'name',
         'color',
+        'trigger_color',
         'created_at',
         'updated_at'
     ];
