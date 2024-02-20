@@ -78,7 +78,7 @@ class Device extends Model
         }, 0);
     }
 
-    public static function evalValue($device_id, $device_log_id, $subscribe_expression, $value)
+    public static function evalValue($device_id, $device_log_id, $subscribe_expression, $value, $device_id_unique)
     {
         $status_responses = [];
         foreach ($subscribe_expression as $val) {
@@ -108,7 +108,7 @@ class Device extends Model
                         'notif_status' => 'unread',
                         'device_id' => $device_id,
                         'absent_device_id' => null,
-                        'message' => "Device {$device_id} has new {$status_type->name}."
+                        'message' => "Device {$device_id_unique} has new {$status_type->name}."
                     ]);
                 }
             }

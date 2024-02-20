@@ -67,7 +67,13 @@ class MqttSubscribingCommand extends Command
                     if ($device) {
                         $device_log = DeviceLog::create(['device_id' => $device->id, 'value' => $message, 'type' => 'subscribe']);
                         $subscribe_expression = $device->subscribe_expression;
-                        $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
+                        $subscribe_responses = Device::evalValue(
+                            $device->id,
+                            $device_log->id,
+                            $subscribe_expression,
+                            $message,
+                            $device->device_id
+                        );
 
                         try {
                             Log::info("Event to NewDataEvent");
