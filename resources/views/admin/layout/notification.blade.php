@@ -95,9 +95,7 @@
                     created_at: moment(item.created_at).format("DD/MM/YYYY HH:mm:ss"),
                 }));
 
-                $(`.notification-count`).html(
-                    `${dataNotifications.filter((item) => item.notif_status == "unread").length}`
-                );
+                $(`.notification-count`).html(`${res.data.total}`);
 
                 dataNotifications.map((item) => {
                     $(`.notification_main`).append(`

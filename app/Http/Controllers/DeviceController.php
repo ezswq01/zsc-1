@@ -144,6 +144,7 @@ class DeviceController extends Controller
                         'device_id' => $device->id,
                         'expression' => $request->subscribe_expressions['expression'][$key],
                         'status_type_id' => $request->subscribe_expressions['status_type'][$key],
+                        'normal_state' => $request->subscribe_expressions['normal_state'][$key] == 'on' ? true : false
                     ]);
                 }
             }
@@ -263,6 +264,7 @@ class DeviceController extends Controller
                         'device_id' => $id,
                         'expression' => $request->subscribe_expressions['expression'][$key],
                         'status_type_id' => $request->subscribe_expressions['status_type'][$key],
+                        'normal_state' => $request->subscribe_expressions['normal_state'][$key] == 'on' ? true : false
                     ]);
                 }
             }

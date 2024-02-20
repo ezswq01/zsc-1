@@ -89,8 +89,8 @@ class Device extends Model
                         'device_id' => $device_id,
                         'device_log_id' => $device_log_id,
                         'status_type_id' => $val->status_type_id,
-                        'marked_as_read' => false,
-                        'notes' => null
+                        'marked_as_read' => $val->normal_state ? true : false,
+                        'notes' => "Normal State"
                     ]
                 );
                 $status_response = $status_response->load('status_type.status_type_widget', 'device.publish_action');
@@ -99,8 +99,10 @@ class Device extends Model
                 // notification
                 $status_type = StatusType::find($val->status_type_id);
                 $setting = Setting::first();
-                $status_type_widgets = StatusTypeWidget::where('status_type_id', $status_type->id)->where('setting_id', $setting->id)->get();
-                if ($status_type_widgets->count() > 0) {
+                $status_type_widgets = StatusTypeWidget::where('status_type_id', $status_type->id)
+                    ->where('setting_id', $setting->id)
+                    ->get();
+                if ($status_type_widgets->count() > 0 && !$val->normal_state) {
                     Notif::create([
                         'notif_type' => 'dynamic_device',
                         'notif_status' => 'unread',

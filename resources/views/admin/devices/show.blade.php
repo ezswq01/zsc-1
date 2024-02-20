@@ -1,6 +1,6 @@
-@extends('admin.layout.main')
+@extends("admin.layout.main")
 
-@push('header')
+@push("header")
     <div class="page-header page-header-light shadow">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="{{ route('admin.devices.index') }}">Device</a>
+                    <a class="breadcrumb-item" href="{{ route("admin.devices.index") }}">Device</a>
                     <span class="breadcrumb-item active">{{ $data->device_id }}</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -26,7 +26,7 @@
     </div>
 @endpush
 
-@section('content')
+@section("content")
     <div class="row">
         <div class="col-xl-8 col-12">
             <div class="card">
@@ -37,7 +37,7 @@
                 <div class="card-body border-top">
                     <div class="row g-lg-5 g-2">
                         <div class="col-12">
-                            <form action="{{ route('admin.devices.store') }}" method="POST">
+                            <form action="{{ route("admin.devices.store") }}" method="POST">
                                 @csrf
                                 <div class="row mb-3">
                                     <label class="col-lg-4 col-form-label">Device ID</label>
@@ -68,7 +68,7 @@
                                             name="device_type_id">
                                             <option></option>
                                             @foreach ($device_types as $device_type)
-                                                <option {{ $data->device_type_id == $device_type->id ? 'selected' : '' }}
+                                                <option {{ $data->device_type_id == $device_type->id ? "selected" : "" }}
                                                     value="{{ $device_type->id }}">{{ $device_type->name }}</option>
                                             @endforeach
                                         </select>
@@ -89,9 +89,9 @@
                                     </div>
                                 </div>
                                 <hr>
-                                @can('devices-update')
+                                @can("devices-update")
                                     <div class="text-end">
-                                        <a href="{{ route('admin.devices.edit', $data->id) }}" class="btn btn-primary"
+                                        <a href="{{ route("admin.devices.edit", $data->id) }}" class="btn btn-primary"
                                             type="submit">Edit</a>
                                     </div>
                                 @endcan
@@ -176,18 +176,29 @@
                     </select>
                 </div>
             </div>
+            <div class="row mt-3">
+                <label class="col-lg-4 col-form-label">Normal State</label>
+                <div class="col-lg-8 d-flex align-items-center">
+                    <select disabled class="form-control select2modify" data-placeholder="Select State"
+                        name="subscribe_expressions[normal_state][]">
+                        <option></option>
+                        <option value="on">NORMAL STATE</option>
+                        <option value="off">TRIGGER WARNING</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
-    @include('admin.components.modals.publish')
-    @include('admin.components.modals.open-note')
-    @include('admin.components.modals.create-note')
+    @include("admin.components.modals.publish")
+    @include("admin.components.modals.open-note")
+    @include("admin.components.modals.create-note")
 @endsection
 
-@push('js')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
-    <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
+@push("js")
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js") }}"></script>
+    <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/buttons.min.js") }}"></script>
 
     <script>
         const model = @json($data);
@@ -198,12 +209,13 @@
             if (dataSubscribeExpressions.length > 0) {
                 dataSubscribeExpressions.forEach((item, index) => {
                     hanldeAddSubsribeExpression();
+                    console.log(item.normal_state)
+                    $(`.subscribe_expression_${index + 1} select[name="subscribe_expressions[normal_state][]`)
+                        .val(item.normal_state ? "on" : "off").change();
                     $(`.subscribe_expression_${index + 1} input[name="subscribe_expressions[expression][]"]`)
-                        .val(item
-                            .expression);
+                        .val(item.expression);
                     $(`.subscribe_expression_${index + 1} select[name="subscribe_expressions[status_type][]"]`)
-                        .val(item
-                            .status_type_id).change();
+                        .val(item.status_type_id).change();
                 })
             }
             if (dataPublishActions.length > 0) {
@@ -315,7 +327,7 @@
                 },
             }, ];
 
-            let url = "{!! route('admin.devices.show', ':device_id') !!}";
+            let url = "{!! route("admin.devices.show", ":device_id") !!}";
             url = url.replace(':device_id', $('#datatable').data('id'));
 
             const datatable = $('#datatable');
@@ -365,7 +377,7 @@
             datatable.delegate('.open-note', 'click', function(e) {
                 let id = $(this).data('id');
 
-                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                let url = "{!! route("admin.device_status.get_device_status", ":id") !!}";
                 url = url.replace(':id', id);
 
                 $.ajax({
@@ -386,7 +398,7 @@
             datatable.delegate('.create-note', 'click', function(e) {
                 let id = $(this).data('id');
 
-                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                let url = "{!! route("admin.device_status.get_device_status", ":id") !!}";
                 url = url.replace(':id', id);
 
                 $.ajax({
@@ -414,7 +426,7 @@
                 const formData = new FormData(e.target);
 
                 $.ajax({
-                    url: '{!! route('admin.device_status.notes') !!}',
+                    url: '{!! route("admin.device_status.notes") !!}',
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -441,7 +453,7 @@
                 $('#id').val(publishActionId);
                 $('#device_status_id').val(deviceStatusId);
 
-                let url = "{!! route('admin.device_status.get_device_status', ':id') !!}";
+                let url = "{!! route("admin.device_status.get_device_status", ":id") !!}";
                 url = url.replace(':id', deviceStatusId);
 
                 $.ajax({
@@ -464,7 +476,7 @@
                 const formData = new FormData(e.target);
 
                 $.ajax({
-                    url: '{!! route('admin.devices.publish') !!}',
+                    url: '{!! route("admin.devices.publish") !!}',
                     type: 'POST',
                     data: formData,
                     processData: false,

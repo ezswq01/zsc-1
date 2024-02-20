@@ -16,6 +16,7 @@ class Setting extends Model
 
     protected $fillable = [
         'app_name',
+        'mqtt_main_topic',
         'logo',
         'is_access_device',
         'created_at',

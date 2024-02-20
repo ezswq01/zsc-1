@@ -50,7 +50,7 @@ class MqttSubscribingCommand extends Command
      */
     public function handle()
     {
-        $mqtt_main_topic = Setting::first()->mqtt_main_topic;
+        $mqtt_main_topic = Setting::first()->mqtt_main_topic ?? "mcc";
         $mqtt = MQTT::connection();
         $mqtt->subscribe("{$mqtt_main_topic}/#", function (string $topic, string $message) {
             echo "Received message on topic: {$topic}\n";

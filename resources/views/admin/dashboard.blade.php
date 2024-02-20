@@ -302,12 +302,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                        class="dropdown-item" 
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#publish_action">
-                                                                        ${item.label}
-                                                                    </button>`
+                                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                        class="dropdown-item" 
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#publish_action">
+                                                                                        ${item.label}
+                                                                                    </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -911,8 +911,8 @@
                                 ...status_type_widget.status_type.device_status.filter(
                                     (ds) => ds.device_id != item.device_id
                                 ),
-                                item
-                            ];
+                                item.marked_as_read ? null : item
+                            ].filter((item) => item);
 
                             // Update Cards
                             status_types = status_types.map((st) => {

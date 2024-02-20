@@ -17,6 +17,7 @@ class SubscribeExpression extends Model
     protected $fillable = [
         'device_id',
         'status_type_id',
+        'normal_state',
         'expression',
         'created_at',
         'updated_at'

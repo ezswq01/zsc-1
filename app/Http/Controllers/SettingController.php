@@ -28,9 +28,10 @@ class SettingController extends Controller
     {
         $validated = $request->validate([
             'app_name' => 'required',
+            'mqtt_main_topic' => 'required',
             'status_types' => 'array',
             'status_types.*' => 'string',
-            'is_access_device' => 'sometimes'
+            'is_access_device' => 'sometimes',
         ]);
 
         $data = Setting::findOrFail($id);
@@ -58,6 +59,7 @@ class SettingController extends Controller
 
             $data->update([
                 'app_name' => $validated['app_name'],
+                'mqtt_main_topic' => $validated['mqtt_main_topic'],
                 'is_access_device' => isset($validated['is_access_device']) && $validated['is_access_device'] == "on" ? true : false
             ]);
 
