@@ -130,6 +130,7 @@
         let absent_device_logs = [];
         let status_type_widgets = [];
         let status_types = [];
+        let is_ready = false;
 
         let audio = new Audio('/mcc-notification.wav');
 
@@ -813,6 +814,9 @@
                 // initialize
                 initializeHtml(data);
 
+                // ready
+                is_ready = true;
+
             } catch (error) {
                 console.log(error);
                 alert("Something went wrong! Please contact admin or try again later.");
@@ -940,14 +944,14 @@
                     })
 
                 })
-                console.log(status_type_widgets)
-                initDatatableStatusTypeWidgets(status_type_widgets)
 
                 // play sound
                 audio.play();
             }
 
-            initializeHtml()
+            if (is_ready) {
+                initializeHtml();
+            }
         });
     </script>
 

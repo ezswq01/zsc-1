@@ -89,9 +89,7 @@ class DashboardController extends Controller
 
         if (Setting::first()->is_access_device) {
             $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')
-                ->whereHas(
-                    'absent_device',
-                    function ($query) use ($request) {
+                ->whereHas('absent_device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {
                                 $branches = $request->branches;
