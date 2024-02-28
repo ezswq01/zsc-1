@@ -798,6 +798,8 @@
                 statusTypeLoading();
                 statusTypeWidgetLoading();
 
+                const timeQuery = moment().format("YYYY-MM-DD HH:mm:ss");
+
                 const response = await fetch(url, {
                     headers: {
                         'Accept': 'application/json',
@@ -809,10 +811,15 @@
 
                 absent_device_logs = data.absent_received_logs || [];
                 status_type_widgets = data.status_type_widgets || [];
-                console.log(status_type_widgets)
 
                 // initialize
+                const timeStart = moment().format("YYYY-MM-DD HH:mm:ss");
                 initializeHtml(data);
+                const timeEnd = moment().format("YYYY-MM-DD HH:mm:ss");
+
+                console.log("Time Query: ", timeQuery)
+                console.log("Time Start: ", timeStart)
+                console.log("Time End: ", timeEnd)
 
                 // ready
                 is_ready = true;
