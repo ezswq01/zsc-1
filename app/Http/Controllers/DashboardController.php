@@ -7,6 +7,7 @@ use App\Models\Device;
 use App\Models\Setting;
 use App\Models\StatusTypeWidget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,8 @@ class DashboardController extends Controller
 
     public function ajaxDashboard(Request $request)
     {
+        Log::info("Query time Start: " . now()->format('Y-m-d H:i:s'));
+
         $status_type_widgets = StatusTypeWidget::with('status_type.device_status.device.publish_action')
             ->with(['status_type.device_status.device' => function ($query) use ($request) {
                 if (!empty($request->branches)) {
@@ -62,6 +65,10 @@ class DashboardController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+        Log::info("Query time End: " . now()->format('Y-m-d H:i:s'));
+
+        Log::info("Query time 2 Start: " . now()->format('Y-m-d H:i:s'));
+
         // group by device_id
         if ($status_type_widgets->count() > 0) {
             $status_type_widgets = $status_type_widgets->map(function ($val, $key) {
@@ -75,21 +82,23 @@ class DashboardController extends Controller
                     })
                     ->toArray();
 
-                return [
-                    ...$val->toArray(),
-                    'status_type' => [
-                        ...$val->status_type->toArray(),
-                        'device_status' => count($device_status) > 0 ? array_values($device_status) : []
-                    ]
-                ];
+                $rtn = $val->toArray();
+                $rtn['status_type'] = $val->status_type->toArray();
+                $rtn['status_type']['device_status'] = count($device_status) > 0 ? array_values($device_status) : [];
+
+                return $rtn;
             });
         }
+
+        Log::info("Query time 2 End: " . now()->format('Y-m-d H:i:s'));
 
         $absent_received_logs = [];
 
         if (Setting::first()->is_access_device) {
             $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')
-                ->whereHas('absent_device', function ($query) use ($request) {
+                ->whereHas(
+                    'absent_device',
+                    function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {
                                 $branches = $request->branches;
