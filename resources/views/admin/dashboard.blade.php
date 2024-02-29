@@ -814,15 +814,14 @@
                 });
 
                 const res = await response.json();
-                
+
                 const data = {
-                    ...res,
-                    status_type_widgets: res.status_type_widgets.map((stw) => {
+                    ...res, status_type_widgets: res.status_type_widgets.map((stw) => {
                         return {
                             ...stw,
                             status_type: {
                                 ...stw.status_type,
-                                device_status: stw?.status_type?.device_status?.at(0) ? [{
+                                device_status: stw?.status_type?.device_status?.at(0)?.marked_as_read == false ? [{
                                     ...stw?.status_type?.device_status?.at(0)
                                 }] : [],
                             },
