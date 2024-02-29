@@ -72,6 +72,7 @@ class DashboardController extends Controller
         // group by device_id
         if ($status_type_widgets->count() > 0) {
             $status_type_widgets = $status_type_widgets->map(function ($val, $key) {
+                Log::info("Query time 3 Start: " . now()->format('Y-m-d H:i:s'));
                 $device_status = $val?->status_type?->device_status?->sortByDesc('id')
                     ->groupBy('device_id')
                     ->map(function ($val) {
@@ -81,10 +82,13 @@ class DashboardController extends Controller
                         return !is_null($val);
                     })
                     ->toArray();
+                Log::info("Query time 3 End: " . now()->format('Y-m-d H:i:s'));
 
+                Log::info("Query time 4 Start: " . now()->format('Y-m-d H:i:s'));
                 $rtn = $val->toArray();
                 $rtn['status_type'] = $val->status_type->toArray();
                 $rtn['status_type']['device_status'] = count($device_status) > 0 ? array_values($device_status) : [];
+                Log::info("Query time 4 End: " . now()->format('Y-m-d H:i:s'));
 
                 return $rtn;
             });
