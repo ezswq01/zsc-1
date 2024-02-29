@@ -74,6 +74,8 @@ class DashboardController extends Controller
         foreach ($status_type_widgets as $key => $status_type_widget) {
             $status_type_widgets[$key]['status_type']['device_status'] = [array_values($status_type_widget['status_type']['device_status'])[0]];
         }
+        
+        Log::info("Time Query End II: " . date('Y-m-d H:i:s'));
 
         $absent_received_logs = [];
 
