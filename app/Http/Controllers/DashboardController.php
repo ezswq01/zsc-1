@@ -26,83 +26,50 @@ class DashboardController extends Controller
 
     public function ajaxDashboard(Request $request)
     {
-        Log::info("Query time Start: " . now()->format('Y-m-d H:i:s'));
-
-        $status_type_widgets = StatusTypeWidget::with('status_type.device_status.device.publish_action')
-            ->with(['status_type.device_status.device' => function ($query) use ($request) {
-                if (!empty($request->branches)) {
-                    return $query->where(function ($w) use ($request) {
-                        $branches = $request->branches;
-                        foreach ($branches as $branch) {
-                            $w->orWhere('branch', $branch);
+        $status_type_widgets = StatusTypeWidget::with([
+            'status_type.device_status' => function ($query) use ($request) {
+                return $query->orderBy('id', 'desc')
+                    ->with('device.publish_action')
+                    ->whereHas('device', function ($query) use ($request) {
+                        if (!empty($request->branches)) {
+                            return $query->where(function ($w) use ($request) {
+                                $branches = $request->branches;
+                                foreach ($branches as $branch) {
+                                    $w->orWhere('branch', $branch);
+                                }
+                            });
+                        }
+                        if (!empty($request->buildings)) {
+                            return $query->where(function ($w) use ($request) {
+                                $buildings = $request->buildings;
+                                foreach ($buildings as $building) {
+                                    $w->orWhere('building', $building);
+                                }
+                            });
+                        }
+                        if (!empty($request->rooms)) {
+                            return $query->where(function ($w) use ($request) {
+                                $rooms = $request->rooms;
+                                foreach ($rooms as $room) {
+                                    $w->orWhere('room', $room);
+                                }
+                            });
+                        }
+                        if (!empty($request->get('search'))) {
+                            $query->where(function ($w) use ($request) {
+                                $search = $request->get('search');
+                                $w->orWhere('device_id', 'ILIKE', "%$search%");
+                            });
                         }
                     });
-                }
-                if (!empty($request->buildings)) {
-                    return $query->where(function ($w) use ($request) {
-                        $buildings = $request->buildings;
-                        foreach ($buildings as $building) {
-                            $w->orWhere('building', $building);
-                        }
-                    });
-                }
-                if (!empty($request->rooms)) {
-                    return $query->where(function ($w) use ($request) {
-                        $rooms = $request->rooms;
-                        foreach ($rooms as $room) {
-                            $w->orWhere('room', $room);
-                        }
-                    });
-                }
-                if (!empty($request->get('search'))) {
-                    $query->where(function ($w) use ($request) {
-                        $search = $request->get('search');
-                        $w->orWhere('device_id', 'ILIKE', "%$search%");
-                    });
-                }
-                return $query;
-            }])
-            ->orderBy('id', 'desc')
-            ->get();
-
-        Log::info("Query time End: " . now()->format('Y-m-d H:i:s'));
-
-        Log::info("Query time 2 Start: " . now()->format('Y-m-d H:i:s'));
-
-        // group by device_id
-        if ($status_type_widgets->count() > 0) {
-            $status_type_widgets = $status_type_widgets->map(function ($val, $key) {
-                Log::info("Query time 3 Start: " . now()->format('Y-m-d H:i:s'));
-                $device_status = $val?->status_type?->device_status?->sortByDesc('id')
-                    ->groupBy('device_id')
-                    ->map(function ($val) {
-                        return !$val->first()->marked_as_read ? $val->first() : null;
-                    })
-                    ->filter(function ($val) {
-                        return !is_null($val);
-                    })
-                    ->toArray();
-                Log::info("Query time 3 End: " . now()->format('Y-m-d H:i:s'));
-
-                Log::info("Query time 4 Start: " . now()->format('Y-m-d H:i:s'));
-                $rtn = $val->toArray();
-                $rtn['status_type'] = $val->status_type->toArray();
-                $rtn['status_type']['device_status'] = count($device_status) > 0 ? array_values($device_status) : [];
-                Log::info("Query time 4 End: " . now()->format('Y-m-d H:i:s'));
-
-                return $rtn;
-            });
-        }
-
-        Log::info("Query time 2 End: " . now()->format('Y-m-d H:i:s'));
+            }
+        ])->orderBy('id', 'desc')->get();
 
         $absent_received_logs = [];
 
         if (Setting::first()->is_access_device) {
             $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')
-                ->whereHas(
-                    'absent_device',
-                    function ($query) use ($request) {
+                ->whereHas('absent_device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {
                                 $branches = $request->branches;

@@ -37,7 +37,9 @@
                     <option></option>
                     @foreach ($device_locations as $device_location)
                         @php
-                            $selected = in_array($device_location->branch, request()->locations ?? []) ? "selected" : "";
+                            $selected = in_array($device_location->branch, request()->locations ?? [])
+                                ? "selected"
+                                : "";
                         @endphp
                         <option {{ $selected }} value="{{ $device_location->branch }}">
                             {{ ucfirst($device_location->branch) }}</option>
@@ -48,7 +50,9 @@
                     <option></option>
                     @foreach ($device_sub_locations as $device_sub_location)
                         @php
-                            $selected = in_array($device_sub_location->building, request()->locations ?? []) ? "selected" : "";
+                            $selected = in_array($device_sub_location->building, request()->locations ?? [])
+                                ? "selected"
+                                : "";
                         @endphp
                         <option {{ $selected }} value="{{ $device_sub_location->building }}">
                             {{ ucfirst($device_sub_location->building) }}</option>
@@ -59,7 +63,9 @@
                     <option></option>
                     @foreach ($device_location_ids as $device_location_id)
                         @php
-                            $selected = in_array($device_location_id->room, request()->locations ?? []) ? "selected" : "";
+                            $selected = in_array($device_location_id->room, request()->locations ?? [])
+                                ? "selected"
+                                : "";
                         @endphp
                         <option {{ $selected }} value="{{ $device_location_id->room }}">
                             {{ ucfirst($device_location_id->room) }}</option>
@@ -303,12 +309,12 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                        class="dropdown-item" 
-                                                                                        data-bs-toggle="modal"
-                                                                                        data-bs-target="#publish_action">
-                                                                                        ${item.label}
-                                                                                    </button>`
+                                                                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                                                                        class="dropdown-item" 
+                                                                                                                        data-bs-toggle="modal"
+                                                                                                                        data-bs-target="#publish_action">
+                                                                                                                        ${item.label}
+                                                                                                                    </button>`
                                                         )
                                                         .reduce(
                                                             (prev, curr) => prev + curr
@@ -807,7 +813,22 @@
                     },
                 });
 
-                const data = await response.json();
+                const res = await response.json();
+                
+                const data = {
+                    ...res,
+                    status_type_widgets: res.status_type_widgets.map((stw) => {
+                        return {
+                            ...stw,
+                            status_type: {
+                                ...stw.status_type,
+                                device_status: stw?.status_type?.device_status?.at(0) ? [{
+                                    ...stw?.status_type?.device_status?.at(0)
+                                }] : [],
+                            },
+                        }
+                    })
+                };
 
                 absent_device_logs = data.absent_received_logs || [];
                 status_type_widgets = data.status_type_widgets || [];
