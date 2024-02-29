@@ -26,6 +26,7 @@ class DashboardController extends Controller
 
     public function ajaxDashboard(Request $request)
     {
+        Log::info("Time Query Start: " . date('Y-m-d H:i:s'));
         $status_type_widgets = StatusTypeWidget::with([
             'status_type.device_status' => function ($query) use ($request) {
                 return $query->orderBy('id', 'desc')
@@ -64,6 +65,7 @@ class DashboardController extends Controller
                     });
             }
         ])->orderBy('id', 'desc')->get();
+        Log::info("Time Query End: " . date('Y-m-d H:i:s'));
 
         $absent_received_logs = [];
 
