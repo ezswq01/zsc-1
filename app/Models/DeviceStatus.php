@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class DeviceStatus extends Model
 {
-    // use HasFactory;
+    use HasEagerLimit;
 
     protected $table = 'device_status';
 

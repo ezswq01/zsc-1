@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class StatusType extends Model
 {
-    // use HasFactory;
+    use HasEagerLimit;
 
     protected $dates = [
         'created_at',
