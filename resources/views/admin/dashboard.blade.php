@@ -309,15 +309,17 @@
                                                         .map(
                                                             (item) =>
                                                                 `<button 
-                                                                                                                        onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
-                                                                                                                        class="dropdown-item" 
-                                                                                                                        data-bs-toggle="modal"
-                                                                                                                        data-bs-target="#publish_action">
-                                                                                                                        ${item.label}
-                                                                                                                    </button>`
+                                                                    onclick="handlePublishModalNote(${status_type_widget.id}, ${data}, ${item.id})" 
+                                                                    class="dropdown-item" 
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#publish_action">
+                                                                    ${item.label}
+                                                                </button>`
                                                         )
                                                         .reduce(
-                                                            (prev, curr) => prev + curr
+                                                            (prev, curr) => {
+                                                                return prev + curr;
+                                                            }, ""
                                                         )
                                                 }
                                                 <button 
