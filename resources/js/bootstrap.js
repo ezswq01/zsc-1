@@ -1,7 +1,7 @@
 import Echo from 'laravel-echo'
 import socketio from 'socket.io-client'
 
-let url = window.location.protocol + '//' + window.location.hostname + ':6001'
+let url = window.location.protocol + '//' + window.location.hostname
 
 window.Echo = new Echo({
     client: socketio,
