@@ -47,6 +47,9 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class);
     Route::resource('absent_devices', AbsentDeviceController::class);
 
+    // Solo page
+    Route::get('/status_types/{id}/history', [StatusTypeController::class, 'history'])->name('status_types.history');
+
     // Logout
     Route::get('/change-password', [AuthController::class, 'changePassword']);
     Route::put('/change-password', [AuthController::class, 'changePasswordStore']);

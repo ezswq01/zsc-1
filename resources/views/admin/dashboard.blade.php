@@ -88,7 +88,7 @@
             </button>
         </div>
         @if ($setting->is_access_device)
-            <div class="col-12 table-component" id="absent-doors">
+            <div class="col-12 table-component" id="absent-doors" style="display: none;">
                 <div class="mb-3">
                     <div class="bg-white p-4">
                         <h6>Access Request</h6>
@@ -353,7 +353,7 @@
 
         function status_type_widgets_html(id, status_type_name) {
             return `
-                <div class="col-12 table-component" id="${id}">
+                <div class="col-12 table-component" id="${id}" style="display: none;">
                     <div class="mb-3">
                         <div class="bg-white p-4">
                             <h6>${status_type_name}</h6>
@@ -413,19 +413,23 @@
             `
         }
 
-        function status_type_html(color, count, widget_id, name, trigger_color) {
+        function status_type_html(color, count, widget_id, name, trigger_color, status_type_id) {
             return `
                 <div class="col-lg-4 col-12">
                     <div class="card text-white status_type_bg_color_${widget_id}" style="background-color: ${count == 0 ? color : trigger_color};">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between align-items-start">
                                 <h3 class="mb-0 status_type_${widget_id} display-3">
                                     ${count}
                                 </h3>
-                                <button onclick="toggleTable('${widget_id}')" type="button"
-                                    class="btn btn-white p-1">
-                                    <i class="ph-table"></i>
-                                </button>
+                                <div class="d-flex justify-content-between align-items-start gap-2">
+                                    <button onclick="toggleTable('${widget_id}')" type="button" class="btn btn-white p-1">
+                                        <i class="ph-table"></i>
+                                    </button>
+                                    <a href="/admin/status_types/${status_type_id}/history" type="button" class="btn btn-white p-1">
+                                        <i class="ph-clock"></i>
+                                    </a>
+                                </div>
                             </div>
                             <div>
                                 ${name}
@@ -763,6 +767,7 @@
                 );
                 // status_types
                 status_types.push({
+                    status_type_id: stw.status_type_id,
                     widget_id: stw.id,
                     name: stw.status_type.name,
                     color: stw.status_type.color,
@@ -790,8 +795,7 @@
             // status_types
             let status_type_html_append = "";
             status_types.map((st) => {
-                status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name, st
-                    .trigger_color);
+                status_type_html_append += status_type_html(st.color, st.count, st.widget_id, st.name, st.trigger_color, st.status_type_id);
             })
             $("#status_types").append(status_type_html_append);
         }
@@ -804,7 +808,7 @@
 
                 // loading
                 statusTypeLoading();
-                statusTypeWidgetLoading();
+                // statusTypeWidgetLoading();
 
                 const timeQuery = moment().format("YYYY-MM-DD HH:mm:ss");
 

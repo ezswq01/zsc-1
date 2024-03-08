@@ -90,7 +90,7 @@ class Device extends Model
                         'device_log_id' => $device_log_id,
                         'status_type_id' => $val->status_type_id,
                         'marked_as_read' => $val->normal_state ? true : false,
-                        'notes' => "Normal State"
+                        'notes' => $val->normal_state ? "Normal State" : ""
                     ]
                 );
                 $status_response = $status_response->load('status_type.status_type_widget', 'device.publish_action');
