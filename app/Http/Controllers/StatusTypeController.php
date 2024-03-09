@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StatusType\StoreStatusTypeRequest;
 use App\Http\Requests\StatusType\UpdateStatusTypeRequest;
+use App\Models\DeviceStatus;
 use App\Models\StatusType;
 use App\Models\StatusTypeWidget;
 use Illuminate\Http\Request;

@@ -7,6 +7,7 @@ use App\Models\Device;
 use App\Models\Setting;
 use App\Models\StatusTypeWidget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
@@ -31,7 +32,11 @@ class DashboardController extends Controller
         $status_type_widgets = StatusTypeWidget::with([
             'status_type.device_status' => function ($query) use ($request) {
                 return $query->orderBy('id', 'desc')
-                    ->limit(1)
+                    ->whereIn('id', function ($subquery) {
+                        $subquery->select(DB::raw('MAX(id)'))
+                            ->from('device_status')
+                            ->groupBy('device_id');
+                    })
                     ->with('device.publish_action')
                     ->whereHas('device', function ($query) use ($request) {
                         if (!empty($request->branches)) {

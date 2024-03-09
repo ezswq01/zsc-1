@@ -5,7 +5,7 @@
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
-                    History Of Status Widget - <span class="fw-normal">All</span>
+                    Device Statuses - <span class="fw-normal">All</span>
                 </h4>
             </div>
         </div>
@@ -14,7 +14,7 @@
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="#">History Of Status Widget</a>
+                    <a class="breadcrumb-item" href="#">Device Statuses</a>
                     <span class="breadcrumb-item active">All</span>
                 </div>
                 <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
@@ -30,7 +30,7 @@
     <!-- Basic datatable -->
     <div class="card">
         <div class="card-header">
-            <h5 class="mb-0">History Of Status Widget</h5>
+            <h5 class="mb-0">Device Statuses</h5>
         </div>
 
         <div class="card-header">
@@ -60,7 +60,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            let data = @json($status_type_widgets);
+            let data = @json($device_statuses);
             const exportOption = [0, 1, 2, 3];
             const buttons = [{
                 extend: 'copyHtml5',
@@ -97,7 +97,7 @@
                 },
             }];
             $(`#datatable`).DataTable({
-                data: data.status_type.device_status,
+                data: data,
                 order: [
                     [0, "desc"]
                 ],
@@ -150,7 +150,7 @@
                         render: function(data, type, row) {
                             return moment(data).format("YYYY-MM-DD HH:mm:ss");
                         },
-                    },
+                    }
                 ],
             });
         });

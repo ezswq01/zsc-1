@@ -827,9 +827,9 @@
                             ...stw,
                             status_type: {
                                 ...stw.status_type,
-                                device_status: stw?.status_type?.device_status?.at(0)?.marked_as_read == false ? [{
-                                    ...stw?.status_type?.device_status?.at(0)
-                                }] : [],
+                                device_status: stw?.status_type?.device_status?.at(0)?.marked_as_read == false ? 
+                                    [...stw?.status_type?.device_status.filter((item) => item.marked_as_read == false)] : 
+                                    [],
                             },
                         }
                     })

@@ -147,6 +147,8 @@
                                 @endif
                                 <li class="nav-item"><a class="nav-link"
                                         href="{{ route("admin.device_logs.index") }}">Devices</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route("admin.device_statuses.index") }}">Device Statuses</a></li>
                             </ul>
                         </li>
                     @endcan

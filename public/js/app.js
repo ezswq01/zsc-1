@@ -11752,7 +11752,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var url = window.location.protocol + '//' + window.location.hostname + ':6001';
+var url = window.location.protocol + '//' + window.location.hostname;
+
+// env = production
+if (true) {
+  console.log('Development mode');
+  url = url + ':' + window.location.port;
+}
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   client: socket_io_client__WEBPACK_IMPORTED_MODULE_1___default.a,
   broadcaster: 'socket.io',

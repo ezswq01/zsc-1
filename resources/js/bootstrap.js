@@ -3,6 +3,12 @@ import socketio from 'socket.io-client'
 
 let url = window.location.protocol + '//' + window.location.hostname
 
+// env = production
+if (process.env.NODE_ENV != 'production') {
+    console.log('Development mode')
+    url = url + ':' + window.location.port
+}
+
 window.Echo = new Echo({
     client: socketio,
     broadcaster: 'socket.io',

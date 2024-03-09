@@ -46,6 +46,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('absent_devices', AbsentDeviceController::class);
+    Route::resource('device_statuses', DeviceStatusController::class);
 
     // Solo page
     Route::get('/status_types/{id}/history', [StatusTypeController::class, 'history'])->name('status_types.history');
