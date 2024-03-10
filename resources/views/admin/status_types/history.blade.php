@@ -61,7 +61,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             let data = @json($status_type_widgets);
-            const exportOption = [0, 1, 2, 3];
+            const exportOption = [0, 1, 2, 3, 4, 5];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',

@@ -61,7 +61,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             let data = @json($device_statuses);
-            const exportOption = [0, 1, 2, 3];
+            const exportOption = [0, 1, 2, 3, 4, 5];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
@@ -75,7 +75,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device_logs')
+                    return getExportFilename('device_statuses')
                 },
             }, {
                 extend: 'csvHtml5',
@@ -84,7 +84,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device_logs')
+                    return getExportFilename('device_statuses')
                 },
             }, {
                 extend: 'pdfHtml5',
@@ -93,7 +93,7 @@
                     columns: exportOption
                 },
                 filename: function() {
-                    return getExportFilename('device_logs')
+                    return getExportFilename('device_statuses')
                 },
             }];
             $(`#datatable`).DataTable({
