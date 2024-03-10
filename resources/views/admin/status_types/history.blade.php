@@ -43,7 +43,9 @@
                     <th>Time</th>
                     <th>Device ID</th>
                     <th>Status</th>
-                    <th>Location</th>
+                    <th>Locations</th>
+                    <th>Sub Location</th>
+                    <th>Location-id</th>
                     <th>Notes</th>
                     <th>Last Updated</th>
                 </tr>
@@ -61,7 +63,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             let data = @json($status_type_widgets);
-            const exportOption = [0, 1, 2, 3, 4, 5];
+            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
@@ -137,6 +139,18 @@
                         data: "device",
                         render: function(data, type, row) {
                             return data?.branch;
+                        },
+                    },
+                    {
+                        data: "device",
+                        render: function(data, type, row) {
+                            return data?.building;
+                        },
+                    },
+                    {
+                        data: "device",
+                        render: function(data, type, row) {
+                            return data?.room;
                         },
                     },
                     {
