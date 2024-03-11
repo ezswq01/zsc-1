@@ -130,7 +130,7 @@ class StatusTypeController extends Controller
         $status_type_widgets = StatusTypeWidget::where('status_type_id', $id)->with([
             'status_type.device_status' => function ($query) use ($request) {
                 return $query->orderBy('id', 'desc')
-                    ->with('device.publish_action')
+                    ->with('device.publish_action', 'user')
                     ->whereHas('device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {

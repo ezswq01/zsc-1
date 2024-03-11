@@ -328,7 +328,8 @@ class DeviceController extends Controller
             if (!$request->is_testing) {
                 $device_status->update([
                     'marked_as_read' => true,
-                    'notes' => $request->notes
+                    'notes' => $request->notes,
+                    'user_id' => auth()->user()->id
                 ]);
             }
         });

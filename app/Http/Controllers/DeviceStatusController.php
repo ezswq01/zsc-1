@@ -33,7 +33,7 @@ class DeviceStatusController extends Controller
 
     public function index(Request $request)
     {
-        $device_statuses = DeviceStatus::with('device.publish_action')
+        $device_statuses = DeviceStatus::with('device.publish_action', 'user')
                         ->whereHas('device', function ($query) use ($request) {
                             if (!empty($request->branches)) {
                                 return $query->where(function ($w) use ($request) {

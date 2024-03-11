@@ -37,20 +37,24 @@
             List of All Device Logs.
         </div>
 
-        <table id="datatable" class="table">
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Device ID</th>
-                    <th>Status</th>
-                    <th>Locations</th>
-                    <th>Sub Location</th>
-                    <th>Location-id</th>
-                    <th>Notes</th>
-                    <th>Last Updated</th>
-                </tr>
-            </thead>
-        </table>
+        <div style="overflow-x:auto">
+            <table id="datatable" class="table text-nowrap">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Device ID</th>
+                        <th>Status</th>
+                        <th>Locations</th>
+                        <th>Sub Location</th>
+                        <th>Location-id</th>
+                        <th>Notes</th>
+                        <th>Marked as Read</th>
+                        <th>Updated By</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
     <!-- /basic datatable -->
 @endsection
@@ -63,7 +67,11 @@
     <script type="text/javascript">
         $(document).ready(function() {
             let data = @json($device_statuses);
-            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7];
+            data = data.map((item) => ({
+                ...item,
+                user_name: item?.user?.name || "-",
+            }))
+            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
@@ -106,7 +114,7 @@
                 columnDefs: [{
                     targets: [0, 1, 2, 3, 4],
                     className: "align-middle",
-                }, ],
+                }],
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
                 columns: [{
@@ -155,6 +163,24 @@
                     },
                     {
                         data: "notes",
+                        render: function(data, type, row) {
+                            return data;
+                        },
+                    },
+                    {
+                        data: "marked_as_read",
+                        render: function(data, type, row) {
+                            return `
+                                <div class="form-check form-switch">
+                                    ${
+                                        data ? `<span class="badge bg-success">Read</span>` : `<span class="badge bg-danger">Unread</span>`
+                                    }
+                                </div>
+                            `;
+                        }
+                    },
+                    {
+                        data: "user_name",
                         render: function(data, type, row) {
                             return data;
                         },
