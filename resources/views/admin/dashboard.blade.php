@@ -534,14 +534,6 @@
                 `
                   <h6 class="fw-semibold">Notes</h6>
                   <textarea class="form-control">${device_status.notes ? device_status.notes : ""}</textarea>
-                  <div class="d-flex gap-2 mt-3">
-                      <label for="marked_${device_status_id}">Set as marked?</label>
-                      <input 
-                        type="checkbox"
-                        ${device_status.marked_as_read ? "checked" : ""}
-                        class="form-check-input" id="marked_${device_status_id}"
-                      >
-                  </div>
                 `
             )
 

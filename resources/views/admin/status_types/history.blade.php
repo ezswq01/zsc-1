@@ -48,7 +48,8 @@
                         <th>Sub Location</th>
                         <th>Location-id</th>
                         <th>Notes</th>
-                        <th>Marked as Read</th>
+                        <th>Marked as Normal</th>
+                        <th>Noted</th>
                         <th>Updated By</th>
                         <th>Last Updated</th>
                     </tr>
@@ -71,7 +72,7 @@
                 ...item,
                 user_name: item?.user?.name || "-",
             }))
-            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
@@ -173,7 +174,23 @@
                             return `
                                 <div class="form-check form-switch">
                                     ${
-                                        data ? `<span class="badge bg-success">Read</span>` : `<span class="badge bg-danger">Unread</span>`
+                                        data ? 
+                                        `<span class="badge bg-success">TRUE</span>` : 
+                                        `<span class="badge bg-danger">FALSE</span>`
+                                    }
+                                </div>
+                            `;
+                        }
+                    },
+                    {
+                        data: "noted",
+                        render: function(data, type, row) {
+                            return `
+                                <div class="form-check form-switch">
+                                    ${
+                                        data ? 
+                                        `<span class="badge bg-success">TRUE</span>` : 
+                                        `<span class="badge bg-danger">FALSE</span>`
                                     }
                                 </div>
                             `;

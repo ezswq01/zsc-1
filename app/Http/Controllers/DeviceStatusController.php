@@ -21,7 +21,8 @@ class DeviceStatusController extends Controller
     {
         $deviceStatus = DeviceStatus::find($request->device_status_id);
         $deviceStatus->notes = $request->notes;
-        $deviceStatus->marked_as_read = $request->marked_as_read;
+        $deviceStatus->marked_as_read = false;
+        $deviceStatus->noted = true;
         $deviceStatus->user_id = auth()->user()->id;
         $deviceStatus->save();
 
