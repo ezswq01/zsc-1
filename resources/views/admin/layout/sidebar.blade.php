@@ -133,7 +133,7 @@
                         @endif
                     @endcan
 
-                    @can("device-logs-read")
+                    @canany(["device-logs-read", "device-status-logs-read"])
                         <li
                             class="nav-item nav-item-submenu {{ $active == "device_logs" ? "nav-item-expanded nav-item-open" : "" }}">
                             <a class="nav-link" href="#">
@@ -145,13 +145,15 @@
                                     <li class="nav-item"><a class="nav-link"
                                             href="{{ route("admin.absent_device_logs.index") }}">Access Devices</a></li>
                                 @endif
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{{ route("admin.device_logs.index") }}">Devices</a></li>
-                                <li class="nav-item"><a class="nav-link"
-                                        href="{{ route("admin.device_statuses.index") }}">Device Statuses</a></li>
+                                @can("device-logs-read")
+                                    <li class="nav-item"><a class="nav-link" href="{{ route("admin.device_logs.index") }}">Devices</a></li>
+                                @endcan
+                                @can("device-status-logs-read")
+                                    <li class="nav-item"><a class="nav-link" href="{{ route("admin.device_statuses.index") }}">Device Statuses</a></li>
+                                @endcan
                             </ul>
                         </li>
-                    @endcan
+                    @endcanany()
                 @endcanany()
 
                 @canany(["users-read", "roles-read", "permissions-read"])
