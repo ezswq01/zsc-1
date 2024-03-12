@@ -113,9 +113,14 @@
                     [0, "desc"]
                 ],
                 columnDefs: [{
-                    targets: [0, 1, 2, 3, 4],
-                    className: "align-middle",
-                }, ],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 9, 10],
+                        className: "align-middle",
+                    },
+                    {
+                        targets: [7, 8],
+                        visible: false,
+                    }
+                ],
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
                 columns: [{
