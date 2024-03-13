@@ -14,13 +14,13 @@
 
                 <div>
                     <button
-                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex"
+                        class="btn btn-black btn-icon btn-sm border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex"
                         type="button">
-                        <i class="ph-arrows-left-right"></i>
+                        <i class="ph-arrows-left-right" style="padding-top:3px;"></i>
                     </button>
 
                     <button
-                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none"
+                        class="btn btn-black btn-icon btn-sm border-transparent sidebar-mobile-main-toggle d-lg-none"
                         type="button">
                         <i class="ph-x"></i>
                     </button>
@@ -69,7 +69,7 @@
                     </li>
                 @endcan
 
-                @canany(["devices-read", "device-types-read", "device-logs-read"])
+                @canany(["devices-read", "device-types-read", "device-logs-read", "device-status-logs-read"])
                     <li class="nav-item-header">
                         <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">
                             Device</div>
