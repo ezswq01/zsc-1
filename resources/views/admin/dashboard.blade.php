@@ -9,7 +9,7 @@
 @endpush
 
 @push("header")
-    <div class="page-header page-header-light shadow">
+    <div class="page-header page-header-light">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="page-header-content d-lg-flex border-top">
+        <div class="page-header-content d-lg-flex">
             <div class="d-flex flex-fill w-xl-75 w-100">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>

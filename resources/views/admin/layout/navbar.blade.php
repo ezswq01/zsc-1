@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-lg navbar-static border-bottom border-opacity-10">
+<div class="navbar navbar-expand-lg navbar-static">
     <div class="container-fluid">
         <div class="d-flex d-lg-none me-2">
             <button class="navbar-toggler sidebar-mobile-main-toggle rounded-pill" type="button">

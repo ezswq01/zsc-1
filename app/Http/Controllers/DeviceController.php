@@ -9,6 +9,7 @@ use App\Models\DeviceLog;
 use App\Models\DeviceStatus;
 use App\Models\DeviceType;
 use App\Models\PublishAction;
+use App\Models\Setting;
 use App\Models\StatusType;
 use App\Models\SubscribeExpression;
 use Illuminate\Http\Request;
@@ -122,20 +123,71 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request) {
-            $topics = explode('/', $validated['publish_topic']);
 
-            $branch = $topics[1];
-            $building = $topics[2];
-            $room = $topics[3];
+
+            // OLD CODES
+            // $topics = explode('/', $validated['publish_topic']);
+            // $branch = $topics[1];
+            // $building = $topics[2];
+            // $room = $topics[3];
+            // $device = Device::create([
+            //     'device_id' => $validated['device_id'],
+            //     'device_type_id' => $validated['device_type_id'],
+            //     'publish_topic' => strtolower($validated['publish_topic']),
+            //     'subscribe_topic' => strtolower($validated['subscribe_topic']),
+            //     'branch' => strtolower($branch),
+            //     'building' => strtolower($building),
+            //     'room' => $room
+            // ]);
+
+            $subscribe_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                "device"
+            ));
+
+            $publish_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                "host"
+            ));
 
             $device = Device::create([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
-                'publish_topic' => strtolower($validated['publish_topic']),
-                'subscribe_topic' => strtolower($validated['subscribe_topic']),
-                'branch' => strtolower($branch),
-                'building' => strtolower($building),
-                'room' => $room
+                'publish_topic' => strtolower($publish_topic),
+                'subscribe_topic' => strtolower($subscribe_topic),
+                'branch' => strtolower($validated['branch']),
+                'building' => strtolower($validated['building']),
+                'room' => strtolower($validated['room'])
             ]);
 
             if ($request->subscribe_expressions) {
@@ -239,25 +291,73 @@ class DeviceController extends Controller
         $validated = $request->all();
 
         DB::transaction(function () use ($validated, $request, $id) {
-            $topics = explode('/', $validated['publish_topic']);
 
-            $branch = $topics[1];
-            $building = $topics[2];
-            $room = $topics[3];
+            // OLD CODES
+            // $topics = explode('/', $validated['publish_topic']);
+            // $branch = $topics[1];
+            // $building = $topics[2];
+            // $room = $topics[3];
+            // Device::find($id)->update([
+            //     'device_id' => $validated['device_id'],
+            //     'device_type_id' => $validated['device_type_id'],
+            //     'publish_topic' => strtolower($validated['publish_topic']),
+            //     'subscribe_topic' => strtolower($validated['subscribe_topic']),
+            //     'branch' => strtolower($branch),
+            //     'building' => strtolower($building),
+            //     'room' => $room
+            // ]);
+
+            $subscribe_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                "device"
+            ));
+
+            $publish_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                "host"
+            ));
 
             Device::find($id)->update([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
-                'publish_topic' => strtolower($validated['publish_topic']),
-                'subscribe_topic' => strtolower($validated['subscribe_topic']),
-                'branch' => strtolower($branch),
-                'building' => strtolower($building),
-                'room' => $room
+                'publish_topic' => strtolower($publish_topic),
+                'subscribe_topic' => strtolower($subscribe_topic),
+                'branch' => strtolower($validated['branch']),
+                'building' => strtolower($validated['building']),
+                'room' => strtolower($validated['room'])
             ]);
 
             SubscribeExpression::where('device_id', $id)->delete();
-            PublishAction::where('device_id', $id)->delete();
-
             if ($request->subscribe_expressions) {
                 foreach ($request->subscribe_expressions['expression'] as $key => $arr) {
                     SubscribeExpression::create([
@@ -269,6 +369,7 @@ class DeviceController extends Controller
                 }
             }
 
+            PublishAction::where('device_id', $id)->delete();
             if ($request->publish_actions) {
                 foreach ($request->publish_actions['label'] as $key => $publish_action) {
                     PublishAction::create([

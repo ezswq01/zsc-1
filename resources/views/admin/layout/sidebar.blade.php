@@ -2,7 +2,7 @@
     $active = request()->segments()[1];
     $setting = App\Models\Setting::first();
 @endphp
-<div class="sidebar sidebar-main sidebar-expand-lg">
+<div class="sidebar sidebar-main sidebar-expand-lg border-0 shadow-none">
 
     <!-- Sidebar content -->
     <div class="sidebar-content">
@@ -135,12 +135,12 @@
 
                     @canany(["device-logs-read", "device-status-logs-read"])
                         <li
-                            class="nav-item nav-item-submenu {{ $active == "device_logs" ? "nav-item-expanded nav-item-open" : "" }}">
+                            class="nav-item nav-item-submenu {{ $active == "device_logs" || $active == "device_statuses" ? "nav-item-expanded nav-item-open" : "" }}">
                             <a class="nav-link" href="#">
                                 <i class="ph-notebook"></i>
                                 <span>Log and Report</span>
                             </a>
-                            <ul class="nav-group-sub collapse {{ $active == "device_logs" ? "show" : "" }}">
+                            <ul class="nav-group-sub collapse {{ $active == "device_logs" || $active == "device_statuses" ? "show" : "" }}">
                                 @if ($setting->is_access_device)
                                     <li class="nav-item"><a class="nav-link"
                                             href="{{ route("admin.absent_device_logs.index") }}">Access Devices</a></li>

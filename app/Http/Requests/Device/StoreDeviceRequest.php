@@ -27,17 +27,25 @@ class StoreDeviceRequest extends FormRequest
         return [
             'device_id' => 'required|string|max:255',
             'device_type_id' => 'required|exists:device_types,id',
-            'publish_topic' => ['required', (new Delimited('regex:/^[a-zA-Z0-9-_]+$/'))
-                ->separatedBy('/')
-                ->doNotTrimItems()
-                ->min(2)
-                ->max(7), 'max:255'],
-            'subscribe_topic' => ['required', (new Delimited('regex:/^[a-zA-Z0-9-_]+$/'))
-                ->separatedBy('/')
-                ->doNotTrimItems()
-                ->min(2)
-                ->max(7), 'max:255'],
-            'subscribe_expressions.*.status_type.*' => 'sometimes|exists:status_types,id'
+            'branch' => 'required|string|max:255',
+            'building' => 'required|string|max:255',
+            'room' => 'required|string|max:255',
+            'subscribe_expressions.*.status_type.*' => 'sometimes|exists:status_types,id',
+
+            // OLD CODES
+            // 'device_id' => 'required|string|max:255',
+            // 'device_type_id' => 'required|exists:device_types,id',
+            // 'subscribe_expressions.*.status_type.*' => 'sometimes|exists:status_types,id'
+            // 'publish_topic' => ['required', (new Delimited('regex:/^[a-zA-Z0-9-_]+$/'))
+            //     ->separatedBy('/')
+            //     ->doNotTrimItems()
+            //     ->min(2)
+            //     ->max(7), 'max:255'],
+            // 'subscribe_topic' => ['required', (new Delimited('regex:/^[a-zA-Z0-9-_]+$/'))
+            //     ->separatedBy('/')
+            //     ->doNotTrimItems()
+            //     ->min(2)
+            //     ->max(7), 'max:255'],
         ];
     }
 }

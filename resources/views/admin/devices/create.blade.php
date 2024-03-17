@@ -1,7 +1,7 @@
 @extends("admin.layout.main")
 
 @push("header")
-    <div class="page-header page-header-light shadow">
+    <div class="page-header page-header-light">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="page-header-content d-lg-flex border-top">
+        <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
@@ -27,7 +27,7 @@
 @endpush
 
 @section("content")
-    <div class="card">
+    <div class="card shadow-none">
         <div class="card-header">
             <h5 class="mb-0">Create Device</h5>
         </div>
@@ -45,17 +45,24 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-lg-4 col-form-label">Subscribe Topic</label>
+                            <label class="col-lg-4 col-form-label">Location</label>
                             <div class="col-lg-8">
-                                <input value="{{ old("subscribe_topic") }}" class="form-control" name="subscribe_topic"
-                                    placeholder="Type Subscribe Topic" required type="text">
+                                <input value="{{ old("branch") }}" class="form-control" name="branch"
+                                    placeholder="Type Location" required type="text">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-lg-4 col-form-label">Publish Topic</label>
+                            <label class="col-lg-4 col-form-label">Sub-Location</label>
                             <div class="col-lg-8">
-                                <input value="{{ old("publish_topic") }}" class="form-control" name="publish_topic"
-                                    placeholder="Type Publish Topic" required type="text">
+                                <input value="{{ old("building") }}" class="form-control" name="building"
+                                    placeholder="Type Sub-Location" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Location ID</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old("room") }}" class="form-control" name="room"
+                                    placeholder="Type Location ID" required type="text">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -75,7 +82,7 @@
                         <div class="subscribe_expression">
                             <div class="text-start">
                                 <button class="btn btn-primary" type="button" onclick="hanldeAddSubsribeExpression()">Add
-                                    Subscribe
+                                    Device
                                     Expression</button>
                             </div>
                         </div>
@@ -83,7 +90,7 @@
                         <div class="publish_button">
                             <div class="text-start">
                                 <button class="btn btn-primary" type="button" onclick="handleAddPublishButtonAction()">Add
-                                    Publish Button
+                                    Host Action Button
                                     Action</button>
                             </div>
                         </div>
@@ -103,16 +110,16 @@
                 <label class="col-lg-4 col-form-label number">1. </label>
             </div>
             <div class="row mt-3">
-                <label class="col-lg-4 col-form-label">Button Label</label>
+                <label class="col-lg-4 col-form-label">Action Label</label>
                 <div class="col-lg-8">
-                    <input class="form-control" name="publish_actions[label][]" placeholder="Type Button Label" required
+                    <input class="form-control" name="publish_actions[label][]" placeholder="Type Action Label" required
                         type="text">
                 </div>
             </div>
             <div class="row mt-3">
-                <label class="col-lg-4 col-form-label">Publish Value</label>
+                <label class="col-lg-4 col-form-label">Action Comment</label>
                 <div class="col-lg-8">
-                    <input class="form-control" name="publish_actions[value][]" placeholder="Type Publish Value" required
+                    <input class="form-control" name="publish_actions[value][]" placeholder="Type Action Comment" required
                         type="text">
                 </div>
             </div>

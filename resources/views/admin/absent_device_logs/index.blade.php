@@ -1,7 +1,7 @@
 @extends('admin.layout.main')
 
 @push('header')
-    <div class="page-header page-header-light shadow">
+    <div class="page-header page-header-light">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
@@ -28,7 +28,7 @@
 
 @section('content')
     <!-- Basic datatable -->
-    <div class="card">
+    <div class="card shadow-none">
         <div class="card-header">
             <h5 class="mb-0">Log and Report</h5>
         </div>

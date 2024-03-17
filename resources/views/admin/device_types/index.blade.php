@@ -1,7 +1,7 @@
 @extends('admin.layout.main')
 
 @push('header')
-    <div class="page-header page-header-light shadow">
+    <div class="page-header page-header-light">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="page-header-content d-lg-flex border-top">
+        <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
@@ -28,7 +28,7 @@
 
 @section('content')
     <!-- Basic datatable -->
-    <div class="card">
+    <div class="card shadow-none">
         <div class="card-header">
             <h5 class="mb-0">Device Type</h5>
         </div>

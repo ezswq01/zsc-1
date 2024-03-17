@@ -1,7 +1,7 @@
 @extends("admin.layout.main")
 
 @push("header")
-    <div class="page-header page-header-light shadow">
+    <div class="page-header page-header-light">
         <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <h4 class="page-title mb-0">
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="page-header-content d-lg-flex border-top">
+        <div class="page-header-content d-lg-flex">
             <div class="d-flex">
                 <div class="breadcrumb py-2">
                     <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
@@ -29,7 +29,7 @@
 @section("content")
     <div class="row">
         <div class="col-xl-8 col-12">
-            <div class="card">
+            <div class="card shadow-none">
                 <div class="card-header">
                     <h5 class="mb-0">Detail Device</h5>
                 </div>
@@ -47,18 +47,24 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-lg-4 col-form-label">Subscribe Topic</label>
+                                    <label class="col-lg-4 col-form-label">Location</label>
                                     <div class="col-lg-8">
-                                        <input disabled class="form-control" value="{{ $data->subscribe_topic }}"
-                                            name="subscribe_topic" placeholder="Type Subscribe Topic" required
-                                            type="text">
+                                        <input disabled value="{{ old("branch", $data->branch) }}" class="form-control" name="branch"
+                                            placeholder="Type Location" required type="text">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-lg-4 col-form-label">Publish Topic</label>
+                                    <label class="col-lg-4 col-form-label">Sub-Location</label>
                                     <div class="col-lg-8">
-                                        <input disabled class="form-control" value="{{ $data->publish_topic }}"
-                                            name="publish_topic" placeholder="Type Publish Topic" required type="text">
+                                        <input disabled value="{{ old("building", $data->building) }}" class="form-control" name="building"
+                                            placeholder="Type Sub-Location" required type="text">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-lg-4 col-form-label">Location ID</label>
+                                    <div class="col-lg-8">
+                                        <input disabled value="{{ old("room", $data->room) }}" class="form-control" name="room"
+                                            placeholder="Type Location ID" required type="text">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -77,14 +83,14 @@
                                 <hr>
                                 <div class="subscribe_expression">
                                     <div class="text-start">
-                                        <button class="btn btn-light" type="button">Add Subscribe
+                                        <button class="btn btn-light" type="button">Add Device
                                             Expression</button>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="publish_button">
                                     <div class="text-start">
-                                        <button class="btn btn-light" type="button">Add Publish Button
+                                        <button class="btn btn-light" type="button">Add Host Action Button
                                             Action</button>
                                     </div>
                                 </div>
@@ -105,7 +111,7 @@
 
     <div class="row">
         <div class="col-xl-8 col-12">
-            <div class="card">
+            <div class="card shadow-none">
                 <div class="card-header">
                     <h5 class="mb-0">Device Logs</h5>
                 </div>
@@ -131,22 +137,22 @@
                 <label class="col-lg-4 col-form-label number">1. </label>
             </div>
             <div class="row mt-3">
-                <label class="col-lg-4 col-form-label">Button Label</label>
+                <label class="col-lg-4 col-form-label">Action Label</label>
                 <div class="col-lg-8">
-                    <input disabled class="form-control" name="publish_actions[label][]" placeholder="Type Button Label"
+                    <input disabled class="form-control" name="publish_actions[label][]" placeholder="Type Action Label"
                         required type="text">
                 </div>
             </div>
             <div class="row mt-3">
-                <label class="col-lg-4 col-form-label">Publish Value</label>
+                <label class="col-lg-4 col-form-label">Action Comment</label>
                 <div class="col-lg-8">
-                    <input disabled class="form-control" name="publish_actions[value][]" placeholder="Type Publish Value"
+                    <input disabled class="form-control" name="publish_actions[value][]" placeholder="Type Action Comment"
                         required type="text">
                 </div>
             </div>
             <div class="text-end mt-3">
                 <button data-id="" class="btn btn-danger" type="button" onclick="handlePublish(this)">
-                    Test Publish
+                    Test Host Action
                 </button>
             </div>
         </div>
