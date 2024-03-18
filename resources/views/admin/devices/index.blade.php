@@ -76,6 +76,7 @@
                     <th>Location</th>
                     <th>Sub-location</th>
                     <th>Location-id</th>
+                    <th>Device Type</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -93,7 +94,7 @@
         $(document).ready(function() {
             'use strict';
 
-            const exportOption = [0, 1, 2, 3];
+            const exportOption = [0, 1, 2, 3, 4, 5];
             const buttons = [{
                 extend: 'copyHtml5',
                 className: 'btn btn-light',
@@ -167,6 +168,10 @@
                         name: 'room'
                     },
                     {
+                        data: 'device_type.name',
+                        name: 'device_type.name'
+                    },
+                    {
                         data: 'options',
                         name: 'options',
                         class: 'text-center'
@@ -178,7 +183,7 @@
                     targets: 0
                 }, {
                     orderable: false,
-                    targets: 5
+                    targets: 6
                 }],
                 order: [
                     [1, 'desc']
