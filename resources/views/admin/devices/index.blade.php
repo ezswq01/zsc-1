@@ -73,8 +73,9 @@
                 <tr>
                     <th>No</th>
                     <th>Device ID</th>
-                    <th>Subscribe Topic</th>
-                    <th>Publish Topic</th>
+                    <th>Location</th>
+                    <th>Sub-location</th>
+                    <th>Location-id</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -154,12 +155,16 @@
                         name: 'device_id'
                     },
                     {
-                        data: 'subscribe_topic',
-                        name: 'subscribe_topic'
+                        data: 'branch',
+                        name: 'branch'
                     },
                     {
-                        data: 'publish_topic',
-                        name: 'publish_topic'
+                        data: 'building',
+                        name: 'building'
+                    },
+                    {
+                        data: 'room',
+                        name: 'room'
                     },
                     {
                         data: 'options',
@@ -173,7 +178,7 @@
                     targets: 0
                 }, {
                     orderable: false,
-                    targets: 4
+                    targets: 5
                 }],
                 order: [
                     [1, 'desc']
