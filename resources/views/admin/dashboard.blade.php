@@ -30,8 +30,8 @@
                 </a>
             </div>
             <div class="d-flex w-100 py-2 bg-white gap-2">
-                <input value="" class="form-control w-100" id="device_id" name="device_id"
-                    placeholder="Type Device ID" required type="text">
+                {{-- <input value="" class="form-control w-100" id="device_id" name="device_id"
+                    placeholder="Type Device ID" required type="text"> --}}
                 <select class="form-control select" data-placeholder="All Locations" name="branches" id="branches"
                     multiple="multiple">
                     <option></option>
