@@ -157,7 +157,7 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
-                "device"
+                "sub"
             ));
 
             $publish_topic = implode('/', array(
@@ -177,7 +177,7 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
-                "host"
+                "pub"
             ));
 
             $device = Device::create([
@@ -324,7 +324,7 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
-                "device"
+                "sub"
             ));
 
             $publish_topic = implode('/', array(
@@ -344,7 +344,7 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
-                "host"
+                "pub"
             ));
 
             Device::find($id)->update([
