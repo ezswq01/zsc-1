@@ -47,6 +47,13 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
+                                    <label class="col-lg-4 col-form-label">Sensor ID</label>
+                                    <div class="col-lg-8">
+                                        <input disabled class="form-control" value="{{ $data->sensor_id }}" name="sensor_id"
+                                            placeholder="Type Sensor ID" required type="text">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
                                     <label class="col-lg-4 col-form-label">Location</label>
                                     <div class="col-lg-8">
                                         <input disabled value="{{ old("branch", $data->branch) }}" class="form-control" name="branch"

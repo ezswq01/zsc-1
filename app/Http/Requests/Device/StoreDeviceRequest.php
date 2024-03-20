@@ -26,6 +26,7 @@ class StoreDeviceRequest extends FormRequest
     {
         return [
             'device_id' => 'required|string|max:255',
+            'sensor_id' => 'required|string|max:255',
             'device_type_id' => 'required|exists:device_types,id',
             'branch' => 'required|string|max:255',
             'building' => 'required|string|max:255',

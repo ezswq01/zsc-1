@@ -45,6 +45,13 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Sensor ID</label>
+                            <div class="col-lg-8">
+                                <input value="{{ old("sensor_id") }}" class="form-control" name="sensor_id"
+                                    placeholder="Type Sensor ID" required type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Location</label>
                             <div class="col-lg-8">
                                 <input value="{{ old("branch") }}" class="form-control" name="branch"

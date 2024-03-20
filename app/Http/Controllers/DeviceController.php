@@ -157,6 +157,11 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
+                ),
                 "sub"
             ));
 
@@ -176,6 +181,11 @@ class DeviceController extends Controller
                     " ",
                     "-",
                     strtolower($validated['room'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
                 ),
                 "pub"
             ));
@@ -324,6 +334,11 @@ class DeviceController extends Controller
                     "-",
                     strtolower($validated['room'])
                 ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
+                ),
                 "sub"
             ));
 
@@ -343,6 +358,11 @@ class DeviceController extends Controller
                     " ",
                     "-",
                     strtolower($validated['room'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
                 ),
                 "pub"
             ));
