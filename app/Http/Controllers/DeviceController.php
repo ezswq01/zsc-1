@@ -267,6 +267,7 @@ class DeviceController extends Controller
         }
 
         $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
+        $data->sensor_id = explode('/', $data->publish_topic)[4];
         $device_types = DeviceType::all(['id', 'name']);
         $status_types = StatusType::all(['id', 'name']);
         $device_logs = DeviceLog::with('device')->where('device_id', $id)->get();
@@ -283,6 +284,7 @@ class DeviceController extends Controller
     public function edit($id)
     {
         $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
+        $data->sensor_id = explode('/', $data->publish_topic)[4];
         $device_types = DeviceType::all(['id', 'name']);
         $status_types = StatusType::all(['id', 'name']);
 
