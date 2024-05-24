@@ -32,7 +32,7 @@ class UserController extends Controller
             $users = User::with('roles')->select('users.*');
             if (!auth()->user()->hasRole('admin')) {
                 $users = User::with('roles')->whereHas('roles', function ($query) {
-                    return $query->where('name','!=', 'Admin');
+                    return $query->where('name','!=', 'admin');
                 });
             }
             return DataTables::eloquent($users)
