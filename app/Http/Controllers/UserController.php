@@ -29,7 +29,13 @@ class UserController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::eloquent(User::with('roles')->select('users.*'))
+            $users = User::with('roles')->select('users.*');
+            if (!auth()->user()->hasRole('admin')) {
+                $users = User::with('roles')->whereHas('roles', function ($query) {
+                    return $query->where('name','!=', 'Admin');
+                });
+            }
+            return DataTables::eloquent($users)
                 ->addIndexColumn()
                 ->editColumn('name', function ($model) {
                     return '<a href="' . route('admin.users.show', $model->id) . '">' . $model->name . '</a>';
