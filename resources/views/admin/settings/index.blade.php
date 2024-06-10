@@ -73,8 +73,22 @@
                                         @php
                                             $selected = in_array($status_type->id, $status_type_widgets->pluck("status_type_id")->toArray()) ? "selected" : "";
                                         @endphp
-                                        <option {{ $selected }} value="{{ $status_type->id }}">{{ $status_type->name }}
-                                        </option>
+                                        <option {{ $selected }} value="{{ $status_type->id }}">{{ $status_type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Email Active</label>
+                            <div class="col-lg-8">
+                                <select multiple="multiple" class="form-control select"
+                                    data-placeholder="Select Users Email Active" name="email_users[]">
+                                    <option></option>
+                                    @foreach ($users as $user)
+                                        @php
+                                            $selected = in_array($user->id, $data->email_users ?? []) ? "selected" : "";
+                                        @endphp
+                                        <option {{ $selected }} value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

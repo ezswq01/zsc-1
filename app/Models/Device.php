@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Jobs\TriggerJob;
+use App\Mail\TriggerMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -52,32 +54,6 @@ class Device extends Model
         return $this->hasMany(SubscribeExpression::class, 'device_id');
     }
 
-    public static function subscribeToTopic($mqtt, $topic)
-    {
-        $mqtt->subscribe($topic, function (string $topic, string $message) {
-            echo "Received message on topic: {$topic}\n";
-            echo "Received message with payload: {$message}\n";
-            try {
-                DB::transaction(function () use ($topic, $message) {
-
-                    // Create device log
-                    $device = Device::where('subscribe_topic', $topic)->first();
-                    $device_log = DeviceLog::create([
-                        'device_id' => $device->id,
-                        'value' => $message
-                    ]);
-
-                    // Subscribe Logic
-                    $subscribe_expression = $device->subscribe_expression;
-                    Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message);
-                });
-                echo "Received message success!\n";
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
-        }, 0);
-    }
-
     public static function evalValue($device_id, $device_log_id, $subscribe_expression, $value, $device_id_unique)
     {
         $status_responses = [];
@@ -103,6 +79,7 @@ class Device extends Model
                     ->where('setting_id', $setting->id)
                     ->get();
                 if ($status_type_widgets->count() > 0 && !$val->normal_state) {
+                    TriggerJob::dispatch($value, $status_type->name);
                     Notif::create([
                         'notif_type' => 'dynamic_device',
                         'notif_status' => 'unread',

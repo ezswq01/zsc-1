@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use App\Models\StatusType;
 use App\Models\StatusTypeWidget;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,8 @@ class SettingController extends Controller
         $data = Setting::first();
         $status_types = StatusType::all(['id', 'name']);
         $status_type_widgets = StatusTypeWidget::all(['status_type_id']);
-        return view('admin.settings.index', compact('data', 'status_types', 'status_type_widgets'));
+        $users = User::all(['id', 'name']);
+        return view('admin.settings.index', compact('data', 'status_types', 'status_type_widgets', 'users'));
     }
 
     public function update($id, Request $request)
@@ -32,6 +34,7 @@ class SettingController extends Controller
             'status_types' => 'array',
             'status_types.*' => 'string',
             'is_access_device' => 'sometimes',
+            'email_users' => 'sometimes',
         ]);
 
         $data = Setting::findOrFail($id);
@@ -60,7 +63,13 @@ class SettingController extends Controller
             $data->update([
                 'app_name' => $validated['app_name'],
                 'mqtt_main_topic' => $validated['mqtt_main_topic'],
-                'is_access_device' => isset($validated['is_access_device']) && $validated['is_access_device'] == "on" ? true : false
+                'is_access_device' => isset($validated['is_access_device']) 
+                                        && $validated['is_access_device'] == "on" 
+                                        ? true 
+                                        : false,
+                'email_users' => isset($validated['email_users']) 
+                                    ? $validated['email_users'] 
+                                    : []
             ]);
 
             StatusTypeWidget::where('setting_id', $data->id)->delete();

@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Events\NewDataEvent;
+use App\Jobs\TriggerJob;
+use App\Mail\TriggerMail;
 use App\Models\AbsentDevice;
 use App\Models\AbsentLastLog;
 use App\Models\AbsentLog;
@@ -15,6 +17,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use PhpMqtt\Client\Facades\MQTT;
 
 class MqttSubscribingCommand extends Command
@@ -110,6 +113,7 @@ class MqttSubscribingCommand extends Command
 
                             try {
                                 Log::info("Event to NewDataEvent");
+                                TriggerJob::dispatch($message, 'Request Open');
                                 NewDataEvent::dispatch([
                                     'type' => 'absent_device',
                                     'data' => $absent_received_log->load('absent_device', 'user')
