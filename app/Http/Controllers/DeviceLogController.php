@@ -21,7 +21,13 @@ class DeviceLogController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::eloquent(DeviceLog::with('device')->select('device_logs.*'))
+            $devices = DeviceLog::with('device')->select('device_logs.*');
+            if (request()->date) {
+                $from_date = explode(' - ', request()->date)[0];
+                $to_date = explode(' - ', request()->date)[1];
+                $devices = $devices->whereBetween('device_logs.created_at', [$from_date, $to_date]);
+            }
+            return DataTables::eloquent($devices)
                 ->addIndexColumn()
                 ->addColumn('device_id', function ($model) {
                     return $model->device->device_id;

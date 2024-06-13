@@ -71,6 +71,7 @@
                             {{ ucfirst($device_location_id->room) }}</option>
                     @endforeach
                 </select>
+                <input type="text" class="form-control datepicker-basic" placeholder="Pick Start & End Date" name="date">
             </div>
         </div>
     </div>
@@ -132,6 +133,13 @@
 @endsection
 
 @push("js")
+    @php
+        $oldDate = old('date');
+        $dates = $oldDate ? explode(' - ', $oldDate) : null;
+        $startDate = $oldDate ? $dates[0] : now()->startOf('hour')->format('Y-m-d H:i:s');
+        $endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
+    @endphp
+
     <script>
         let absent_device_logs = [];
         let status_type_widgets = [];
@@ -853,6 +861,7 @@
             let buildings = $('#buildings').val();
             let rooms = $('#rooms').val();
             let search = $('#device_id').val();
+            let date = $('.datepicker-basic').val();
 
             let url = '{{ route("dashboard.ajax") }}';
 
@@ -886,13 +895,23 @@
                 });
             }
 
-            if (search.length >= 3) {
-                const searchParams = new URLSearchParams();
-                searchParams.append('search', search);
+            // if (search.length >= 3) {
+            //     const searchParams = new URLSearchParams();
+            //     searchParams.append('search', search);
+            //     if (url.indexOf('?') === -1) {
+            //         url = `${url}?${searchParams.toString()}`;
+            //     } else {
+            //         url = `${url}&${searchParams.toString()}`;
+            //     }
+            // }
+
+            if (date) {
+                const dateParams = new URLSearchParams();
+                dateParams.append('date', date);
                 if (url.indexOf('?') === -1) {
-                    url = `${url}?${searchParams.toString()}`;
+                    url = `${url}?${dateParams.toString()}`;
                 } else {
-                    url = `${url}&${searchParams.toString()}`;
+                    url = `${url}&${dateParams.toString()}`;
                 }
             }
 
@@ -977,6 +996,22 @@
             if (is_ready) {
                 initializeHtml();
             }
+        });
+    </script>
+
+    <script>
+        const startDate = '{{ $startDate }}';
+        const endDate = '{{ $endDate }}';
+        $('.datepicker-basic').daterangepicker({
+            timePicker: true,
+            showDropdowns: true,
+            startDate: moment(startDate),
+            endDate: moment(endDate),
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            triggerFetch();
         });
     </script>
 

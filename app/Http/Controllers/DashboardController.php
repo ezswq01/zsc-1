@@ -31,6 +31,11 @@ class DashboardController extends Controller
 
         $status_type_widgets = StatusTypeWidget::with([
             'status_type.device_status' => function ($query) use ($request) {
+                if ($request->date) {
+                    $from_date = explode(' - ', request()->date)[0];
+                    $to_date = explode(' - ', request()->date)[1];
+                    $query->whereBetween('created_at', [$from_date, $to_date]);
+                }
                 return $query->orderBy('id', 'desc')
                     ->whereIn('id', function ($subquery) {
                         $subquery->select(DB::raw('MAX(id)'))
@@ -78,7 +83,13 @@ class DashboardController extends Controller
         $absent_received_logs = [];
 
         if (Setting::first()->is_access_device) {
-            $absent_received_logs = AbsentReceivedLog::with('absent_device', 'user')
+            $absent_received_logs = AbsentReceivedLog::query();
+            if ($request->date) {
+                $from_date = explode(' - ', request()->date)[0];
+                $to_date = explode(' - ', request()->date)[1];
+                $absent_received_logs->whereBetween('created_at', [$from_date, $to_date]);
+            }
+            $absent_received_logs = $absent_received_logs::with('absent_device', 'user')
                 ->whereHas('absent_device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {

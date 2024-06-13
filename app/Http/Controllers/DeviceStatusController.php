@@ -35,7 +35,13 @@ class DeviceStatusController extends Controller
 
     public function index(Request $request)
     {
-        $device_statuses = DeviceStatus::with('device.publish_action', 'user')
+        $device_statuses = DeviceStatus::with('device.publish_action', 'user');
+        if (request()->date) {
+            $from_date = explode(' - ', request()->date)[0];
+            $to_date = explode(' - ', request()->date)[1];
+            $device_statuses = $device_statuses->whereBetween('created_at', [$from_date, $to_date]);
+        }
+        $device_statuses = $device_statuses
                         ->whereHas('device', function ($query) use ($request) {
                             if (!empty($request->branches)) {
                                 return $query->where(function ($w) use ($request) {

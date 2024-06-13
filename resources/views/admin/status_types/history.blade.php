@@ -34,7 +34,13 @@
         </div>
 
         <div class="card-header">
-            List of All Device Logs.
+            <div class="d-flex flex-lg-row flex-column gap-2 justify-content-between">
+                List of All Device Logs.
+                <div class="">
+                    <input type="text" class="form-control datepicker-basic @error('date') is-invalid @enderror"
+                        placeholder="Pick Start & End Date" name="date">
+                </div>
+            </div>
         </div>
 
         <div style="overflow-x:auto">
@@ -61,6 +67,30 @@
 @endsection
 
 @push("js")
+    @php
+        $oldDate = old('date');
+        $dates = $oldDate ? explode(' - ', $oldDate) : null;
+        $startDate = $oldDate ? $dates[0] : now()->startOf('hour')->format('Y-m-d H:i:s');
+        $endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
+    @endphp
+
+    <script>
+        const startDate = '{{ $startDate }}';
+        const endDate = '{{ $endDate }}';
+        $('.datepicker-basic').daterangepicker({
+            timePicker: true,
+            showDropdowns: true,
+            startDate: moment(startDate),
+            endDate: moment(endDate),
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log(picker);
+            window.location.href = `{{ route('admin.status_types.history', $id) }}?date=${picker.startDate.format('YYYY-MM-DD HH:mm:ss')} - ${picker.endDate.format('YYYY-MM-DD HH:mm:ss')}`;
+        });
+    </script>
+
     <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js") }}"></script>
     <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js") }}"></script>
     <script src="{{ asset("assets/js/vendor/tables/datatables/extensions/buttons.min.js") }}"></script>

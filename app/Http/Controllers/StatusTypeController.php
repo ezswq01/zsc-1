@@ -129,6 +129,11 @@ class StatusTypeController extends Controller
     {
         $status_type_widgets = StatusTypeWidget::where('status_type_id', $id)->with([
             'status_type.device_status' => function ($query) use ($request) {
+                if ($request->date) {
+                    $from_date = explode(' - ', request()->date)[0];
+                    $to_date = explode(' - ', request()->date)[1];
+                    $query->whereBetween('created_at', [$from_date, $to_date]);
+                }
                 return $query->orderBy('id', 'desc')
                     ->with('device.publish_action', 'user')
                     ->whereHas('device', function ($query) use ($request) {
@@ -166,6 +171,6 @@ class StatusTypeController extends Controller
             }
         ])->orderBy('id', 'desc')->first();
 
-        return view('admin.status_types.history', compact('status_type_widgets'));
+        return view('admin.status_types.history', compact('status_type_widgets', 'id'));
     }
 }

@@ -119,8 +119,15 @@
     <div class="row">
         <div class="col-xl-8 col-12">
             <div class="card shadow-none">
+
                 <div class="card-header">
-                    <h5 class="mb-0">Device Logs</h5>
+                    <div class="d-flex flex-lg-row flex-column gap-2 justify-content-between">
+                        List of All Device Logs.
+                        <div class="">
+                            <input type="text" class="form-control datepicker-basic @error('date') is-invalid @enderror"
+                                placeholder="Pick Start & End Date" name="date">
+                        </div>
+                    </div>
                 </div>
 
                 <table id="datatable" class="table" data-id="{{ $data->id }}">
@@ -318,6 +325,9 @@
     </script>
 
     <script type="text/javascript">
+        let url = "{!! route("admin.devices.show", ":device_id") !!}";
+        let _datatable;
+
         $(document).ready(function() {
             const exportOption = [0, 1, 2];
             const buttons = [{
@@ -340,11 +350,10 @@
                 },
             }, ];
 
-            let url = "{!! route("admin.devices.show", ":device_id") !!}";
             url = url.replace(':device_id', $('#datatable').data('id'));
 
             const datatable = $('#datatable');
-            const _datatable = datatable.DataTable({
+            _datatable = datatable.DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: url,
@@ -508,6 +517,36 @@
                     }
                 });
             });
+        });
+    </script>
+
+    @php
+        $oldDate = old('date');
+        $dates = $oldDate ? explode(' - ', $oldDate) : null;
+        $startDate = $oldDate ? $dates[0] : now()->startOf('hour')->format('Y-m-d H:i:s');
+        $endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
+    @endphp
+
+    <script>
+        const startDate = '{{ $startDate }}';
+        const endDate = '{{ $endDate }}';
+        $('.datepicker-basic').daterangepicker({
+            timePicker: true,
+            drops: 'auto',
+            showDropdowns: true,
+            startDate: moment(startDate),
+            endDate: moment(endDate),
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            _datatable.ajax.url(
+                url
+                    + "?date=" 
+                    + picker.startDate.format('YYYY-MM-DD HH:mm:ss') 
+                    + " - " 
+                    + picker.endDate.format('YYYY-MM-DD HH:mm:ss')
+            ).load();
         });
     </script>
 @endpush

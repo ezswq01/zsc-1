@@ -238,6 +238,12 @@ class DeviceController extends Controller
                 ->select('device_status.*')
                 ->where('device_status.device_id', $id);
 
+            if (request()->date) {
+                $from_date = explode(' - ', request()->date)[0];
+                $to_date = explode(' - ', request()->date)[1];
+                $devices = $device_status->whereBetween('device_status.created_at', [$from_date, $to_date]);
+            }
+
             return DataTables::eloquent($device_status)
                 ->editColumn('created_at', function ($model) {
                     return [
