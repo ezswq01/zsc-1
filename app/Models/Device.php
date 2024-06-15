@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Jobs\TriggerJob;
 use App\Mail\TriggerMail;
+use App\Notifications\TriggerTelegramNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class Device extends Model
 {
@@ -80,6 +82,11 @@ class Device extends Model
                     ->get();
                 if ($status_type_widgets->count() > 0 && !$val->normal_state) {
                     TriggerJob::dispatch($value, $status_type->name);
+                    Notification::route('telegram', $setting->chat_id_telegram)->notify(
+                        new TriggerTelegramNotification(
+                            "Trigger Alert!\nAlert from : $status_type->name with value $value"
+                        )
+                    );
                     Notif::create([
                         'notif_type' => 'dynamic_device',
                         'notif_status' => 'unread',

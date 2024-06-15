@@ -14,10 +14,12 @@ use App\Models\DeviceLog;
 use App\Models\Notif;
 use App\Models\Setting;
 use App\Models\User;
+use App\Notifications\TriggerTelegramNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use PhpMqtt\Client\Facades\MQTT;
 
 class MqttSubscribingCommand extends Command
@@ -114,6 +116,12 @@ class MqttSubscribingCommand extends Command
                             try {
                                 Log::info("Event to NewDataEvent");
                                 TriggerJob::dispatch($message, 'Request Open');
+                                $setting = Setting::first();
+                                Notification::route('telegram', $setting->chat_id_telegram)->notify(
+                                    new TriggerTelegramNotification(
+                                        "Request Open!\nAlert from : $message"
+                                    )
+                                );
                                 NewDataEvent::dispatch([
                                     'type' => 'absent_device',
                                     'data' => $absent_received_log->load('absent_device', 'user')

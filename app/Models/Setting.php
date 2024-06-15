@@ -22,7 +22,8 @@ class Setting extends Model
         'is_access_device',
         'created_at',
         'updated_at',
-        'email_users'
+        'email_users',
+        'chat_id_telegram'
     ];
 
     protected $casts = [
