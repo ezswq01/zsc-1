@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCamTestPayloadsTable extends Migration
+class CreateCamPayloadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,6 +16,7 @@ class CreateCamTestPayloadsTable extends Migration
         Schema::create('cam_payloads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('device_log_id');
+            $table->string('file_name');
             $table->text('file');
             $table->timestamps();
         });

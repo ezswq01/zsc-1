@@ -50,27 +50,32 @@ class DeviceLogController extends Controller
         return view('admin.device_logs.index');
     }
 
-    public function camPayload($payload_id, Request $request) 
+    public function camPayload(Request $request) 
     {
         $request->validate([
-            'file' => 'required|file',
+            'file' => 'required|file'
         ]);
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $path = $file->store(
-                'payloads/cam',
-                'public'
-            );
-        } else {
+        $file = $request->file('file');
+        $file_name = $file->getClientOriginalName();
+        $app = explode('_', $file_name);
+        $payload_id = $app[1];
+
+        if ($app[0] !== 'cambymcc') {
             return response()->json([
                 'success' => false,
-                'message' => 'File not found',
+                'message' => 'Invalid app code. Please use the correct app code',
             ], 400);
         }
 
+        $path = $file->store(
+            'payloads/cam',
+            'public'
+        );
+
         DB::table('cam_payloads')->insert([
             'payload_id' => $payload_id,
+            'file_name' => $file_name,
             'file' => $path,
             'created_at' => now(),
             'updated_at' => now(),
@@ -78,7 +83,7 @@ class DeviceLogController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Cam payload saved successfully',
+            'message' => 'Cam payload saved successfully.',
         ], 200);
     }
 }
