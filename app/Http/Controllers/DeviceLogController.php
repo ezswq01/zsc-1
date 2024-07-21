@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DeviceLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class DeviceLogController extends Controller
@@ -49,69 +50,35 @@ class DeviceLogController extends Controller
         return view('admin.device_logs.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function camPayload($payload_id, Request $request) 
     {
-        //
-    }
+        $request->validate([
+            'file' => 'required|file',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store(
+                'payloads/cam',
+                'public'
+            );
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'File not found',
+            ], 400);
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        DB::table('cam_payloads')->insert([
+            'payload_id' => $payload_id,
+            'file' => $path,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Cam payload saved successfully',
+        ], 200);
     }
 }

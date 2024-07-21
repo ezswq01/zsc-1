@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceLogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('dashboard', [DashboardController::class, 'ajaxDashboard'])->name('dashboard.ajax');
+Route::get('/cam-payload/{payload_id}', [DeviceLogController::class, 'camPayload'])->name('cam.payload');
