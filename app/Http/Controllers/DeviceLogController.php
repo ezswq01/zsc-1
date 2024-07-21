@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DeviceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class DeviceLogController extends Controller
@@ -56,30 +57,41 @@ class DeviceLogController extends Controller
             'file' => 'required|file'
         ]);
 
-        $file = $request->file('file');
-        $file_name = $file->getClientOriginalName();
-        $app = explode('_', $file_name);
-        $payload_id = $app[1];
+        try {
+            $file = $request->file('file');
+            $file_name = $file->getClientOriginalName();
+            $app = explode('_', $file_name);
+            $payload_id = explode('.', $app[1])[0];
 
-        if ($app[0] !== 'cambymcc') {
+            if ($app[0] !== 'cambymcc') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid app code. Please use the correct app code',
+                ], 400);
+            }
+
+            $path = $file->store(
+                'payloads/cam',
+                'public'
+            );
+
+            DB::table('cam_payloads')->insert([
+                'device_log_id' => $payload_id,
+                'file_name' => $file_name,
+                'file' => $path,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+        } catch (\Exception $e) {
+            if (isset($path) && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid app code. Please use the correct app code',
-            ], 400);
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        $path = $file->store(
-            'payloads/cam',
-            'public'
-        );
-
-        DB::table('cam_payloads')->insert([
-            'payload_id' => $payload_id,
-            'file_name' => $file_name,
-            'file' => $path,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
 
         return response()->json([
             'success' => true,
