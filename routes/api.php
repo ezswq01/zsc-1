@@ -21,4 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('dashboard', [DashboardController::class, 'ajaxDashboard'])->name('dashboard.ajax');
-Route::get('/cam-payload', [DeviceLogController::class, 'camPayload'])->name('cam.payload');
+Route::post('/cam-payload', [DeviceLogController::class, 'camPayload'])->name('cam.payload');
