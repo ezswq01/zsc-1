@@ -126,8 +126,7 @@
             </div>
         @endif
         <div class="col-12">
-            <div class="row gx-3" id="status_type_widgets_tables">
-            </div>
+            <div class="row gx-3" id="status_type_widgets_tables"></div>
         </div>
     </div>
 @endsection

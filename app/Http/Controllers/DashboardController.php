@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $device_sub_locations = Device::distinct()->get(['building']);
         $device_location_ids = Device::distinct()->get(['room']);
 
-        return view('admin.dashboard', compact(
+        return view('admin.dashboard_v2', compact(
             'device_locations',
             'device_sub_locations',
             'device_location_ids',
@@ -43,6 +43,7 @@ class DashboardController extends Controller
                             ->groupBy('device_id');
                     })
                     ->with('device.publish_action')
+                    ->with('device_log.cam_payloads')
                     ->whereHas('device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {
@@ -89,7 +90,7 @@ class DashboardController extends Controller
                 $to_date = explode(' - ', request()->date)[1];
                 $absent_received_logs->whereBetween('created_at', [$from_date, $to_date]);
             }
-            $absent_received_logs = $absent_received_logs::with('absent_device', 'user')
+            $absent_received_logs = $absent_received_logs->with('absent_device', 'user')
                 ->whereHas('absent_device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {

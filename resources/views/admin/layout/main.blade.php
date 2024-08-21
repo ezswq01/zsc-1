@@ -27,8 +27,8 @@
     <script src="/assets/demo/pages/form_select2.js"></script>
     <script src="/assets_2/js/app.js"></script>
     <script src="/assets/demo/pages/datatables_basic.js"></script>
-    <script src="/assets/js/vendor/editors/ckeditor/ckeditor_classic.js"></script>
-    <script src="/assets/demo/pages/editor_ckeditor_classic.js"></script>
+    {{-- <script src="/assets/js/vendor/editors/ckeditor/ckeditor_classic.js"></script>
+    <script src="/assets/demo/pages/editor_ckeditor_classic.js"></script> --}}
     <script src="/assets/js/vendor/ui/moment/moment.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/assets/js/vendor/pickers/daterangepicker.js"></script>

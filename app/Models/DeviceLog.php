@@ -37,4 +37,9 @@ class DeviceLog extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function cam_payloads()
+    {
+        return $this->hasMany(CamPayload::class, 'device_log_id');
+    }
 }
