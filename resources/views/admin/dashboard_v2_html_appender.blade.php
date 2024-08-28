@@ -22,7 +22,7 @@
 
 <!-- HTMLS -->
 <div id="card-widget-modal-example" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -37,6 +37,7 @@
                             <th>Device ID</th>
                             <th>Status</th>
                             <th>Location</th>
+                            <th>Cams</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -137,6 +138,7 @@
             var tbody_html = '';
             status_logs.forEach(
                 log => {
+                    console.log(log.device_log.cam_payloads);
 
                     // tbody html
                     tbody_html += `<tr>`;
@@ -145,6 +147,7 @@
                     tbody_html += `<td>${log.device_id}</td>`;
                     tbody_html += `<td><div id="mark_${log.id}">${log.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
                     tbody_html += `<td>${log.device?.branch}</td>`;
+                    tbody_html += `<td><div class="d-flex flex-wrap gap-2">${log.device_log.cam_payloads.map((cam) => `<a target="_blank" href="/storage/${cam.file}"><img src="/storage/${cam.file}" class="img-fluid" style="width: 100px" /></a>`).join(", ")}</div></td>`;
                     tbody_html += `<td class="text-center d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
                     tbody_html += `</tr>`;
 

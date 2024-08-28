@@ -5,30 +5,30 @@
         var data = {absent_received_logs: [], status_type_widgets: []};
         const status_type_widgets_convert = (res) => {
             return {
-            absent_received_logs: res.absent_received_logs.filter(
-                (adl) => adl.marked_as_read == false
-            ),
-            status_type_widgets: res.status_type_widgets.map(
-                (stw) => {
-                    const last_status_not_marked_as_read = 
-                    stw?.status_type?.device_status?.at(0)?.marked_as_read == false;
+                absent_received_logs: res.absent_received_logs.filter(
+                    (adl) => adl.marked_as_read == false
+                ),
+                status_type_widgets: res.status_type_widgets.map(
+                    (stw) => {
+                        const last_status_not_marked_as_read = 
+                        stw?.status_type?.device_status?.at(0)?.marked_as_read == false;
 
-                    const status_not_marked_as_read = 
-                    stw?.status_type?.device_status?.filter(
-                        (item) => item.marked_as_read == false
-                    );
+                        const status_not_marked_as_read = 
+                        stw?.status_type?.device_status?.filter(
+                            (item) => item.marked_as_read == false
+                        );
 
-                    return {
-                        ...stw,
-                        status_type: {
-                            ...stw.status_type,
-                            device_status: last_status_not_marked_as_read 
-                            ? status_not_marked_as_read 
-                            : [],
-                        },
+                        return {
+                            ...stw,
+                            status_type: {
+                                ...stw.status_type,
+                                device_status: last_status_not_marked_as_read 
+                                ? status_not_marked_as_read 
+                                : [],
+                            },
+                        }
                     }
-                }
-            )
+                )
             }
         }
 
