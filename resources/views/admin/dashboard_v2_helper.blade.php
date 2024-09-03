@@ -96,7 +96,7 @@
 
             // absent_received_widgets
             @if ($setting->is_access_device)
-            absent_received_widgets(card_widget_html, data.absent_received_logs);
+                absent_received_widgets(card_widget_html, data.absent_received_logs);
             @endif
 
             // status_type_widgets

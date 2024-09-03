@@ -71,6 +71,7 @@
 </div>
 @push('js')
     <script>
+        const absent_received_widgets_modal_print = (html, data) => {}
         const absent_received_widgets = (html, data) => {
             var cloned_card_widget_html = html.clone();
             var count_not_marked_as_read = data.length;
@@ -138,8 +139,6 @@
             var tbody_html = '';
             status_logs.forEach(
                 log => {
-                    console.log(log.device_log.cam_payloads);
-
                     // tbody html
                     tbody_html += `<tr>`;
                     tbody_html += `<td>${moment(log.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
@@ -166,17 +165,6 @@
                     cloned_card_widget_note_modal_html.find('.modal-title').text(
                         'Note for LOG ID: ' + log.id + ' - DEVICE ID: ' + log.device_id
                     );
-
-                    // modal body
-                    if (log.device_log?.cam_payloads?.length > 0) {
-                        log.device_log.cam_payloads.forEach(
-                            cam_payload => {
-                                cloned_card_widget_note_modal_html.find('.modal-body').prepend(
-                                    '<img src="' + cam_payload + '" class="img-fluid" />'
-                                );
-                            }
-                        )
-                    }
                     
                     // textarea
                     cloned_card_widget_note_modal_html.find('textarea').val(log.notes).attr(
