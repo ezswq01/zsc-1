@@ -146,7 +146,7 @@
                     tbody_html += `<td>${log.device_id}</td>`;
                     tbody_html += `<td><div id="mark_${log.id}">${log.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
                     tbody_html += `<td>${log.device?.branch}</td>`;
-                    tbody_html += `<td><div class="d-flex flex-wrap gap-2">${log.device_log.cam_payloads.map((cam) => `<a target="_blank" href="/storage/${cam.file}">${cam.file_name}</a>`).join(", ")}</div></td>`;
+                    tbody_html += `<td><div class="d-flex flex-wrap gap-2">${log.device_log.cam_payloads.map((cam) => `<a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a>`).join("/")}</div></td>`;
                     tbody_html += `<td class="text-center d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
                     tbody_html += `</tr>`;
 
