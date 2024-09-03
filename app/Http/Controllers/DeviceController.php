@@ -190,11 +190,37 @@ class DeviceController extends Controller
                 "pub"
             ));
 
+            $cam_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
+                ),
+                "cam"
+            ));
+
             $device = Device::create([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($publish_topic),
                 'subscribe_topic' => strtolower($subscribe_topic),
+                'cam_topic' => strtolower($cam_topic),
                 'branch' => strtolower($validated['branch']),
                 'building' => strtolower($validated['building']),
                 'room' => strtolower($validated['room'])
@@ -375,11 +401,37 @@ class DeviceController extends Controller
                 "pub"
             ));
 
+            $cam_topic = implode('/', array(
+                Setting::first()->mqtt_main_topic ?? "mcc",
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['branch'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['building'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['room'])
+                ),
+                str_replace(
+                    " ",
+                    "-",
+                    strtolower($validated['sensor_id'])
+                ),
+                "cam"
+            ));
+
             Device::find($id)->update([
                 'device_id' => $validated['device_id'],
                 'device_type_id' => $validated['device_type_id'],
                 'publish_topic' => strtolower($publish_topic),
                 'subscribe_topic' => strtolower($subscribe_topic),
+                'cam_topic' => strtolower($cam_topic),
                 'branch' => strtolower($validated['branch']),
                 'building' => strtolower($validated['building']),
                 'room' => strtolower($validated['room'])

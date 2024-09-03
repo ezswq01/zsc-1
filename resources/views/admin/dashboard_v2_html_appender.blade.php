@@ -142,7 +142,7 @@
                     // tbody html
                     tbody_html += `<tr>`;
                     tbody_html += `<td>${moment(log.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
-                    tbody_html += `<td>${log.id}</td>`;
+                    tbody_html += `<td>${log.device_log.id}</td>`;
                     tbody_html += `<td>${log.device_id}</td>`;
                     tbody_html += `<td><div id="mark_${log.id}">${log.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
                     tbody_html += `<td>${log.device?.branch}</td>`;

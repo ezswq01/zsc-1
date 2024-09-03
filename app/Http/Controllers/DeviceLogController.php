@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\DeviceLog;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -62,6 +64,7 @@ class DeviceLogController extends Controller
             $file_name = $file->getClientOriginalName();
             $app = explode('_', $file_name);
             $payload_id = explode('.', $app[1])[0];
+            $file_ext = $file->getClientOriginalExtension();
 
             if ($app[0] !== 'cambymcc') {
                 return response()->json([
@@ -70,10 +73,50 @@ class DeviceLogController extends Controller
                 ], 400);
             }
 
-            $path = $file->store(
-                'payloads/cam',
-                'public'
-            );
+            // $path = $file->store(
+            //     'payloads/cam',
+            //     'public'
+            // );
+
+            $device = Device::where('id', DeviceLog::find($payload_id)->device_id)->first();
+            if (!$device) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Device not found.',
+                ], 404);
+            }
+            if (!isset($device->cam_topic)) {
+                $cam_topic = implode('/', array(
+                    Setting::first()->mqtt_main_topic ?? "mcc",
+                    str_replace(
+                        " ",
+                        "-",
+                        strtolower($device->branch)
+                    ),
+                    str_replace(
+                        " ",
+                        "-",
+                        strtolower($device->building)
+                    ),
+                    str_replace(
+                        " ",
+                        "-",
+                        strtolower($device->room)
+                    ),
+                    str_replace(
+                        " ",
+                        "-",
+                        strtolower($device->device_id)
+                    ),
+                    "cam"
+                ));
+                $device->cam_topic = $cam_topic;
+                $device->save();
+            }
+            $cam_topic = $device->cam_topic;
+            $cam_topic = str_replace('/', '_', $cam_topic);
+            $file_name_original = $cam_topic . '_' . now()->format('YmdHis') . '.' . $file_ext;
+            $path = $file->storeAs('payloads/cam', $file_name_original, 'public');
 
             DB::table('cam_payloads')->insert([
                 'device_log_id' => $payload_id,
