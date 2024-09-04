@@ -145,7 +145,7 @@
                     tbody_html += `<tr>`;
                     tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${device_status.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
                     tbody_html += `<td>${moment(device_status.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
-                    tbody_html += `<td>${device_status.device_status.id}</td>`;
+                    tbody_html += `<td>${device_status.device_log.id}</td>`;
                     tbody_html += `<td>${device_status.device_id}</td>`;
                     tbody_html += `<td><div id="mark_${device_status.id}">${device_status.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
                     tbody_html += `<td>${device_status.device?.branch}</td>`;
