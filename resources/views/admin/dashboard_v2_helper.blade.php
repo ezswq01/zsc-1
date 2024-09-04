@@ -113,41 +113,9 @@
 
         // WEBSOCKET
         window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
-            const item = e.message;
-            if (item.type == "absent_device") {
-
-                // add items to absent_received_logs
-                data['absent_received_logs'] = [item.data, ...data['absent_received_logs'].filter(
-                    (adl) => adl.absent_device_id != item.data.absent_device_id
-                )];
-
-                // filter absent_received_logs
-                data['absent_received_logs'] = data['absent_received_logs'].filter(
-                    item => item.status != "Open"
-                )
-
-                // play sound
-                audio.play();
-            }
-            if (item.type == "dynamic_device" && item.data.length > 0) {
-                item.data.map((item) => { // item == device_status
-                    data['status_type_widgets'] = data['status_type_widgets'].map((status_type_widget) => {
-                        if (status_type_widget.id == item.status_type.status_type_widget.id) {
-                            const device_id = item.device_id;
-                            const device_status_to_be = status_type_widget.status_type.device_status.filter(
-                                (ds) => ds.device_id != device_id
-                            );
-                            status_type_widget['status_type']['device_status'] = [item, ...device_status_to_be];
-                            return status_type_widget;
-                        }
-                        return status_type_widget;
-                    })
-                })
-                audio.play();
-            }
-            print();
+            triggerFetch(); audio.play();
         }).listen('.camDataEvent', (e) => {
-            triggerFetch();
+            triggerFetch(); audio.play();
         });
     </script>
 @endpush
