@@ -347,25 +347,25 @@ class DeviceController extends Controller
         $device_status = DeviceStatus::find($request->device_status_id);
         // $subscribe_expression = $device->subscribe_expression;
 
-        // create mqtt connection
-        $mqtt = MQTT::connection();
-
-        // publish message
-        $publish_value = $publish_action->value;
-        if (str_contains($publish_value, '{{log_id}}')) {
-            $publish_value = str_replace('{{log_id}}', $request->log_id, $publish_value);
-        }
-        $mqtt->publish($device->publish_topic, $publish_value, 1);
-        $mqtt->loop(true, true);
-
         DB::transaction(function () use ($publish_action, $device, $request, &$device_status) {
 
             // save publish action to device log
-            DeviceLog::create([
+            $log = DeviceLog::create([
                 'device_id' => $device->id,
                 'value' => $publish_action->value,
                 'type' => 'publish'
             ]);
+
+            // create mqtt connection
+            $mqtt = MQTT::connection();
+    
+            // publish message
+            $publish_value = $publish_action->value;
+            if (str_contains($publish_value, '{{log_id}}')) {
+                $publish_value = str_replace('{{log_id}}', ($request->log_id ?? $log->id), $publish_value);
+            }
+            $mqtt->publish($device->publish_topic, $publish_value, 1);
+            $mqtt->loop(true, true);
 
             // @note : this is not needed
             // update or create device status
