@@ -145,6 +145,7 @@
                 })
                 audio.play();
             }
+            console.log(data);
             print();
         });
     </script>
