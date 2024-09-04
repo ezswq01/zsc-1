@@ -144,14 +144,14 @@
                     // tbody html
                     tbody_html += `<tr>`;
                     tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${device_status.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
-                    tbody_html += `<td>${moment(device_status.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
-                    tbody_html += `<td>${device_status.device_log.id}</td>`;
-                    tbody_html += `<td>${device_status.device_id}</td>`;
-                    tbody_html += `<td><div id="mark_${device_status.id}">${device_status.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
-                    tbody_html += `<td>${device_status.device?.branch}</td>`;
-                    tbody_html += `<td>${device_status.device?.building}</td>`;
-                    tbody_html += `<td>${device_status.device?.room}</td>`;
-                    tbody_html += `<td><ul class="mb-0">${device_status.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
+                    tbody_html += `<td class="align-middle">${moment(device_status.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
+                    tbody_html += `<td class="align-middle">${device_status.device_log.id}</td>`;
+                    tbody_html += `<td class="align-middle">${device_status.device_id}</td>`;
+                    tbody_html += `<td class="align-middle"><div id="mark_${device_status.id}">${device_status.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
+                    tbody_html += `<td class="align-middle">${device_status.device?.branch}</td>`;
+                    tbody_html += `<td class="align-middle">${device_status.device?.building}</td>`;
+                    tbody_html += `<td class="align-middle">${device_status.device?.room}</td>`;
+                    tbody_html += `<td class="align-middle"><ul class="mb-0">${device_status.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
                     tbody_html += `</tr>`;
 
                     // html
