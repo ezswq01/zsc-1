@@ -28,7 +28,7 @@
                 <h5 class="modal-title"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body overflow-auto text-nowrap">
                 <table class="table table-hover table-center">
                     <thead>
                         <tr>
