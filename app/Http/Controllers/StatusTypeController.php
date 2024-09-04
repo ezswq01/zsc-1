@@ -135,7 +135,7 @@ class StatusTypeController extends Controller
                     $query->whereBetween('created_at', [$from_date, $to_date]);
                 }
                 return $query->orderBy('id', 'desc')
-                    ->with('device.publish_action', 'user')
+                    ->with('device.publish_action', 'user', 'device_log.cam_payloads')
                     ->whereHas('device', function ($query) use ($request) {
                         if (!empty($request->branches)) {
                             return $query->where(function ($w) use ($request) {

@@ -57,6 +57,7 @@
                         <th>Marked as Normal</th>
                         <th>Noted</th>
                         <th>Updated By</th>
+                        <th>Cams</th>
                         <th>Last Updated</th>
                     </tr>
                 </thead>
@@ -143,11 +144,11 @@
                     [0, "desc"]
                 ],
                 columnDefs: [{
-                        targets: [0, 1, 2, 3, 4, 5, 6, 9, 10],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 9, 10, 11],
                         className: "align-middle",
                     },
                     {
-                        targets: [7, 8],
+                        targets: [7, 9],
                         visible: false,
                     }
                 ],
@@ -241,6 +242,19 @@
                         data: "updated_at",
                         render: function(data, type, row) {
                             return moment(data).format("YYYY-MM-DD HH:mm:ss");
+                        },
+                    },
+                    {
+                        data: "device_log.cam_payloads",
+                        render: function(data, type, row) {
+                            return `
+                                <ul>
+                                    ${data?.map(
+                                        (cam) => `
+                                            <li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>
+                                        `)?.join("") || "No Image Available"}
+                                </ul>
+                            `;
                         },
                     },
                 ],

@@ -29,16 +29,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body overflow-auto text-nowrap">
-                <table class="table table-hover table-center">
+                <table class="table table-center">
                     <thead>
                         <tr>
+                            <th class="">Actions</th>
                             <th>Time</th>
                             <th>Log ID</th>
                             <th>Device ID</th>
                             <th>Status</th>
                             <th>Location</th>
+                            <th>Sub-Location</th>
+                            <th>Room</th>
                             <th>Cams</th>
-                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -141,13 +143,15 @@
                 log => {
                     // tbody html
                     tbody_html += `<tr>`;
+                    tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
                     tbody_html += `<td>${moment(log.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
                     tbody_html += `<td>${log.device_log.id}</td>`;
                     tbody_html += `<td>${log.device_id}</td>`;
                     tbody_html += `<td><div id="mark_${log.id}">${log.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
                     tbody_html += `<td>${log.device?.branch}</td>`;
-                    tbody_html += `<td><div class="d-flex flex-wrap gap-2">${log.device_log?.cam_payloads?.map((cam) => `<a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a>`)?.join("/") || "No Image Available"}</div></td>`;
-                    tbody_html += `<td class="text-center d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
+                    tbody_html += `<td>${log.device?.building}</td>`;
+                    tbody_html += `<td>${log.device?.room}</td>`;
+                    tbody_html += `<td><ul class="mb-0">${log.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
                     tbody_html += `</tr>`;
 
                     // html
