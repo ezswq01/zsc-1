@@ -351,7 +351,11 @@ class DeviceController extends Controller
         $mqtt = MQTT::connection();
 
         // publish message
-        $mqtt->publish($device->publish_topic, $publish_action->value, 1);
+        $publish_value = $publish_action->value;
+        if (includes($publish_value, '{{log_id}}')) {
+            $publish_value = str_replace('{{log_id}}', $request->log_id, $publish_value);
+        }
+        $mqtt->publish($device->publish_topic, $publish_value, 1);
         $mqtt->loop(true, true);
 
         DB::transaction(function () use ($publish_action, $device, $request, &$device_status) {

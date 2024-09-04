@@ -144,14 +144,14 @@
                     // tbody html
                     tbody_html += `<tr>`;
                     tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
-                    tbody_html += `<td>${moment(log.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
-                    tbody_html += `<td>${log.device_log.id}</td>`;
-                    tbody_html += `<td>${log.device_id}</td>`;
-                    tbody_html += `<td><div id="mark_${log.id}">${log.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
-                    tbody_html += `<td>${log.device?.branch}</td>`;
-                    tbody_html += `<td>${log.device?.building}</td>`;
-                    tbody_html += `<td>${log.device?.room}</td>`;
-                    tbody_html += `<td><ul class="mb-0">${log.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
+                    tbody_html += `<td>${moment(device_status.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
+                    tbody_html += `<td>${device_status.device_status.id}</td>`;
+                    tbody_html += `<td>${device_status.device_id}</td>`;
+                    tbody_html += `<td><div id="mark_${device_status.id}">${device_status.marked_as_read ? `<i class="ph-check-circle text-success"></i>` : `<i class="ph-question text-danger"></i>`}</div></td>`;
+                    tbody_html += `<td>${device_status.device?.branch}</td>`;
+                    tbody_html += `<td>${device_status.device?.building}</td>`;
+                    tbody_html += `<td>${device_status.device?.room}</td>`;
+                    tbody_html += `<td><ul class="mb-0">${device_status.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
                     tbody_html += `</tr>`;
 
                     // html
@@ -162,26 +162,28 @@
 
                     // modal id
                     cloned_card_widget_note_modal_html.attr(
-                        'id', 'card-widget-note-modal-' + log.id
+                        'id', 'card-widget-note-modal-' + device_status.id
                     )
 
                     // modal title
                     cloned_card_widget_note_modal_html.find('.modal-title').text(
-                        'Note for LOG ID: ' + log.id + ' - DEVICE ID: ' + log.device_id
+                        'Note for LOG ID: ' + device_status.id + ' - DEVICE ID: ' + device_status.device_id
                     );
                     
                     // textarea
-                    cloned_card_widget_note_modal_html.find('textarea').val(log.notes).attr(
-                        'disabled', log.noted ? true : false
+                    cloned_card_widget_note_modal_html.find('textarea').val(device_status.notes).attr(
+                        'disabled', device_status.noted ? true : false
                     );
 
                     // modal body / publish actions
-                    if (log.device?.publish_action?.length > 0) {
-                        log.device.publish_action.forEach(
+                    if (device_status.device?.publish_action?.length > 0) {
+                        device_status.device.publish_action.forEach(
                             action => {
                                 cloned_card_widget_note_modal_html.find('.modal-footer').prepend(
-                                    '<button data-log-id=' 
-                                    + log.id 
+                                    '<button data-device-status-id=' 
+                                    + device_status.id 
+                                    + " data-log-id="
+                                    + device_status.device_log_id
                                     + ' data-publish-action-id="' 
                                     + action.id 
                                     +'" class="btn btn-sm btn-primary card-widget-note-modal-publish-action">' 
@@ -198,20 +200,22 @@
                     // event listener for publish modal
                     var publish_actions = document.querySelectorAll(
                         '#card-widget-note-modal-' 
-                            + log.id 
+                            + device_status.id 
                             + ' .card-widget-note-modal-publish-action'
                     );
                     publish_actions.forEach(
                         action_html => {
                             var publish_action_id = action_html.getAttribute('data-publish-action-id');
+                            var device_status_id = action_html.getAttribute('data-device-status-id');
                             var log_id = action_html.getAttribute('data-log-id');
                             action_html.addEventListener('click', () => {
                                 if (!confirm('Are you sure you want to publish this note?')) return;
-                                const textarea = document.querySelector('#card-widget-note-modal-' + log.id + ' textarea').value;
+                                const textarea = document.querySelector('#card-widget-note-modal-' + device_status.id + ' textarea').value;
                                 const data = {
                                     _token: '{{ csrf_token() }}',
                                     id: publish_action_id,
-                                    device_status_id: log_id,
+                                    device_status_id: device_status_id,
+                                    log_id: log_id,
                                     notes: textarea
                                 };
                                 $.ajax({
@@ -235,15 +239,15 @@
                     // event listener for note modal
                     document.querySelector(
                             '#card-widget-note-modal-' 
-                                + log.id 
+                                + device_status.id 
                                 + ' .card-widget-note-modal-submit-note'
                     ).addEventListener('click', () => {
-                        if (log.noted) return alert('Note already published!');
+                        if (device_status.noted) return alert('Note already published!');
                         if (!confirm('Are you sure you want to publish this note?')) return;
-                        const textarea = document.querySelector('#card-widget-note-modal-' + log.id + ' textarea').value;
+                        const textarea = document.querySelector('#card-widget-note-modal-' + device_status.id + ' textarea').value;
                         const data = {
                             _token: '{{ csrf_token() }}',
-                            device_status_id: log.id,
+                            device_status_id: device_status.id,
                             notes: textarea,
                         };
                         $.ajax({
