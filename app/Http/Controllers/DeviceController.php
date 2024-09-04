@@ -345,27 +345,28 @@ class DeviceController extends Controller
         $publish_action = PublishAction::find($request->id);
         $device = $publish_action->device;
         $device_status = DeviceStatus::find($request->device_status_id);
-        // $subscribe_expression = $device->subscribe_expression;
+        $device_device_status = DeviceStatus::where('device_id', $device->id)->latest()->first();
+
+        // create mqtt connection
+        $mqtt = MQTT::connection();
+
+        // publish message
+        $publish_value = $publish_action->value;
+        $log_id = $request->log_id ?? DeviceLog::find($device_device_status->device_log_id)->id;
+        if (str_contains($publish_value, '{{log_id}}')) {
+            $publish_value = str_replace('{{log_id}}', $log_id, $publish_value);
+        }
+        $mqtt->publish($device->publish_topic, $publish_value, 1);
+        $mqtt->loop(true, true);
 
         DB::transaction(function () use ($publish_action, $device, $request, &$device_status) {
 
             // save publish action to device log
-            $log = DeviceLog::create([
+            DeviceLog::create([
                 'device_id' => $device->id,
                 'value' => $publish_action->value,
                 'type' => 'publish'
             ]);
-
-            // create mqtt connection
-            $mqtt = MQTT::connection();
-    
-            // publish message
-            $publish_value = $publish_action->value;
-            if (str_contains($publish_value, '{{log_id}}')) {
-                $publish_value = str_replace('{{log_id}}', ($request->log_id ?? $log->id), $publish_value);
-            }
-            $mqtt->publish($device->publish_topic, $publish_value, 1);
-            $mqtt->loop(true, true);
 
             // @note : this is not needed
             // update or create device status
@@ -375,7 +376,7 @@ class DeviceController extends Controller
             // delete current device_status to point that i handled.
             if (!$request->is_testing) {
                 $device_status->update([
-                    'marked_as_read' => false,
+                    // 'marked_as_read' => false,
                     'notes' => $request->notes,
                     'user_id' => auth()->user()->id
                 ]);
