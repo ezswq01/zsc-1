@@ -143,7 +143,7 @@
                 device_status => {
                     // tbody html
                     tbody_html += `<tr>`;
-                    tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
+                    tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${device_status.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
                     tbody_html += `<td>${moment(device_status.created_at).format('YYYY-MM-DD, HH:mm:ss')}</td>`;
                     tbody_html += `<td>${device_status.device_status.id}</td>`;
                     tbody_html += `<td>${device_status.device_id}</td>`;
