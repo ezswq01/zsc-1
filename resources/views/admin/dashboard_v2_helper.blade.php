@@ -145,8 +145,9 @@
                 })
                 audio.play();
             }
-            console.log(data);
             print();
+        }).listen('.camDataEvent', (e) => {
+            triggerFetch();
         });
     </script>
 @endpush

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CamDataEvent;
 use App\Models\Device;
 use App\Models\DeviceLog;
 use App\Models\Setting;
@@ -108,6 +109,11 @@ class DeviceLogController extends Controller
                 'file' => $path,
                 'created_at' => now(),
                 'updated_at' => now(),
+            ]);
+
+            CamDataEvent::dispatch([
+                'type' => 'dynamic_device',
+                'data' => DeviceLog::find($payload_id)->load('cam_payloads'),
             ]);
             
         } catch (\Exception $e) {
