@@ -352,7 +352,7 @@ class DeviceController extends Controller
 
         // publish message
         $publish_value = $publish_action->value;
-        if (includes($publish_value, '{{log_id}}')) {
+        if (str_contains($publish_value, '{{log_id}}')) {
             $publish_value = str_replace('{{log_id}}', $request->log_id, $publish_value);
         }
         $mqtt->publish($device->publish_topic, $publish_value, 1);
