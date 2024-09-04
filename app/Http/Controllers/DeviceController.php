@@ -375,7 +375,7 @@ class DeviceController extends Controller
             // delete current device_status to point that i handled.
             if (!$request->is_testing) {
                 $device_status->update([
-                    'marked_as_read' => true,
+                    'marked_as_read' => false,
                     'notes' => $request->notes,
                     'user_id' => auth()->user()->id
                 ]);
