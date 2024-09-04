@@ -35,7 +35,7 @@ class TriggerJob implements ShouldQueue
      */
     public function handle()
     {
-        foreach(Settings::first()->load('users')->users as $user){
+        foreach(Setting::first()->load('users')->users as $user){
             Mail::to($user)->send(new TriggerMail($this->val, $this->type));
         }
     }
