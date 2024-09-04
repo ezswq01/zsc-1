@@ -106,6 +106,9 @@
                     status_type_widgets_modal_print(card_widget_modal_html, data);
                 }
             );
+
+            // modal reset
+            $('.modal-backdrop').remove();
         }
 
         // WEBSOCKET
@@ -114,12 +117,9 @@
             if (item.type == "absent_device") {
 
                 // add items to absent_received_logs
-                data['absent_received_logs'] = [
-                    item.data,
-                    ...data['absent_received_logs'].filter(
-                        (adl) => adl.absent_device_id != item.data.absent_device_id
-                    )
-                ]
+                data['absent_received_logs'] = [item.data, ...data['absent_received_logs'].filter(
+                    (adl) => adl.absent_device_id != item.data.absent_device_id
+                )];
 
                 // filter absent_received_logs
                 data['absent_received_logs'] = data['absent_received_logs'].filter(
@@ -133,38 +133,14 @@
                 item.data.map((item) => { // item == device_status
                     data['status_type_widgets'] = data['status_type_widgets'].map((status_type_widget) => {
                         if (status_type_widget.id == item.status_type.status_type_widget.id) {
-
-                            // table records update
-                            const countDeviceStatus = [
-                                ...status_type_widget.status_type.device_status.filter(
-                                    (ds) => ds.device_id != item.device_id
-                                ),
-                                item.marked_as_read ? null : item
-                            ].filter((item) => item);
-
-                            // Update Cards
-                            status_types = status_types.map((st) => {
-                                if (st.widget_id == status_type_widget.id) {
-                                    return {
-                                        ...st,
-                                        count: countDeviceStatus.length
-                                    }
-                                } else {
-                                    return st
-                                }
-                            })
-
-                            return {
-                                ...status_type_widget,
-                                status_type: {
-                                    ...status_type_widget.status_type,
-                                    device_status: countDeviceStatus
-                                }
-                            }
+                            const device_id = item.device_id;
+                            const device_status_to_be = status_type_widget.status_type.device_status.filter(
+                                (ds) => ds.device_id != device_id
+                            );
+                            status_type_widget['status_type']['device_status'] = [item, ...device_status_to_be];
+                            return status_type_widget;
                         }
-                        return {
-                            ...status_type_widget
-                        }
+                        return status_type_widget;
                     })
                 })
                 audio.play();

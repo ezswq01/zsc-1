@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Events\NewDataEvent;
 use App\Jobs\TriggerJob;
-use App\Mail\TriggerMail;
 use App\Models\AbsentDevice;
 use App\Models\AbsentLastLog;
 use App\Models\AbsentLog;
@@ -18,68 +17,52 @@ use App\Notifications\TriggerTelegramNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use PhpMqtt\Client\Facades\MQTT;
 
 class MqttSubscribingCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'mqtt-subscribing';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Command description';
+    protected $mqtt;
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
+        $this->mqtt = MQTT::connection();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
-    {
+    public function handle() {
         $mqtt_main_topic = Setting::first()->mqtt_main_topic ?? "mcc";
-        $mqtt = MQTT::connection();
-        $mqtt->subscribe("{$mqtt_main_topic}/#", function (string $topic, string $message) {
+        $this->mqtt->subscribe("{$mqtt_main_topic}/#", function (string $topic, string $message) {
             echo "Received message on topic: {$topic}\n";
             echo "Received message with payload: {$message}\n";
+            if (strpos($topic, 'cambymcc') !== false) {
+                echo "Received message on cam topic: {$topic}\n";
+                return;
+            }
             try {
                 DB::transaction(function () use ($topic, $message) {
-
                     Log::info("Received message on topic: {$topic}");
-
-                    /* Get Device */
                     $device = Device::where('subscribe_topic', $topic)->first();
                     $absent_device = AbsentDevice::where('subscribe_topic', $topic)->first();
-
                     if ($device) {
+                        if (!isset($device->cam_topic)) {
+                            $cam_topic = implode('/', array(
+                                Setting::first()->mqtt_main_topic ?? "mcc",
+                                str_replace(" ","-", strtolower($device->branch)),
+                                str_replace(" ","-", strtolower($device->building)),
+                                str_replace(" ","-", strtolower($device->room)),
+                                str_replace(" ","-", strtolower($device->device_id)),
+                                "cambymcc"
+                            ));
+                            $device->cam_topic = $cam_topic;
+                            $device->save();
+                        }
                         $device_log = DeviceLog::create(['device_id' => $device->id, 'value' => $message, 'type' => 'subscribe']);
                         $subscribe_expression = $device->subscribe_expression;
-                        $subscribe_responses = Device::evalValue(
-                            $device->id,
-                            $device_log->id,
-                            $subscribe_expression,
-                            $message,
-                            $device->device_id
-                        );
-
+                        $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message, $device->device_id);
+                        $publish_topic = $device->cam_topic;
+                        $this->mqtt->publish($publish_topic, $device_log->id, 0);
                         try {
                             Log::info("Event to NewDataEvent");
                             NewDataEvent::dispatch([
@@ -91,7 +74,6 @@ class MqttSubscribingCommand extends Command
                             Log::error($e->getMessage());
                         }
                     }
-
                     if ($absent_device) {
                         $user = User::where('user_code', $message)->first();
                         if ($user) {
@@ -112,7 +94,6 @@ class MqttSubscribingCommand extends Command
                                     'marked_as_read' => false
                                 ]
                             );
-
                             try {
                                 Log::info("Event to NewDataEvent");
                                 TriggerJob::dispatch($message, 'Request Open');
@@ -130,7 +111,6 @@ class MqttSubscribingCommand extends Command
                             } catch (\Exception $e) {
                                 Log::error($e->getMessage());
                             }
-
                             Notif::create([
                                 'notif_type' => 'dynamic_device',
                                 'notif_status' => 'unread',
@@ -147,6 +127,6 @@ class MqttSubscribingCommand extends Command
                 Log::error($e->getMessage());
             }
         }, 0);
-        $mqtt->loop(true);
+        $this->mqtt->loop(true);
     }
 }

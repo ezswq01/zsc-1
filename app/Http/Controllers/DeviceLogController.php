@@ -88,27 +88,11 @@ class DeviceLogController extends Controller
             if (!isset($device->cam_topic)) {
                 $cam_topic = implode('/', array(
                     Setting::first()->mqtt_main_topic ?? "mcc",
-                    str_replace(
-                        " ",
-                        "-",
-                        strtolower($device->branch)
-                    ),
-                    str_replace(
-                        " ",
-                        "-",
-                        strtolower($device->building)
-                    ),
-                    str_replace(
-                        " ",
-                        "-",
-                        strtolower($device->room)
-                    ),
-                    str_replace(
-                        " ",
-                        "-",
-                        strtolower($device->device_id)
-                    ),
-                    "cam"
+                    str_replace(" ","-", strtolower($device->branch)),
+                    str_replace(" ","-", strtolower($device->building)),
+                    str_replace(" ","-", strtolower($device->room)),
+                    str_replace(" ","-", strtolower($device->device_id)),
+                    "cambymcc"
                 ));
                 $device->cam_topic = $cam_topic;
                 $device->save();

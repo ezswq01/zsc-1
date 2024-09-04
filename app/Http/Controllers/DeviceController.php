@@ -27,11 +27,6 @@ class DeviceController extends Controller
         $this->middleware('can:devices-delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (request()->ajax()) {
@@ -99,11 +94,6 @@ class DeviceController extends Controller
         return view('admin.devices.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $device_types = DeviceType::all(['id', 'name']);
@@ -112,12 +102,6 @@ class DeviceController extends Controller
         return view('admin.devices.create', compact('device_types', 'status_types'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreDeviceRequest $request)
     {
         $validated = $request->all();
@@ -142,76 +126,28 @@ class DeviceController extends Controller
 
             $subscribe_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "sub"
             ));
 
             $publish_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "pub"
             ));
 
             $cam_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "cam"
             ));
 
@@ -251,12 +187,6 @@ class DeviceController extends Controller
         return redirect()->route('admin.devices.index')->with('success', 'Device created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         if (request()->ajax()) {
@@ -307,12 +237,6 @@ class DeviceController extends Controller
         return view('admin.devices.show', compact('data', 'device_types', 'status_types', 'device_logs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data = Device::with('subscribe_expression', 'publish_action', 'device_type')->find($id);
@@ -323,13 +247,6 @@ class DeviceController extends Controller
         return view('admin.devices.edit', compact('data', 'device_types', 'status_types'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateDeviceRequest $request, $id)
     {
         $validated = $request->all();
@@ -353,76 +270,28 @@ class DeviceController extends Controller
 
             $subscribe_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "sub"
             ));
 
             $publish_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "pub"
             ));
 
             $cam_topic = implode('/', array(
                 Setting::first()->mqtt_main_topic ?? "mcc",
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['branch'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['building'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['room'])
-                ),
-                str_replace(
-                    " ",
-                    "-",
-                    strtolower($validated['sensor_id'])
-                ),
+                str_replace(" ","-",strtolower($validated['branch'])),
+                str_replace(" ","-",strtolower($validated['building'])),
+                str_replace(" ","-",strtolower($validated['room'])),
+                str_replace(" ","-",strtolower($validated['sensor_id'])),
                 "cam"
             ));
 
@@ -464,12 +333,6 @@ class DeviceController extends Controller
         return redirect()->route('admin.devices.index')->with('success', 'Device updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $data = Device::find($id);

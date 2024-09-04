@@ -71,7 +71,11 @@ class Device extends Model
                         'notes' => $val->normal_state ? "Normal State" : ""
                     ]
                 );
-                $status_response = $status_response->load('status_type.status_type_widget', 'device.publish_action');
+                $status_response = $status_response->load(
+                    'status_type.status_type_widget', 
+                    'device.publish_action', 
+                    'device_log.cam_payloads'
+                );
                 $status_responses[] = $status_response;
 
                 // notification

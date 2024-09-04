@@ -11757,8 +11757,9 @@ var url = window.location.protocol + '//' + window.location.hostname;
 // env = production
 if (true) {
   console.log('Development mode');
-  url = url + ':' + window.location.port;
+  url = url + ':' + (window.location.port || "6001");
 }
+console.log('url: ', url);
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   client: socket_io_client__WEBPACK_IMPORTED_MODULE_1___default.a,
   broadcaster: 'socket.io',
