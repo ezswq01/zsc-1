@@ -140,7 +140,7 @@
 
             var tbody_html = '';
             status_logs.forEach(
-                log => {
+                device_status => {
                     // tbody html
                     tbody_html += `<tr>`;
                     tbody_html += `<td class="align-middle d-flex gap-2"><button data-bs-target="#card-widget-note-modal-${log.id}" data-bs-toggle="modal" class="btn btn-sm btn-success"><i class="ph-eye"></i></button></td>`;
