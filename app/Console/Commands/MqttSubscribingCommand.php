@@ -62,7 +62,7 @@ class MqttSubscribingCommand extends Command
                         $subscribe_expression = $device->subscribe_expression;
                         $subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message, $device->device_id);
                         $publish_topic = $device->cam_topic;
-                        $this->mqtt->publish($publish_topic, $device_log->id, 0);
+                        $this->mqtt->publish($publish_topic, "cambymcc_" . $device_log->id, 0);
                         try {
                             Log::info("Event to NewDataEvent");
                             NewDataEvent::dispatch([
