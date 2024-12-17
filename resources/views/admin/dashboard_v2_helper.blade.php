@@ -121,7 +121,7 @@
 				var iframe_loading = $(
 					`.card-widget-note-modal-iframe-loading-${e?.message?.device?.id}`
 				);
-				iframe.attr('src', 'http://' + e?.message?.plain_payload);
+				iframe.attr('src', 'https://' + e?.message?.plain_payload);
 				iframe.show();
 				iframe_loading.hide();
 			} else {
