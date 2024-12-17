@@ -6,7 +6,7 @@ let url = window.location.protocol + '//' + window.location.hostname;
 // env = production
 if (process.env.NODE_ENV != 'production') {
     console.log('Development mode')
-    url = url + ':' + 6010
+    url = url + ':' + (window.location.port || "6010")
 }
 
 console.log('url: ', url);

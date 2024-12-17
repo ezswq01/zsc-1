@@ -11757,7 +11757,7 @@ var url = window.location.protocol + '//' + window.location.hostname;
 // env = production
 if (true) {
   console.log('Development mode');
-  url = url + ':' + 6010;
+  url = url + ':' + (window.location.port || "6010");
 }
 console.log('url: ', url);
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
