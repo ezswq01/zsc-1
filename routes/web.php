@@ -58,6 +58,7 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
 
     // Ajax routes
     Route::post('/devices/publish', [DeviceController::class, 'publish'])->name('devices.publish');
+    Route::post('/devices/publish-streaming', [DeviceController::class, 'publishStreaming'])->name('devices.publish-streaming');
     Route::post('/absent_devices/publish', [AbsentDeviceController::class, 'publish'])->name('absent_devices.publish');
     Route::get('/api/devices/device_branches', [DeviceController::class, 'branches'])->name('devices.branches');
     Route::get('/api/devices/device_buildings', [DeviceController::class, 'buildings'])->name('devices.buildings');

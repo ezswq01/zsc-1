@@ -11757,7 +11757,7 @@ var url = window.location.protocol + '//' + window.location.hostname;
 // env = production
 if (true) {
   console.log('Development mode');
-  url = url + ':' + (window.location.port || "6001");
+  url = url + ':' + 6010;
 }
 console.log('url: ', url);
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -11776,7 +11776,7 @@ console.log('Echo is listening...');
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\mcc-iot-app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/mcc-iot-app/resources/js/app.js */"./resources/js/app.js");
 
 
 /***/ }),

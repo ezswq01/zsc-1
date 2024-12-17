@@ -8,7 +8,7 @@
 
         <div class="navbar-brand flex-1 flex-lg-0 p-0">
             <a class="d-inline-flex align-items-center" href="/">
-                <img src="{{ App\Models\Setting::first()?->logo ? Storage::url(App\Models\Setting::first()?->logo) : "/assets/images/logo_icon.svg" }}"
+                <img src="{{ App\Models\Setting::first()->logo ? Storage::url(App\Models\Setting::first()->logo) : "/assets/images/logo_icon.svg" }}"
                     alt="logo" style="min-height: 75px">
             </a>
         </div>

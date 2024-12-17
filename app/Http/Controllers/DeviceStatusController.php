@@ -29,7 +29,7 @@ class DeviceStatusController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Notes updated successfully.',
-            'device_status' => $deviceStatus?->load('status_type.status_type_widget')
+            'device_status' => $deviceStatus->load('status_type.status_type_widget')
         ]);
     }
 

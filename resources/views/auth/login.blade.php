@@ -10,9 +10,9 @@
                             $setting = App\Models\Setting::first();
                         @endphp
                         <img alt="" style="height: 100px"
-                            src="{{ $setting?->logo ? Storage::url($setting?->logo) : "/assets/images/logo_icon.svg" }}">
+                            src="{{ $setting->logo ? Storage::url($setting->logo) : "/assets/images/logo_icon.svg" }}">
                     </div>
-                    <h5 class="mb-0">{{ $setting?->app_name ?? "Login to your account" }}</h5>
+                    <h5 class="mb-0">{{ $setting->app_name ?? "Login to your account" }}</h5>
                     <span class="d-block text-muted">Enter your credentials below</span>
                 </div>
 

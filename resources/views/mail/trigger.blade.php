@@ -18,8 +18,8 @@
                                         <tr>
                                             <td align="center" valign="top"><a href="#"
                                                     style="text-decoration:none" target="_blank"
-                                                    data-saferedirecturl="{{ env("APP_URL") . (App\Models\Setting::first()?->logo ? Storage::url(App\Models\Setting::first()?->logo) : "/assets/images/logo_icon.svg") }}"><img
-                                                        src="{{ env("APP_URL") . (App\Models\Setting::first()?->logo ? Storage::url(App\Models\Setting::first()?->logo) : "/assets/images/logo_icon.svg") }}" height="auto"
+                                                    data-saferedirecturl="{{ env("APP_URL") . (App\Models\Setting::first()->logo ? Storage::url(App\Models\Setting::first()->logo) : "/assets/images/logo_icon.svg") }}"><img
+                                                        src="{{ env("APP_URL") . (App\Models\Setting::first()->logo ? Storage::url(App\Models\Setting::first()->logo) : "/assets/images/logo_icon.svg") }}" height="auto"
                                                         alt="WINNER RESEARCH LOGO" border="0"
                                                         style="display:block;font-family:Arial,sans-serif;font-size:18px;line-height:25px;text-align:center;color:#FFF;font-weight:bold;max-width:172px;max-height:48px"
                                                         class="m_5781801497573853726em_w150 CToWUd" data-bit="iit"></a>
