@@ -37,8 +37,8 @@ class MqttSubscribingCommand extends Command
 			echo "Received message on topic: {$topic}\n";
 			echo "Received message with payload: {$message}\n";
 			if (strpos($topic, 'cambymcc') !== false) {
-					echo "Received message on cam topic: {$topic}\n";
-					return;
+				echo "Received message on cam topic: {$topic}\n";
+				return;
 			}
 			try {
 					DB::transaction(function () use ($topic, $message) {
@@ -58,24 +58,33 @@ class MqttSubscribingCommand extends Command
 									$device->cam_topic = $cam_topic;
 									$device->save();
 							}
-							$device_log = DeviceLog::create(['device_id' => $device->id, 'value' => $message, 'type' => 'subscribe']);
+							$device_log = DeviceLog::create([
+								'device_id' => $device->id, 
+								'value' => $message, 
+								'type' => 'subscribe'
+							]);
 							$subscribe_expression = $device->subscribe_expression;
-							$subscribe_responses = Device::evalValue($device->id, $device_log->id, $subscribe_expression, $message, $device->device_id);
+							$subscribe_responses = Device::evalValue(
+								$device->id,
+								$device_log->id,
+								$subscribe_expression,
+								$message,
+								$device->device_id
+							);
 							$publish_topic = $device->cam_topic;
 							$this->mqtt->publish($publish_topic, "cambymcc_" . $device_log->id, 0);
 							try {
-									Log::info("Event to NewDataEvent");
-									NewDataEvent::dispatch([
-										'type' => 'dynamic_device',
-										'topic' => $topic,
-										'device' => $device,
-										'plain_payload' => $message,
-										'is_streaming_request' => str_contains($message, ":") ? true : false,
-										'data' => $subscribe_responses
-									]);
-									Log::info("Event Done");
+								Log::info("Event to NewDataEvent");
+								NewDataEvent::dispatch([
+									'type' => 'dynamic_device',
+									'topic' => $topic,
+									'device' => $device,
+									'plain_payload' => $message,
+									'data' => $subscribe_responses
+								]);
+								Log::info("Event Done");
 							} catch (\Exception $e) {
-									Log::error($e->getMessage());
+								Log::error($e->getMessage());
 							}
 						}
 						if ($absent_device) {
@@ -104,7 +113,7 @@ class MqttSubscribingCommand extends Command
 										$setting = Setting::first();
 										Notification::route('telegram', $setting->chat_id_telegram)->notify(
 											new TriggerTelegramNotification(
-													"Request Open!\nAlert from : $message"
+												"Request Open!\nAlert from : $message"
 											)
 										);
 										NewDataEvent::dispatch([
@@ -124,6 +133,23 @@ class MqttSubscribingCommand extends Command
 									]);
 							}
 						}
+
+						// stream listener logic
+						if (str_contains($topic, "/stream/")) {
+							try {
+								Log::info($topic);
+								Log::info("Event to - Stream Listener");
+								NewDataEvent::dispatch([
+									'type' => 'stream_listener',
+									'topic' => $topic,
+									'plain_payload' => $message,
+								]);
+								Log::info("Event Done - Stream Listener");
+							} catch (\Exception $e) {
+								Log::error($e->getMessage());
+							}
+						}
+
 					});
 					echo "Received message success!\n";
 			} catch (\Exception $e) {

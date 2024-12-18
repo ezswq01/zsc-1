@@ -100,73 +100,73 @@
 
 @section("content")
 
-    <!-- 
-    *
-    * DEVELOPER NOTE
-    *
-    *
-    * Status Type Widgets   = Every Each Card Widget.
-    * Device Status         = Every Each Log, represented.
-    * Status Type Widgets   = Need to be filtered, using status_type_widgets_convert, 
-    *                       = because it's only showing the FALSY marked as read.
-    *
-    *
-    * The code is too much already, please DO NOT save data into variable. 
-    * Make it consistent by just counting the html element.
-    *
-    *
-    * Goodluck.
-    * dirait.com
-    -->
-    
-    @php
-        $oldDate = old('date');
-        $dates = $oldDate ? explode(' - ', $oldDate) : null;
-        $startDate = $oldDate ? $dates[0] : now()->subYears(1)->startOf('hour')->format('Y-m-d H:i:s');
-        $endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
-        $setting = App\Models\Setting::first();
-    @endphp
-    @include('admin.dashboard_v2_helper')
-    @include('admin.dashboard_v2_html_appender')
-    @push('js')
-        <script>
-            document.addEventListener('DOMContentLoaded', async () => {
-                await triggerFetch();
-            })
-        </script>
-        <script>
-            const startDate = '{{ $startDate }}';
-            const endDate = '{{ $endDate }}';
-            $('.datepicker-basic').daterangepicker({
-                timePicker: true,
-                showDropdowns: true,
-                startDate: moment(startDate),
-                endDate: moment(endDate),
-                locale: {
-                    format: 'YYYY-MM-DD HH:mm:ss'
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                triggerFetch();
-            });
-        </script>
-        <script>
-            $('#branches').select2({
-                width: '100%',
-            });
-            $('#buildings').select2({
-                width: '100%',
-            });
-            $('#rooms').select2({
-                width: '100%',
-            });
-            $('#device_id').on('input', function() {
-                if ($(this).val().length >= 3 || $(this).val().length == 0) {
-                    triggerFetch()
-                }
-            })
-            $('#branches, #buildings, #rooms').change(function() {
-                triggerFetch()
-            });
-        </script>
-    @endpush
+	<!-- 
+	*
+	* DEVELOPER NOTE
+	*
+	*
+	* Status Type Widgets   = Every Each Card Widget.
+	* Device Status         = Every Each Log, represented.
+	* Status Type Widgets   = Need to be filtered, using status_type_widgets_convert, 
+	*                       = because it's only showing the FALSY marked as read.
+	*
+	*
+	* The code is too much already, please DO NOT save data into variable. 
+	* Make it consistent by just counting the html element.
+	*
+	*
+	* Goodluck.
+	* dirait.com
+	-->
+	
+	@php
+		$oldDate = old('date');
+		$dates = $oldDate ? explode(' - ', $oldDate) : null;
+		$startDate = $oldDate ? $dates[0] : now()->subYears(1)->startOf('hour')->format('Y-m-d H:i:s');
+		$endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
+		$setting = App\Models\Setting::first();
+	@endphp
+	@include('admin.dashboard_v2_helper')
+	@include('admin.dashboard_v2_html_appender')
+	@push('js')
+		<script>
+			document.addEventListener('DOMContentLoaded', async () => {
+				await triggerFetch();
+			})
+		</script>
+		<script>
+			const startDate = '{{ $startDate }}';
+			const endDate = '{{ $endDate }}';
+			$('.datepicker-basic').daterangepicker({
+				timePicker: true,
+				showDropdowns: true,
+				startDate: moment(startDate),
+				endDate: moment(endDate),
+				locale: {
+					format: 'YYYY-MM-DD HH:mm:ss'
+				}
+			}).on('apply.daterangepicker', function(ev, picker) {
+				triggerFetch();
+			});
+		</script>
+		<script>
+			$('#branches').select2({
+				width: '100%',
+			});
+			$('#buildings').select2({
+				width: '100%',
+			});
+			$('#rooms').select2({
+				width: '100%',
+			});
+			$('#device_id').on('input', function() {
+				if ($(this).val().length >= 3 || $(this).val().length == 0) {
+					triggerFetch()
+				}
+			})
+			$('#branches, #buildings, #rooms').change(function() {
+				triggerFetch()
+			});
+		</script>
+	@endpush
 @endsection

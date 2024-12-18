@@ -366,6 +366,32 @@ class DeviceController extends Controller
 		}
 	}
 
+	public function publishStreamingStop() 
+	{
+		$device_id = request()->device_id;
+		$device = Device::find($device_id);
+		if (!$device) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Device not found.'
+			]);
+		}
+		try {
+			$mqtt = MQTT::connection();
+			$mqtt->publish($device->publish_topic, "stopstream", 1);
+			$mqtt->loop(true, true);
+			return response()->json([
+				'success' => true,
+				'message' => 'Streaming stopped.',
+			]);
+		} catch (\Exception $e) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Failed to request streaming. ' . $e->getMessage(),
+			]);
+		}
+	}
+
 	public function publish(Request $request)
 	{
 		$publish_action = PublishAction::find($request->id);

@@ -19,13 +19,13 @@
 							);
 
 							return {
-									...stw,
-									status_type: {
-										...stw.status_type,
-										device_status: last_status_not_marked_as_read 
-										? status_not_marked_as_read 
-										: [],
-									},
+								...stw,
+								status_type: {
+									...stw.status_type,
+									device_status: last_status_not_marked_as_read 
+									? status_not_marked_as_read 
+									: [],
+								},
 							}
 						}
 					)
@@ -112,23 +112,45 @@
 		}
 
 		// WEBSOCKET
-		window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
-			console.log(e)
-			if (e?.message?.is_streaming_request) {
-				var iframe = $(
-					`.card-widget-note-modal-iframe-${e?.message?.device?.id}`
-				);
-				var iframe_loading = $(
-					`.card-widget-note-modal-iframe-loading-${e?.message?.device?.id}`
-				);
-				iframe.attr('src', 'https://' + e?.message?.plain_payload);
-				iframe.show();
-				iframe_loading.hide();
-			} else {
-				triggerFetch(); audio.play();
-			}
-		}).listen('.camDataEvent', (e) => {
-			triggerFetch(); audio.play();
-		});
+		window.Echo.channel('laravel_database_newDataChannel')
+			.listen('.newDataEvent', (e) => {
+				console.log(e)
+				if (e?.message?.type === "stream_listener") {
+					var topic = e?.message?.topic;
+					var topicapp = topic.split('/')[0];
+					var topicbranch = topic.split('/')[1];
+					var topicbuilding = topic.split('/')[2];
+					var iframe = $(
+						`.card-widget-note-modal-`
+						+ topicapp
+						+ `-`
+						+ topicbranch
+						+ `-`
+						+ topicbuilding 
+						+ ` `
+						+ `.card-widget-note-modal-iframe`
+					);
+					var iframe_loading = $(
+						`.card-widget-note-modal-`
+						+ topicapp
+						+ `-`
+						+ topicbranch
+						+ `-`
+						+ topicbuilding
+						+ ` `
+						+ `.card-widget-note-modal-iframe-loading`
+					);
+					iframe.attr('src', 'https://' + e?.message?.plain_payload);
+					iframe.show();
+					iframe_loading.hide();
+				} else {
+					triggerFetch(); 
+					audio.play();
+				}
+			})
+			.listen('.camDataEvent', (e) => {
+				triggerFetch(); 
+				audio.play();
+			});
 	</script>
 @endpush
