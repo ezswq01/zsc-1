@@ -177,8 +177,8 @@ class DeviceController extends Controller
 					foreach ($request->publish_actions['label'] as $key => $publish_action) {
 						PublishAction::create([
 							'device_id' => $device->id,
-							'label' => $publish_action['label'][$key],
-							'value' => $publish_action['value'][$key],
+							'label' => $request->publish_actions['label'][$key],
+							'value' => $request->publish_actions['value'][$key],
 						]);
 					}
 			}

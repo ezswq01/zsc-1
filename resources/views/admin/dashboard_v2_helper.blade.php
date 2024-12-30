@@ -22,9 +22,7 @@
 								...stw,
 								status_type: {
 									...stw.status_type,
-									device_status: last_status_not_marked_as_read 
-									? status_not_marked_as_read 
-									: [],
+									device_status: status_not_marked_as_read,
 								},
 							}
 						}
