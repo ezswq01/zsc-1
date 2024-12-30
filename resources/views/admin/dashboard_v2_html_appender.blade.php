@@ -122,7 +122,6 @@
 				$('#card-widgets').append(cloned_card_widget_html);
 			}
 			const status_type_widgets_modal_print = (html, data) => {
-            console.log(data);
 					
 				// vars
 				var cloned_card_widget_modal_html = html.clone();

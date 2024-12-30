@@ -45,6 +45,7 @@ class MqttSubscribingCommand extends Command
 						Log::info("Received message on topic: {$topic}");
 						$device = Device::where('subscribe_topic', $topic)->first();
 						$absent_device = AbsentDevice::where('subscribe_topic', $topic)->first();
+                  
 						if ($device) {
 							if (!isset($device->cam_topic)) {
 									$cam_topic = implode('/', array(
@@ -87,6 +88,7 @@ class MqttSubscribingCommand extends Command
 								Log::error($e->getMessage());
 							}
 						}
+
 						if ($absent_device) {
 							$user = User::where('user_code', $message)->first();
 							if ($user) {
@@ -135,7 +137,7 @@ class MqttSubscribingCommand extends Command
 						}
 
 						// stream listener logic
-						if (str_contains($topic, "/stream/")) {
+						if (str_contains($topic, "/stream")) {
 							try {
 								Log::info($topic);
 								Log::info("Event to - Stream Listener");
