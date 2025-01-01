@@ -24,6 +24,7 @@ class Device extends Model
 		'device_type_id',
 		'publish_topic',
 		'subscribe_topic',
+		'cam_topic',
 		'branch',
 		'building',
 		'room',
