@@ -74,7 +74,9 @@
 </div>
 @push('js')
 		<script>
-			const absent_received_widgets_modal_print = (html, data) => {}
+			const absent_received_widgets_modal_print = (html, data) => {
+				//
+			}
 			const absent_received_widgets = (html, data) => {
 				var cloned_card_widget_html = html.clone();
 				var count_not_marked_as_read = data.length;

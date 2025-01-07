@@ -1,1 +1,1 @@
-laravel-echo-server start
+laravel-echo-server start --force

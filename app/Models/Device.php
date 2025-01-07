@@ -29,7 +29,9 @@ class Device extends Model
 		'building',
 		'room',
 		'created_at',
-		'updated_at'
+		'updated_at',
+		'is_online',
+		'last_ping_at',
 	];
 
 	public function device_type()

@@ -1,101 +1,101 @@
 @extends("admin.layout.main")
 
 @push("style")
-    <style>
-        .select2-search__field {
-            width: 100% !important
-        }
-    </style>
+	<style>
+		.select2-search__field {
+			width: 100% !important
+		}
+	</style>
 @endpush
 
 @push("header")
-    <div class="page-header page-header-light">
-        <div class="page-header-content d-lg-flex">
-            <div class="d-flex">
-                <h4 class="page-title mb-0">
-                    Dashboard
-                </h4>
-            </div>
-        </div>
+	<div class="page-header page-header-light">
+		<div class="page-header-content d-lg-flex">
+			<div class="d-flex">
+				<h4 class="page-title mb-0">
+					Dashboard
+				</h4>
+			</div>
+		</div>
 
-        <div class="page-header-content d-lg-flex">
-            <div class="d-flex flex-fill w-xl-75 w-100">
-                <div class="breadcrumb py-2">
-                    <a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
-                    <a class="breadcrumb-item" href="#">Dashboard</a>
-                </div>
-                <a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
-                    data-bs-toggle="collapse" href="#breadcrumb_elements">
-                    <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
-                </a>
-            </div>
-            <div class="d-flex w-100 py-2 bg-white gap-2">
-                <select 
-                    class="form-control select" 
-                    data-placeholder="All Locations" 
-                    name="branches" 
-                    id="branches"
-                    multiple="multiple"
-                >
-                    <option></option>
-                    @foreach ($device_locations as $device_location)
-                        @php
-                            $selected = in_array($device_location->branch, request()->locations ?? [])
-                                ? "selected"
-                                : "";
-                        @endphp
-                        <option {{ $selected }} value="{{ $device_location->branch }}">
-                            {{ ucfirst($device_location->branch) }}
-                        </option>
-                    @endforeach
-                </select>
-                <select 
-                    class="form-control select" 
-                    data-placeholder="All Sub-Locations" 
-                    name="buildings" 
-                    id="buildings"
-                    multiple="multiple"
-                >
-                    <option></option>
-                    @foreach ($device_sub_locations as $device_sub_location)
-                        @php
-                            $selected = in_array($device_sub_location->building, request()->locations ?? [])
-                                ? "selected"
-                                : "";
-                        @endphp
-                        <option {{ $selected }} value="{{ $device_sub_location->building }}">
-                            {{ ucfirst($device_sub_location->building) }}
-                        </option>
-                    @endforeach
-                </select>
-                <select 
-                    class="form-control select" 
-                    data-placeholder="All Location-ID" 
-                    name="rooms" 
-                    id="rooms"
-                    multiple="multiple"
-                >
-                    <option></option>
-                    @foreach ($device_location_ids as $device_location_id)
-                        @php
-                            $selected = in_array($device_location_id->room, request()->locations ?? [])
-                                ? "selected"
-                                : "";
-                        @endphp
-                        <option {{ $selected }} value="{{ $device_location_id->room }}">
-                            {{ ucfirst($device_location_id->room) }}
-                        </option>
-                    @endforeach
-                </select>
-                <input 
-                    type="text" 
-                    class="form-control datepicker-basic" 
-                    placeholder="Pick Start & End Date" 
-                    name="date"
-                >
-            </div>
-        </div>
-    </div>
+		<div class="page-header-content d-lg-flex">
+			<div class="d-flex flex-fill w-xl-75 w-100">
+					<div class="breadcrumb py-2">
+						<a class="breadcrumb-item" href="/admin/dashboard"><i class="ph-house"></i></a>
+						<a class="breadcrumb-item" href="#">Dashboard</a>
+					</div>
+					<a class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
+						data-bs-toggle="collapse" href="#breadcrumb_elements">
+						<i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+					</a>
+			</div>
+			<div class="d-flex w-100 py-2 bg-white gap-2">
+					<select 
+						class="form-control select" 
+						data-placeholder="All Locations" 
+						name="branches" 
+						id="branches"
+						multiple="multiple"
+					>
+						<option></option>
+						@foreach ($device_locations as $device_location)
+							@php
+									$selected = in_array($device_location->branch, request()->locations ?? [])
+										? "selected"
+										: "";
+							@endphp
+							<option {{ $selected }} value="{{ $device_location->branch }}">
+									{{ ucfirst($device_location->branch) }}
+							</option>
+						@endforeach
+					</select>
+					<select 
+						class="form-control select" 
+						data-placeholder="All Sub-Locations" 
+						name="buildings" 
+						id="buildings"
+						multiple="multiple"
+					>
+						<option></option>
+						@foreach ($device_sub_locations as $device_sub_location)
+							@php
+									$selected = in_array($device_sub_location->building, request()->locations ?? [])
+										? "selected"
+										: "";
+							@endphp
+							<option {{ $selected }} value="{{ $device_sub_location->building }}">
+									{{ ucfirst($device_sub_location->building) }}
+							</option>
+						@endforeach
+					</select>
+					<select 
+						class="form-control select" 
+						data-placeholder="All Location-ID" 
+						name="rooms" 
+						id="rooms"
+						multiple="multiple"
+					>
+						<option></option>
+						@foreach ($device_location_ids as $device_location_id)
+							@php
+									$selected = in_array($device_location_id->room, request()->locations ?? [])
+										? "selected"
+										: "";
+							@endphp
+							<option {{ $selected }} value="{{ $device_location_id->room }}">
+									{{ ucfirst($device_location_id->room) }}
+							</option>
+						@endforeach
+					</select>
+					<input 
+						type="text" 
+						class="form-control datepicker-basic" 
+						placeholder="Pick Start & End Date" 
+						name="date"
+					>
+			</div>
+		</div>
+	</div>
 @endpush
 
 @section("content")
@@ -128,6 +128,7 @@
 	@endphp
 	@include('admin.dashboard_v2_helper')
 	@include('admin.dashboard_v2_html_appender')
+	@include('admin.dashboard_v2_registered_locations')
 	@push('js')
 		<script>
 			document.addEventListener('DOMContentLoaded', async () => {

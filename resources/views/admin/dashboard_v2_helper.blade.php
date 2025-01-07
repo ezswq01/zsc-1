@@ -87,8 +87,15 @@
 			data = status_type_widgets_convert(res);
 			print();
 		}
-		const print = () => {
-			$('#card-widgets').html('');
+		const print = async () => {
+			// get #card-widgets children except #card-widget-registered-location
+			$('#card-widgets')
+				.children()
+				.not('#card-widget-registered-location')
+				.not('#card-widget-inactive-location')
+				.not('#card-widget-active-location')
+				.remove();
+				
 			const card_widget_html = $('#card-widget-example');
 			const card_widget_modal_html = $('#card-widget-modal-example');
 
