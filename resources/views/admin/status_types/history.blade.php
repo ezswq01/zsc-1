@@ -265,7 +265,7 @@
 								<ul>
 									${data?.map(
 										(cam) => `
-											<li><a target="_blank" href="/">${cam.latlong}-id: ${cam.id}</a></li>
+											<li><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${cam.latlong}">${cam.latlong}-id: ${cam.id}</a></li>
 										`)?.join("") || "No Latlong Available"}
 								</ul>
 							`;

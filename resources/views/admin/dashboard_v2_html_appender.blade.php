@@ -41,6 +41,7 @@
 								<th>Sub-Location</th>
 								<th>Room</th>
 								<th>Cams</th>
+								<th>LatLong</th>
 							</tr>
 						</thead>
 						<tbody></tbody>
@@ -155,6 +156,7 @@
 						tbody_html += `<td class="align-middle">${device_status.device?.building}</td>`;
 						tbody_html += `<td class="align-middle">${device_status.device?.room}</td>`;
 						tbody_html += `<td class="align-middle"><ul class="mb-0">${device_status.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="/storage/${cam.file}">${cam.file_name}-id: ${cam.id}</a></li>`)?.join("") || "No Image Available"}</ul></td>`;
+						tbody_html += `<td class="align-middle"><ul class="mb-0">${device_status.device_log?.cam_payloads?.map((cam) => `<li><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${cam.latlong}">${cam.latlong}-id: ${cam.id}</a></li>`)?.join("") || "No LatLong Available"}</ul></td>`;
 						tbody_html += `</tr>`;
 
 						// html

@@ -297,11 +297,25 @@
 		}
 
 		document.addEventListener('DOMContentLoaded', async () => {
-			// location_widgets
+			await printRegisteredLocation();
+			setInterval(async () => {
+				await printRegisteredLocation();
+			}, 1000 * 60 * 1); // 1 minute
+		})
+
+		async function printRegisteredLocation() {
+			$('#card-widget-location-device').remove();
+			$('#card-widget-registered-location').remove();
+			$('#card-widget-active-location').remove();
+			$('#card-widget-inactive-location').remove();
+			$('#card-widget-location-device-modal-').remove();
+			$('#card-widget-location-device-modal-registered-device').remove();
+			$('#card-widget-location-device-modal-active-device').remove();
+			$('#card-widget-location-device-modal-inactive-device').remove();
 			var res = await getRegisteredLocation();
 			inactive_locations(card_widget_html, res);
 			active_locations(card_widget_html, res);
 			registered_locations(card_widget_html, res);
-		})
+		}
 	</script>
 @endif

@@ -396,8 +396,8 @@ public function getRegisteredLocations()
 {
 	$onlineDevices = Device::where('is_online', true)
 		->where(function($q) {
-			$q->where('last_ping_at', '>=', now()->subMinutes(15))
-			->orWhereNull('last_ping_at');
+			$q->where('last_ping_at', '>=', now()->subMinutes(15));
+			// ->orWhereNull('last_ping_at');
 		})
 		->get();
 	
