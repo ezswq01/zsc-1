@@ -304,6 +304,8 @@
 		})
 
 		async function printRegisteredLocation() {
+			var res = await getRegisteredLocation();
+			$('.modal-backdrop').remove();
 			$('#card-widget-location-device').remove();
 			$('#card-widget-registered-location').remove();
 			$('#card-widget-active-location').remove();
@@ -312,7 +314,6 @@
 			$('#card-widget-location-device-modal-registered-device').remove();
 			$('#card-widget-location-device-modal-active-device').remove();
 			$('#card-widget-location-device-modal-inactive-device').remove();
-			var res = await getRegisteredLocation();
 			inactive_locations(card_widget_html, res);
 			active_locations(card_widget_html, res);
 			registered_locations(card_widget_html, res);

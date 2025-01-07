@@ -88,6 +88,7 @@
 			print();
 		}
 		const print = async () => {
+			$('.modal-backdrop').remove();
 			$('#card-widgets')
 				.children()
 				.not('#card-widget-location-device')
