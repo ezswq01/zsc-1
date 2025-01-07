@@ -395,14 +395,12 @@ public function publishStreamingStop()
 public function getRegisteredLocations()
 {
 	$onlineDevices = Device::where('is_online', true)
-		->where(function($q) {
-			$q->where('last_ping_at', '>=', now()->subMinutes(15));
-			// ->orWhereNull('last_ping_at');
-		})
+		->where('last_ping_at', '>=', now()->subMinutes(15))
 		->get();
 	
 	$inactiveDevices = Device::where('is_online', false)
 		->orWhere('last_ping_at', '<', now()->subMinutes(15))
+		->orWhereNull('last_ping_at')
 		->get();
 
 	$registeredLocations = Device::all()
