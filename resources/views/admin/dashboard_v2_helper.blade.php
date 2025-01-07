@@ -88,12 +88,16 @@
 			print();
 		}
 		const print = async () => {
-			// get #card-widgets children except #card-widget-registered-location
 			$('#card-widgets')
 				.children()
+				.not('#card-widget-location-device')
 				.not('#card-widget-registered-location')
-				.not('#card-widget-inactive-location')
 				.not('#card-widget-active-location')
+				.not('#card-widget-inactive-location')
+				.not('#card-widget-location-device-modal-')
+				.not('#card-widget-location-device-modal-registered-device')
+				.not('#card-widget-location-device-modal-active-device')
+				.not('#card-widget-location-device-modal-inactive-device')
 				.remove();
 				
 			const card_widget_html = $('#card-widget-example');

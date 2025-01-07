@@ -14,6 +14,7 @@ class CamPayload extends Model
         'file',
         'file_name',
         'created_at',
-        'updated_at'
+        'updated_at',
+		  'latlong'
     ];
 }
