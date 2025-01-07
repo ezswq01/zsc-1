@@ -45,7 +45,8 @@ class MqttSubscribingCommand extends Command
 					Log::info("Received message on topic: {$topic}");
 
 					// is active logic
-					if ($message === "mainpingbyhost") {
+					$lowercase_message = strtolower($message);
+					if ($lowercase_message === "mainpingbyhost") {
 						echo "Received mainpingbyhost\n";
 						$room = explode('/', $topic)[3];
 						Device::where('room', $room)->update([
