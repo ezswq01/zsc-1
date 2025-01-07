@@ -36,6 +36,7 @@
 							<tr>
 								<th class="">No.</th>
 								<th>Location ID</th>
+								<th>Location Confirmation</th>
 							</tr>
 						</thead>
 						<tbody></tbody>
@@ -119,7 +120,11 @@
 					const tr  = $('<tr></tr>');
 					const td1 = $('<td></td>').text(index + 1);
 					const td2 = $('<td></td>').text(key);
-					tr.append(td1, td2);
+					const td3 = $('<td></td>').text(
+						data?.data?.inactiveLocations[key][0]['last_ping_at']
+							|| "No ping data"
+					);
+					tr.append(td1, td2, td3);
 					tbody.append(tr);
 				});
 			}
@@ -192,7 +197,11 @@
 					const tr  = $('<tr></tr>');
 					const td1 = $('<td></td>').text(index + 1);
 					const td2 = $('<td></td>').text(key);
-					tr.append(td1, td2);
+					const td3 = $('<td></td>').text(
+						data?.data?.activeLocations[key][0]['last_ping_at']
+							|| "No ping data" 
+					);
+					tr.append(td1, td2, td3);
 					tbody.append(tr);
 				});
 			}
@@ -266,7 +275,11 @@
 					const tr  = $('<tr></tr>');
 					const td1 = $('<td></td>').text(index + 1);
 					const td2 = $('<td></td>').text(key);
-					tr.append(td1, td2);
+					const td3 = $('<td></td>').text(
+						data?.data?.registeredLocations[key][0]['last_ping_at']
+							|| "No ping data"
+					);
+					tr.append(td1, td2, td3);
 					tbody.append(tr);
 				});
 			}
