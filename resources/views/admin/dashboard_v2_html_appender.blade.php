@@ -1,11 +1,11 @@
 <div class="row gx-3" id="card-widgets"></div>
 
 <!-- HTMLS -->
-<div id="card-widget-example" class="col-lg-4 col-12" style="display:none;">
+<div id="card-widget-example" class="col-lg-3 col-12" style="display:none;">
 	<div class="card text-white shadow-lg">
 		<div class="card-body">
 			<div class="d-flex justify-content-between align-items-start">
-					<h3 class="mb-0 display-3"></h3>
+					<h3 class="mb-0 display-4"></h3>
 					<div class="d-flex justify-content-between align-items-start gap-2">
 						<button type="button" class="btn btn-white p-1">
 							<i class="ph-table"></i>

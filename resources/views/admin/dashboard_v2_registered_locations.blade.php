@@ -1,9 +1,9 @@
 @if ($setting->location_widget)
-	<div id="card-widget-location-device" class="col-lg-4 col-12" style="display:none;">
+	<div id="card-widget-location-device" class="col-lg-3 col-12" style="display:none;">
 		<div class="card text-white shadow-lg">
 			<div class="card-body">
 				<div class="d-flex justify-content-between align-items-start">
-					<h3 class="mb-0 display-3"></h3>
+					<h3 class="mb-0 display-4"></h3>
 					<div class="d-flex justify-content-between align-items-start gap-2">
 						<button 
 							type="button" 
@@ -106,7 +106,7 @@
 
 			// widget name
 			cloned_card_widget_html.find('h6').text(
-				'In-Active Location'
+				'Inactive Location'
 			).attr(
 				'id', `card-widget-name-inactive-location`
 			);
@@ -131,7 +131,7 @@
 
 			// modal title
 			cloned_card_widget_modal_html.find('.modal-title').text(
-				'In-Active Location'
+				'Inactive Location'
 			).attr(
 				'id', `card-widget-location-device-modal-title-inactive-location`
 			);
