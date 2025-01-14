@@ -69,9 +69,13 @@
 				success: async function(response) {
 					return response;
 				},
-				error: function(error) {
+				error: async function(error) {
 					console.log(error);
-					alert('An error occured while retrieving location data!');
+					// alert('An error occured while retrieving location data!');
+					// re-try
+					setTimeout(async () => {
+						await getRegisteredLocation();
+					}, 1000 * 3 * 1); // 1 minute
 				}
 			})
 			return res;
