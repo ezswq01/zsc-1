@@ -19,7 +19,7 @@ class DeviceStatusController extends Controller
 
     public function notes(Request $request)
     {
-        $device_status = device_status::find($request->device_status_id);
+        $device_status = DeviceStatus::find($request->device_status_id);
         $old_notes = $device_status->notes;
         $device_status->notes = $request->notes;
         $device_status->marked_as_read = $old_notes === "Normal State" ? true : false;
