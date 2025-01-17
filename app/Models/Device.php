@@ -70,7 +70,8 @@ class Device extends Model
 							'device_id' => $device_id,
 							'device_log_id' => $device_log_id,
 							'status_type_id' => $val->status_type_id,
-							'marked_as_read' => $val->normal_state ? true : false,
+							// 'marked_as_read' => $val->normal_state ? true : false,
+							'marked_as_read' => false, // need notes to set into normal state
 							'notes' => $val->normal_state ? "Normal State" : ""
 						]
 					);

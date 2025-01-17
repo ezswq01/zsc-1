@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpMqtt\Client\Facades\MQTT;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class DeviceController extends Controller
 {
@@ -448,9 +449,9 @@ public function publish(Request $request)
 
 		// save publish action to device log
 		DeviceLog::create([
-				'device_id' => $device->id,
-				'value' => $publish_action->value,
-				'type' => 'publish'
+			'device_id' => $device->id,
+			'value' => $publish_action->value,
+			'type' => 'publish'
 		]);
 
 		// @note : this is not needed
@@ -460,11 +461,13 @@ public function publish(Request $request)
 		// dashboard action only.
 		// delete current device_status to point that i handled.
 		if (!$request->is_testing) {
-				$device_status->update([
-					// 'marked_as_read' => false,
-					'notes' => $request->notes,
-					'user_id' => auth()->user()->id
-				]);
+			$old_notes = $device_status->notes;
+			$device_status->update([
+				// 'marked_as_read' => false,
+				'marked_as_read' => $old_notes === "Normal State" ? true : false,
+				'notes' => $request->notes,
+				'user_id' => auth()->user()->id
+			]);
 		}
 	});
 
