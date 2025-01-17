@@ -107,7 +107,9 @@ class Device extends Model
 						'notif_status' => 'unread',
 						'device_id' => $device_id,
 						'absent_device_id' => null,
-						'message' => "Device {$device_id_unique} has new {$status_type->name}."
+						'message' => "Device {$device_id_unique} has new {$status_type->name}. State: "
+							. ($val->normal_state ? "Normal" : "Abnormal")
+							. ". Value: $value",
 					]);
 				}
 			}
