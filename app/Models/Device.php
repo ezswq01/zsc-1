@@ -95,7 +95,7 @@ class Device extends Model
 				$status_type_widgets = StatusTypeWidget::where('status_type_id', $status_type->id)
 					->where('setting_id', $setting->id)
 					->get();
-				if ($status_type_widgets->count() > 0 && !$val->normal_state) {
+				if ($status_type_widgets->count() > 0) {
 					TriggerJob::dispatch($value, $status_type->name);
 					Notification::route('telegram', $setting->chat_id_telegram)->notify(
 						new TriggerTelegramNotification(
@@ -108,7 +108,7 @@ class Device extends Model
 						'device_id' => $device_id,
 						'absent_device_id' => null,
 						'message' => "Device {$device_id_unique} has new {$status_type->name}. State: "
-							. ($val->normal_state ? "Normal" : "Abnormal")
+							. ($val->normal_state ? "OK" : "NOT OK")
 							. ". Value: $value",
 					]);
 				}
