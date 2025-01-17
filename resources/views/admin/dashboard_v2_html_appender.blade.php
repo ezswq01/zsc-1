@@ -303,7 +303,7 @@
 								var device_status_id = action_html.getAttribute('data-device-status-id');
 								var log_id = action_html.getAttribute('data-log-id');
 								action_html.addEventListener('click', () => {
-									if (!confirm('Are you sure you want to publish this note?')) return;
+									// if (!confirm('Are you sure you want to publish this note?')) return;
 									const textarea = document.querySelector(
 										'#card-widget-note-modal-' 
 										+ device_status.id 
@@ -341,7 +341,7 @@
 							+ ' .card-widget-note-modal-submit-note'
 						).addEventListener('click', () => {
 							if (device_status.noted) return alert('Note already published!');
-							if (!confirm('Are you sure you want to publish this note?')) return;
+							// if (!confirm('Are you sure you want to publish this note?')) return;
 							const textarea = document.querySelector(
 								'#card-widget-note-modal-' 
 								+ device_status.id 

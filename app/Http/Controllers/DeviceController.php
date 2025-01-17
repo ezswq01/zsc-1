@@ -464,8 +464,8 @@ public function publish(Request $request)
 			$old_notes = $device_status->notes;
 			$device_status->update([
 				// 'marked_as_read' => false,
-				'marked_as_read' => $old_notes === "Normal State" ? true : false,
-				'notes' => $request->notes,
+				// 'marked_as_read' => $old_notes === "Normal State" ? true : false,
+				// 'notes' => $request->notes,
 				'user_id' => auth()->user()->id
 			]);
 		}

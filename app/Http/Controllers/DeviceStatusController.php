@@ -19,17 +19,18 @@ class DeviceStatusController extends Controller
 
     public function notes(Request $request)
     {
-        $deviceStatus = DeviceStatus::find($request->device_status_id);
-        $deviceStatus->notes = $request->notes;
-        $deviceStatus->marked_as_read = false;
-        $deviceStatus->noted = true;
-        $deviceStatus->user_id = auth()->user()->id;
-        $deviceStatus->save();
+        $device_status = device_status::find($request->device_status_id);
+        $old_notes = $device_status->notes;
+        $device_status->notes = $request->notes;
+        $device_status->marked_as_read = $old_notes === "Normal State" ? true : false;
+        $device_status->noted = true;
+        $device_status->user_id = auth()->user()->id;
+        $device_status->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Notes updated successfully.',
-            'device_status' => $deviceStatus->load('status_type.status_type_widget')
+            'device_status' => $device_status->load('status_type.status_type_widget')
         ]);
     }
 
