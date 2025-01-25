@@ -37,6 +37,9 @@
 								<th class="">No.</th>
 								<th>Location ID</th>
 								<th>Location Confirmation</th>
+								<th>Active Hour</th>
+								<th>Inactive Hour</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody></tbody>
@@ -80,6 +83,7 @@
 			})
 			return res;
 		}
+
 		const inactive_locations = async (html, data) => {
 			var cloned_card_widget_html = html.clone();
 			var cloned_card_widget_modal_html = card_widget_modal_html.clone();
@@ -128,7 +132,25 @@
 						data?.data?.inactiveLocations[key][0]['last_ping_at']
 							|| "No ping data"
 					);
-					tr.append(td1, td2, td3);
+                    const td4 = $('<td></td>').text(
+                        data?.data?.inactiveLocations[key][0]['active_hour']
+                            || "No active hour data"
+                    );
+                    const td5 = $('<td></td>').text(
+                        data?.data?.inactiveLocations[key][0]['inactive_hour']
+                            || "No inactive hour data"
+                    );
+                    const td6 = $('<td></td>').html(
+                        `
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="getHour('${data?.data?.inactiveLocations[key][0]['id']}')"
+                            >
+                                <i class="ph-clock"></i>
+                            </button>
+                        `
+                    );
+					tr.append(td1, td2, td3, td4, td5, td6);
 					tbody.append(tr);
 				});
 			}
@@ -157,6 +179,7 @@
 			$('#card-widgets').prepend(cloned_card_widget_html);
 			$('#card-widget-inactive-location').prepend(cloned_card_widget_modal_html);
 		}
+
 		const active_locations = async (html, data) => {
 			var cloned_card_widget_html = html.clone();
 			var cloned_card_widget_modal_html = card_widget_modal_html.clone();
@@ -205,7 +228,25 @@
 						data?.data?.activeLocations[key][0]['last_ping_at']
 							|| "No ping data" 
 					);
-					tr.append(td1, td2, td3);
+                    const td4 = $('<td></td>').text(
+                        data?.data?.activeLocations[key][0]['active_hour']
+                            || "No active hour data"
+                    );
+                    const td5 = $('<td></td>').text(
+                        data?.data?.activeLocations[key][0]['inactive_hour']
+                            || "No inactive hour data"
+                    );
+                    const td6 = $('<td></td>').html(
+                        `
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="getHour('${data?.data?.activeLocations[key][0]['id']}')"
+                            >
+                                <i class="ph-clock"></i>
+                            </button>
+                        `
+                    );
+					tr.append(td1, td2, td3, td4, td5, td6);
 					tbody.append(tr);
 				});
 			}
@@ -234,6 +275,7 @@
 			$('#card-widgets').prepend(cloned_card_widget_html);
 			$('#card-widget-active-location').prepend(cloned_card_widget_modal_html);
 		}
+
 		const registered_locations = async (html, data) => {
 
 			var cloned_card_widget_html = html.clone();
@@ -283,7 +325,25 @@
 						data?.data?.registeredLocations[key][0]['last_ping_at']
 							|| "No ping data"
 					);
-					tr.append(td1, td2, td3);
+                    const td4 = $('<td></td>').text(
+                        data?.data?.registeredLocations[key][0]['active_hour']
+                            || "No active hour data"
+                    );
+                    const td5 = $('<td></td>').text(
+                        data?.data?.registeredLocations[key][0]['inactive_hour']
+                            || "No inactive hour data"
+                    );
+                    const td6 = $('<td></td>').html(
+                        `
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="getHour('${data?.data?.registeredLocations[key][0]['id']}')"
+                            >
+                                <i class="ph-clock"></i>
+                            </button>
+                        `
+                    );
+					tr.append(td1, td2, td3, td4, td5, td6);
 					tbody.append(tr);
 				});
 			}
@@ -312,6 +372,29 @@
 			$('#card-widgets').prepend(cloned_card_widget_html);
 			$('#card-widget-registered-location').prepend(cloned_card_widget_modal_html);
 		}
+
+        function getHour(deviceId) {
+            $.ajax({
+                url: '/admin/devices/get-hour',
+                type: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    device_id: deviceId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Successfully requested for hour data!');
+                    } else {
+                        console.log(response);
+                        alert(`An error occured while retrieving hour data!`);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert('An error occured while retrieving hour data!');
+                }
+            })
+        }
 
 		document.addEventListener('DOMContentLoaded', async () => {
 			await printRegisteredLocation();

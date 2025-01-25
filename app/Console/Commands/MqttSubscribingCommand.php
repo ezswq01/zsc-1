@@ -44,6 +44,43 @@ class MqttSubscribingCommand extends Command
 				DB::transaction(function () use ($topic, $message) {
 					Log::info("Received message on topic: {$topic}");
 
+
+                    $lowercase_topic = strtolower($topic);
+                    $lowercase_message = strtolower($message);
+					if (str_contains($lowercase_topic, "getactivehour") || str_contains($lowercase_topic, "getinactivehour")) {
+                        if (str_contains($lowercase_topic, "getactivehour")) {
+                            echo "Received getactivehour\n";
+                            $room = explode('/', $topic)[3];
+                            $last_active_hour = explode(":", $message);
+                            $hour = $last_active_hour[0];
+                            $hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
+                            $minute = $last_active_hour[1];
+                            $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
+                            Device::where('room', $room)->update([
+                                'active_hour' => $hour . ":" . $minute
+                            ]);
+                        }
+                        if (str_contains($lowercase_topic, "getinactivehour")) {
+                            echo "Received getinactivehour\n";
+                            $room = explode('/', $topic)[3];
+                            $last_inactive_hour = explode(":", $message);
+                            $hour = $last_inactive_hour[0];
+                            $hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
+                            $minute = $last_inactive_hour[1];
+                            $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
+                            Device::where('room', $room)->update([
+                                'inactive_hour' => $hour . ":" . $minute
+                            ]);
+                        }
+                        NewDataEvent::dispatch([
+                            'type' => 'gethourbyroom',
+                            'topic' => $topic,
+                            'plain_payload' => $message,
+                        ]);
+                        return;
+                    }
+
+
 					// is active logic
 					$lowercase_message = strtolower($message);
 					if ($lowercase_message === "mainpingbyhost") {

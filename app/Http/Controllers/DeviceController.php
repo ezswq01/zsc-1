@@ -393,6 +393,45 @@ public function publishStreamingStop()
 	}
 }
 
+public function getHours(Request $request)
+{
+	$device_id = $request->device_id;
+	$device = Device::find($device_id);
+    $active_topic = implode('/', array(
+        Setting::first()->mqtt_main_topic ?? "mcc",
+        str_replace(" ","-",strtolower($device->branch)),
+        str_replace(" ","-",strtolower($device->building)),
+        str_replace(" ","-",strtolower($device->room)),
+        "getactivehour",
+        "pub"
+    ));
+    $inactiveTopic = implode('/', array(
+        Setting::first()->mqtt_main_topic ?? "mcc",
+        str_replace(" ","-",strtolower($device->branch)),
+        str_replace(" ","-",strtolower($device->building)),
+        str_replace(" ","-",strtolower($device->room)),
+        "getinactivehour",
+        "pub"
+    ));
+    Log::info("Active Topic: {$active_topic}");
+    Log::info("Inactive Topic: {$inactiveTopic}");
+	try {
+		$mqtt = MQTT::connection();
+        $mqtt->publish($active_topic, "getactivehour", 1);
+        $mqtt->publish($inactiveTopic, "getinactivehour", 1);
+		$mqtt->loop(true, true);
+		return response()->json([
+			'success' => true,
+			'message' => 'Streaming requested.',
+		]);
+	} catch (\Exception $e) {
+		return response()->json([
+			'success' => false,
+			'message' => 'Failed to request streaming. ' . $e->getMessage(),
+		]);
+	}
+}
+
 public function getRegisteredLocations()
 {
 	$onlineDevices = Device::where('is_online', true)

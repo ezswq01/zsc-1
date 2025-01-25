@@ -153,6 +153,8 @@
 					iframe.attr('src', 'https://' + e?.message?.plain_payload);
 					iframe.show();
 					iframe_loading.hide();
+				} else if (e?.message?.type === "gethourbyroom") {
+                    await printRegisteredLocation();
 				} else {
 					triggerFetch(); 
 					audio.play();

@@ -32,6 +32,8 @@ class Device extends Model
 		'updated_at',
 		'is_online',
 		'last_ping_at',
+        'active_hour',
+        'inactive_hour',
 	];
 
 	public function device_type()
