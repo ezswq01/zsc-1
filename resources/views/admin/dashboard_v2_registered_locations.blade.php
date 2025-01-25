@@ -146,7 +146,19 @@
                                 class="btn btn-sm btn-primary" 
                                 onclick="getHour('${data?.data?.inactiveLocations[key][0]['id']}')"
                             >
-                                <i class="ph-clock"></i>
+                                Get Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setActiveHour('${data?.data?.inactiveLocations[key][0]['id']}')"
+                            >
+                                Set Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setInctiveHour('${data?.data?.inactiveLocations[key][0]['id']}')"
+                            >
+                                Set Inctive Hours
                             </button>
                         `
                     );
@@ -242,7 +254,19 @@
                                 class="btn btn-sm btn-primary" 
                                 onclick="getHour('${data?.data?.activeLocations[key][0]['id']}')"
                             >
-                                <i class="ph-clock"></i>
+                                Get Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setActiveHour('${data?.data?.activeLocations[key][0]['id']}')"
+                            >
+                                Set Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setInctiveHour('${data?.data?.activeLocations[key][0]['id']}')"
+                            >
+                                Set Inctive Hours
                             </button>
                         `
                     );
@@ -339,7 +363,19 @@
                                 class="btn btn-sm btn-primary" 
                                 onclick="getHour('${data?.data?.registeredLocations[key][0]['id']}')"
                             >
-                                <i class="ph-clock"></i>
+                                Get Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setActiveHour('${data?.data?.registeredLocations[key][0]['id']}')"
+                            >
+                                Set Active Hours
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-primary" 
+                                onclick="setInctiveHour('${data?.data?.registeredLocations[key][0]['id']}')"
+                            >
+                                Set Inctive Hours
                             </button>
                         `
                     );
@@ -392,6 +428,76 @@
                 error: function(error) {
                     console.log(error);
                     alert('An error occured while retrieving hour data!');
+                }
+            })
+        }
+
+        function setActiveHour(deviceId) {
+            const hour = prompt('Please enter the hour value:');
+            if (!hour) {
+                alert('Please enter a valid hour value!');
+                return;
+            }
+            const minute = prompt('Please enter the minute value:');
+            if (!minute) {
+                alert('Please enter a valid minute value!');
+                return;
+            }
+            const time = hour + ':' + minute;
+            $.ajax({
+                url: '/admin/devices/set-active-hour',
+                type: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    device_id: deviceId,
+                    time: time,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Successfully requested for changing active hour data!');
+                    } else {
+                        console.log(response);
+                        alert(`An error occured while changing active hour data!`);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert('An error occured while changing hour data!');
+                }
+            })
+        }
+
+        function setInctiveHour(deviceId) {
+            const hour = prompt('Please enter the hour value:');
+            if (!hour) {
+                alert('Please enter a valid hour value!');
+                return;
+            }
+            const minute = prompt('Please enter the minute value:');
+            if (!minute) {
+                alert('Please enter a valid minute value!');
+                return;
+            }
+            const time = hour + ':' + minute;
+            $.ajax({
+                url: '/admin/devices/set-inactive-hour',
+                type: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    device_id: deviceId,
+                    time: time,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Successfully requested for changing inactive hour data!');
+                    } else {
+                        console.log(response);
+                        alert(`An error occured while changing inactive hour data!`);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert('An error occured while changing hour data!');
                 }
             })
         }

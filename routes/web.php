@@ -62,6 +62,8 @@ Route::name('admin.')->prefix('admin')->middleware('auth')->group(function () {
     Route::post('/devices/publish-streaming-stop', [DeviceController::class, 'publishStreamingStop'])->name('devices.publish-streaming-stop');
     Route::post('/devices/get-registered-locations', [DeviceController::class, 'getRegisteredLocations'])->name('devices.get-reg-locations');
     Route::post('/devices/get-hour', [DeviceController::class, 'getHours'])->name('devices.get-hour');
+    Route::post('/devices/set-active-hour', [DeviceController::class, 'setActiveHours'])->name('devices.set-active-hour');
+    Route::post('/devices/set-inactive-hour', [DeviceController::class, 'setInactiveHours'])->name('devices.set-inactive-hour');
     Route::post('/absent_devices/publish', [AbsentDeviceController::class, 'publish'])->name('absent_devices.publish');
     Route::get('/api/devices/device_branches', [DeviceController::class, 'branches'])->name('devices.branches');
     Route::get('/api/devices/device_buildings', [DeviceController::class, 'buildings'])->name('devices.buildings');

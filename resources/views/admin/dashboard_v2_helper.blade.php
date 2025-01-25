@@ -123,7 +123,7 @@
 
 		// WEBSOCKET
 		window.Echo.channel('laravel_database_newDataChannel')
-			.listen('.newDataEvent', (e) => {
+			.listen('.newDataEvent', async (e) => {
 				console.log(e)
 				if (e?.message?.type === "stream_listener") {
 					var topic = e?.message?.topic;
