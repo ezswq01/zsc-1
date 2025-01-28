@@ -71,24 +71,27 @@ class Device extends Model
             if (eval("return $expression;"))
             {
                 if ($val->normal_state) {
-                    $last_trigger_device_status = DeviceStatus::where('device_id', $device_id)
+                    $last_trigger_device_status = DeviceStatus::orderBy('id', 'desc')
+                        ->where('device_id', $device_id)
                         ->where('status_type_id', $val->status_type_id)
-                        ->orderBy('created_at', 'desc')
                         ->where('notes', '!=', 'Normal State')
                         ->first();
 
                     if ($last_trigger_device_status) {
                         if ($last_trigger_device_status->notes != "") {
-                            $last_trigger_device_status->update([
-                                'marked_as_read' => true,
-                            ]);
                             $status_response = DeviceStatus::create([
                                 'device_id' => $device_id,
                                 'device_log_id' => $device_log_id,
                                 'status_type_id' => $val->status_type_id,
-                                'marked_as_read' => $last_trigger_device_status->marked_as_read,
+                                'marked_as_read' => true,
                                 'notes' => 'Normal State',
                             ]);
+                            DeviceStatus::where('device_id', $device_id)
+                                ->where('status_type_id', $val->status_type_id)
+                                ->where('notes', '!=', 'Normal State')
+                                ->update([
+                                    'marked_as_read' => true
+                                ]);
                         } else {
                             $status_response = DeviceStatus::create([
                                 'device_id' => $device_id,

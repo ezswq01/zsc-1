@@ -34,7 +34,6 @@ class DeviceStatusController extends Controller
         }
 
         $device_status = DeviceStatus::find($request->device_status_id);
-        $id = $device_status->id;
         $device_id = $device_status->device_id;
         $status_type_id = $device_status->status_type_id;
 
@@ -51,6 +50,12 @@ class DeviceStatusController extends Controller
             $device_status->noted = true;
             $device_status->user_id = auth()->user()->id;
             $device_status->save();
+            DeviceStatus::where('device_id', $device_id)
+                ->where('status_type_id', $status_type_id)
+                ->where('notes', '!=', 'Normal State')
+                ->update([
+                    'marked_as_read' => true
+                ]);
         } else {
             $device_status->notes = $request->notes;
             $device_status->marked_as_read = false;
