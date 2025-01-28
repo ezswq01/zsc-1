@@ -19,45 +19,13 @@ class DeviceStatusController extends Controller
 
     public function notes(Request $request)
     {
-        if (!$request->notes) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Notes is required.'
-            ], 500);
-        }
-
-        if ($request->notes === 'Normal State') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Notes cannot be Normal State!'
-            ], 500);
-        }
-
         $device_status = DeviceStatus::find($request->device_status_id);
-        $id = $device_status->id;
-        $device_id = $device_status->device_id;
-        $status_type_id = $device_status->status_type_id;
-
-        $normal_state_device_status = DeviceStatus::where('device_id', $device_id)
-            ->where('status_type_id', $status_type_id)
-            ->where('notes', 'Normal State')
-            ->where('created_at', '>', $device_status->created_at)
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        if ($normal_state_device_status) {
-            $device_status->notes = $request->notes;
-            $device_status->marked_as_read = true;
-            $device_status->noted = true;
-            $device_status->user_id = auth()->user()->id;
-            $device_status->save();
-        } else {
-            $device_status->notes = $request->notes;
-            $device_status->marked_as_read = false;
-            $device_status->noted = true;
-            $device_status->user_id = auth()->user()->id;
-            $device_status->save();
-        }
+        $old_notes = $device_status->notes;
+        $device_status->notes = $request->notes;
+        $device_status->marked_as_read = $old_notes === "Normal State" ? true : false;
+        $device_status->noted = true;
+        $device_status->user_id = auth()->user()->id;
+        $device_status->save();
 
         return response()->json([
             'success' => true,

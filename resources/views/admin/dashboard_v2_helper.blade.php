@@ -11,12 +11,20 @@
 					status_type_widgets: res.status_type_widgets.map(
 						(stw) => {
 							const last_status_not_marked_as_read = 
-							stw?.status_type?.device_status?.at(0)?.marked_as_read == false;
+							stw?.status_type?.device_status?.at(0)?.marked_as_read == false &&
+                            stw?.status_type?.device_status?.at(0)?.notes !== "Normal State";
 
 							const status_not_marked_as_read = 
 							stw?.status_type?.device_status?.filter(
-									(item) => item.marked_as_read == false
+									(item) => (
+                                        item.marked_as_read == false &&
+                                        item.notes !== "Normal State"
+                                    )
 							);
+
+                            console.log(
+                                stw?.status_type?.device_status,
+                            )
 
 							return {
 								...stw,
@@ -39,40 +47,40 @@
 			let date = $('.datepicker-basic').val();
 			let url = '{{ route("dashboard.ajax") }}';
 			if (branches && branches.length > 0) {
-					branches.forEach(element => {
-						if (url.indexOf('?') === -1) {
-							url = `${url}?branches[]=${element}`
-						} else {
-							url = `${url}&branches[]=${element}`
-						}
-					});
+                branches.forEach(element => {
+                    if (url.indexOf('?') === -1) {
+                        url = `${url}?branches[]=${element}`
+                    } else {
+                        url = `${url}&branches[]=${element}`
+                    }
+                });
 			}
 			if (buildings && buildings.length > 0) {
-					buildings.forEach(element => {
-						if (url.indexOf('?') === -1) {
-							url = `${url}?buildings[]=${element}`
-						} else {
-							url = `${url}&buildings[]=${element}`
-						}
-					});
+                buildings.forEach(element => {
+                    if (url.indexOf('?') === -1) {
+                        url = `${url}?buildings[]=${element}`
+                    } else {
+                        url = `${url}&buildings[]=${element}`
+                    }
+                });
 			}
 			if (rooms && rooms.length > 0) {
-					rooms.forEach(element => {
-						if (url.indexOf('?') === -1) {
-							url = `${url}?rooms[]=${element}`
-						} else {
-							url = `${url}&rooms[]=${element}`
-						}
-					});
+                rooms.forEach(element => {
+                    if (url.indexOf('?') === -1) {
+                        url = `${url}?rooms[]=${element}`
+                    } else {
+                        url = `${url}&rooms[]=${element}`
+                    }
+                });
 			}
 			if (date) {
-					const dateParams = new URLSearchParams();
-					dateParams.append('date', date);
-					if (url.indexOf('?') === -1) {
-						url = `${url}?${dateParams.toString()}`;
-					} else {
-						url = `${url}&${dateParams.toString()}`;
-					}
+                const dateParams = new URLSearchParams();
+                dateParams.append('date', date);
+                if (url.indexOf('?') === -1) {
+                    url = `${url}?${dateParams.toString()}`;
+                } else {
+                    url = `${url}&${dateParams.toString()}`;
+                }
 			}
 			await getFetch(url);
 		}
@@ -124,7 +132,7 @@
 		// WEBSOCKET
 		window.Echo.channel('laravel_database_newDataChannel')
 			.listen('.newDataEvent', async (e) => {
-				console.log(e)
+                console.log(e?.message?.data?.at(0))
 				if (e?.message?.type === "stream_listener") {
 					var topic = e?.message?.topic;
 					var topicapp = topic.split('/')[0];
@@ -156,8 +164,12 @@
 				} else if (e?.message?.type === "gethourbyroom") {
                     await printRegisteredLocation();
 				} else {
-					triggerFetch(); 
-					audio.play();
+                    await triggerFetch(); 
+                    if (e?.message?.data?.at(0)?.notes === "Normal State") {
+                        // do nothing
+                    } else {
+                        audio.play();
+                    }
 				}
 			})
 			.listen('.camDataEvent', (e) => {

@@ -71,43 +71,29 @@ class Device extends Model
             if (eval("return $expression;"))
             {
                 if ($val->normal_state) {
-                    $last_trigger_device_status = DeviceStatus::where('device_id', $device_id)
+                    $device_status_before = DeviceStatus::where('device_id', $device_id)
                         ->where('status_type_id', $val->status_type_id)
                         ->orderBy('created_at', 'desc')
-                        ->where('notes', '!=', 'Normal State')
                         ->first();
-
-                    if ($last_trigger_device_status) {
-                        if ($last_trigger_device_status->notes != "") {
-                            $last_trigger_device_status->update([
-                                'marked_as_read' => true,
-                            ]);
-                            $status_response = DeviceStatus::create([
-                                'device_id' => $device_id,
-                                'device_log_id' => $device_log_id,
-                                'status_type_id' => $val->status_type_id,
-                                'marked_as_read' => $last_trigger_device_status->marked_as_read,
-                                'notes' => 'Normal State',
-                            ]);
-                        } else {
-                            $status_response = DeviceStatus::create([
-                                'device_id' => $device_id,
-                                'device_log_id' => $device_log_id,
-                                'status_type_id' => $val->status_type_id,
-                                'marked_as_read' => false,
-                                'notes' => 'Normal State',
-                            ]);
-                            
-                        }
-                    } else {
-                        $status_response = DeviceStatus::create([
-                            'device_id' => $device_id,
-                            'device_log_id' => $device_log_id,
-                            'status_type_id' => $val->status_type_id,
-                            'marked_as_read' => false,
-                            'notes' => "",
-                        ]);
+                    Log::info("DSB: " . json_encode($device_status_before));
+                    $notes = "";
+                    if ($val->normal_state && $device_status_before->noted)
+                    {
+                        $notes = $device_status_before->notes;
                     }
+                    else
+                    {
+                        $notes = $val->normal_state ? "Normal State" : "";
+                    }
+                    $status_response = DeviceStatus::create([
+                        'device_id' => $device_id,
+                        'device_log_id' => $device_log_id,
+                        'status_type_id' => $val->status_type_id,
+                        'marked_as_read' => $val->normal_state && (
+                            $device_status_before->noted || $device_status_before->marked_as_read
+                        ) === true ? true : false,
+                        'notes' => $notes,
+                    ]);
                 } else {
                     $status_response = DeviceStatus::create([
                         'device_id' => $device_id,

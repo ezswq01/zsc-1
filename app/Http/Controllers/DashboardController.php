@@ -43,6 +43,8 @@ class DashboardController extends Controller
                     {
                         $subquery->select(DB::raw('MAX(id)'))
                             ->from('device_status')
+                            ->where('notes', '!=', 'Normal State')
+                            ->where('marked_as_read', false)
                             ->groupBy('device_id');
                     })
                     ->with('device.publish_action')
