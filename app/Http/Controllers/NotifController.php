@@ -9,7 +9,9 @@ class NotifController extends Controller
 {
     public function index(Request $request)
     {
-        $notif = Notif::with('absent_device', 'device')->where('notif_status', '!=', 'read');
+        $notif = Notif::with('absent_device', 'device')
+            ->where('notif_status', '!=', 'read')
+            ->where('message', 'LIKE', '%NOT OK.%');
 
         return response()->json([
             'success' => true,
