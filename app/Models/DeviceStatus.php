@@ -26,7 +26,8 @@ class DeviceStatus extends Model
         'noted',
         'notes',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'is_normal_state',
     ];
 
     public function device()

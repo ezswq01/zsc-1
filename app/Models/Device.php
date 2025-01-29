@@ -84,13 +84,15 @@ class Device extends Model
                                 'device_log_id' => $device_log_id,
                                 'status_type_id' => $val->status_type_id,
                                 'marked_as_read' => true,
+                                'is_normal_state' => true,
                                 'notes' => 'Normal State',
                             ]);
                             DeviceStatus::where('device_id', $device_id)
                                 ->where('status_type_id', $val->status_type_id)
                                 ->where('notes', '!=', 'Normal State')
                                 ->update([
-                                    'marked_as_read' => true
+                                    'marked_as_read' => true,
+                                    'is_normal_state' => true
                                 ]);
                         } else {
                             $status_response = DeviceStatus::create([
@@ -102,6 +104,12 @@ class Device extends Model
                             ]);
                             
                         }
+                        DeviceStatus::where('device_id', $device_id)
+                            ->where('status_type_id', $val->status_type_id)
+                            ->where('notes', '!=', 'Normal State')
+                            ->update([
+                                'is_normal_state' => true
+                            ]);
                     } else {
                         $status_response = DeviceStatus::create([
                             'device_id' => $device_id,

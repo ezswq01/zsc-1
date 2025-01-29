@@ -63,7 +63,11 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			</div>
 			<div class="modal-body">
-					<textarea class="form-control" rows="5" style="resize: none;"></textarea>
+					<textarea class="form-control mb-2" rows="5" style="resize: none;"></textarea>
+                    <div class="d-flex gap-2 align-items-center">
+                        <span>State: </span>
+                        <span class="state"></span>
+                    </div>
 			</div>
 			<div class="modal-footer">
 					<button type="button" class="btn btn-link ms-auto" data-bs-dismiss="modal">Close</button>
@@ -186,9 +190,20 @@
 						);
 						
 						// textarea
-						cloned_card_widget_note_modal_html.find('textarea').val(device_status.notes).attr(
-							'disabled', device_status.noted ? true : false
-						);
+						// cloned_card_widget_note_modal_html.find('textarea').val(device_status.notes).attr(
+						// 	'disabled', device_status.noted ? true : false
+						// );
+
+                        // state
+                        cloned_card_widget_note_modal_html.find('.state').text(
+                            device_status.is_normal_state
+                                ? 'Normal'
+                                : 'Not Normal'
+                        ).addClass(
+                            device_status.is_normal_state
+                                ? 'btn btn-sm btn-success'
+                                : 'btn btn-sm btn-danger'
+                        );
 
 						// modal body / publish actions
 						if (device_status.device?.publish_action?.length > 0) {
