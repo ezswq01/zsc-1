@@ -62,8 +62,15 @@ class Device extends Model
         return $this->hasMany(SubscribeExpression::class, 'device_id');
     }
 
-    public static function evalValue($device_id, $device_log_id, $subscribe_expression, $value, $device_id_unique)
-    {
+    public static function evalValue(
+        $device_id, 
+        $device_log_id, 
+        $subscribe_expression, 
+        $value, 
+        $device_id_unique,
+        $mqtt,
+        $cam_topic
+    ) {
         $status_responses = [];
         foreach ($subscribe_expression as $val)
         {
@@ -158,6 +165,7 @@ class Device extends Model
                             . ($val->normal_state ? "OK" : "NOT OK")
                             . ". Value: $value",
                     ]);
+                    $mqtt->publish($cam_topic, "cambymcc_" . $device_log_id, 0);
                 }
             }
         }
