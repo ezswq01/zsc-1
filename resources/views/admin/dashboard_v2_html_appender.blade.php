@@ -193,6 +193,7 @@
 						// cloned_card_widget_note_modal_html.find('textarea').val(device_status.notes).attr(
 						// 	'disabled', device_status.noted ? true : false
 						// );
+						cloned_card_widget_note_modal_html.find('textarea').val(device_status.notes);
 
                         // state
                         cloned_card_widget_note_modal_html.find('.state').text(
@@ -355,7 +356,7 @@
 							+ device_status.id 
 							+ ' .card-widget-note-modal-submit-note'
 						).addEventListener('click', () => {
-							if (device_status.noted) return alert('Note already published!');
+							// if (device_status.noted) return alert('Note already published!');
 							// if (!confirm('Are you sure you want to publish this note?')) return;
 							const textarea = document.querySelector(
 								'#card-widget-note-modal-' 
