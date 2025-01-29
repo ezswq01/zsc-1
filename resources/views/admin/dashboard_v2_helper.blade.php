@@ -166,7 +166,7 @@
                     await triggerFetch(); 
                     if (e?.message?.data?.at(0)?.notes === "Normal State") {
                         // do nothing
-                    } else {
+                    } else if (e?.message?.data?.length > 0) {
                         audio.play();
                     }
 				}
