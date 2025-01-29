@@ -249,10 +249,10 @@
 								type: 'POST',
 								data: data,
 								success: async function(response) {
-									console.log(response);
+									// console.log(response);
 								},
 								error: function(error) {
-									console.log(error);
+									// console.log(error);
 									alert('An error occured while publishing note!');
 								}
 							})
@@ -297,10 +297,10 @@
 									type: 'POST',
 									data: data,
 									success: async function(response) {
-										console.log(response);
+										// console.log(response);
 									},
 									error: function(error) {
-										console.log(error);
+										// console.log(error);
 										alert('An error occured while publishing note!');
 									}
 								})
@@ -342,7 +342,7 @@
 												$('.modal-backdrop').remove();
 											},
 											error: function(error) {
-												console.log(error);
+												// console.log(error);
 												alert('An error occured while publishing note!');
 											}
 									})
@@ -378,7 +378,7 @@
 									$('.modal-backdrop').remove();
 								},
 								error: function(error) {
-									console.log(error);
+									// console.log(error);
 									alert('An error occured while publishing note!');
 								}
 							})

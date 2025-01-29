@@ -584,7 +584,7 @@
                     alert(response.message);
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                 }
             })
         }
@@ -665,7 +665,7 @@
                 },
                 error: function(error) {
                     alert("Something went wrong!");
-                    console.log(error);
+                    // console.log(error);
                 }
             })
         }
@@ -705,7 +705,7 @@
                     alert(response.message);
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                 }
             })
         }
@@ -842,15 +842,15 @@
                 initializeHtml(data);
                 const timeEnd = moment().format("YYYY-MM-DD HH:mm:ss");
 
-                console.log("Time Query: ", timeQuery)
-                console.log("Time Start: ", timeStart)
-                console.log("Time End: ", timeEnd)
+                // console.log("Time Query: ", timeQuery)
+                // console.log("Time Start: ", timeStart)
+                // console.log("Time End: ", timeEnd)
 
                 // ready
                 is_ready = true;
 
             } catch (error) {
-                console.log(error);
+                // console.log(error);
                 alert("Something went wrong! Please contact admin or try again later.");
             }
         }

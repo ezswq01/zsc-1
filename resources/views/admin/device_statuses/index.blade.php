@@ -86,7 +86,7 @@
                 format: 'YYYY-MM-DD HH:mm:ss'
             }
         }).on('apply.daterangepicker', function(ev, picker) {
-            console.log(picker);
+            // console.log(picker);
             window.location.href = `{{ route('admin.device_statuses.index') }}?date=${picker.startDate.format('YYYY-MM-DD HH:mm:ss')} - ${picker.endDate.format('YYYY-MM-DD HH:mm:ss')}`;
         });
     </script>

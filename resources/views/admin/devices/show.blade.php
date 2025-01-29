@@ -229,7 +229,7 @@
             if (dataSubscribeExpressions.length > 0) {
                 dataSubscribeExpressions.forEach((item, index) => {
                     hanldeAddSubsribeExpression();
-                    console.log(item.normal_state)
+                    // console.log(item.normal_state)
                     $(`.subscribe_expression_${index + 1} select[name="subscribe_expressions[normal_state][]`)
                         .val(item.normal_state ? "on" : "off").change();
                     $(`.subscribe_expression_${index + 1} input[name="subscribe_expressions[expression][]"]`)
@@ -318,7 +318,7 @@
                     alert(response.message);
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                 }
             })
         }
@@ -412,7 +412,7 @@
                         $('#open-note #device-note').text(data.notes);
                     },
                     error: function(error) {
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             });
@@ -437,7 +437,7 @@
                             $('#create-note #marked_as_read').removeAttr('checked');
                     },
                     error: function(error) {
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             });
@@ -463,7 +463,7 @@
                     },
                     error: function(error) {
                         alert("Something went wrong!");
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             });
@@ -487,7 +487,7 @@
                         $('#publish #device-id').text(data.device.device_id);
                     },
                     error: function(error) {
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             });
@@ -513,7 +513,7 @@
                     },
                     error: function(error) {
                         alert("Something went wrong!");
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             });

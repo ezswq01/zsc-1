@@ -73,7 +73,7 @@
                 getData(limit);
             },
             error: function(error) {
-                console.log(error)
+                // console.log(error)
             }
         });
     }
@@ -126,7 +126,7 @@
                 }
             },
             error: function(error) {
-                console.log(error)
+                // console.log(error)
             }
         });
     }
@@ -136,7 +136,7 @@
     });
 
     window.Echo.channel('laravel_database_newDataChannel').listen('.newDataEvent', (e) => {
-        console.log("notif received");
+        // console.log("notif received");
         getData(limit);
     });
 </script>

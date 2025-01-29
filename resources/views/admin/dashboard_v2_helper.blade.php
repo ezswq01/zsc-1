@@ -22,10 +22,6 @@
                                     )
 							);
 
-                            console.log(
-                                stw?.status_type?.device_status,
-                            )
-
 							return {
 								...stw,
 								status_type: {
@@ -132,7 +128,10 @@
 		// WEBSOCKET
 		window.Echo.channel('laravel_database_newDataChannel')
 			.listen('.newDataEvent', async (e) => {
-                console.log(e?.message?.data?.at(0))
+                console.log(
+                    "newDataEvent",
+                    e
+                )
 				if (e?.message?.type === "stream_listener") {
 					var topic = e?.message?.topic;
 					var topicapp = topic.split('/')[0];
@@ -173,6 +172,10 @@
 				}
 			})
 			.listen('.camDataEvent', (e) => {
+                console.log(
+                    "camDataEvent",
+                    e
+                )
 				triggerFetch(); 
 				audio.play();
 			});

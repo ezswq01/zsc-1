@@ -73,7 +73,7 @@
 					return response;
 				},
 				error: async function(error) {
-					console.log(error);
+					// console.log(error);
 					// alert('An error occured while retrieving location data!');
 					// re-try
 					setTimeout(async () => {
@@ -421,12 +421,12 @@
                     if (response.success) {
                         alert('Successfully requested for hour data!');
                     } else {
-                        console.log(response);
+                        // console.log(response);
                         alert(`An error occured while retrieving hour data!`);
                     }
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                     alert('An error occured while retrieving hour data!');
                 }
             })
@@ -456,12 +456,12 @@
                     if (response.success) {
                         alert('Successfully requested for changing active hour data!');
                     } else {
-                        console.log(response);
+                        // console.log(response);
                         alert(`An error occured while changing active hour data!`);
                     }
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                     alert('An error occured while changing hour data!');
                 }
             })
@@ -491,12 +491,12 @@
                     if (response.success) {
                         alert('Successfully requested for changing inactive hour data!');
                     } else {
-                        console.log(response);
+                        // console.log(response);
                         alert(`An error occured while changing inactive hour data!`);
                     }
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                     alert('An error occured while changing hour data!');
                 }
             })
