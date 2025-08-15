@@ -279,14 +279,147 @@ $setting = App\Models\Setting::first();
           </div>
           <iframe
             style="aspect-ratio: 16/9"
-            :style="{ display: isStreaming ? 'block' : 'none' }"
-            class="w-100 card-widget-note-modal-iframe">
+            :style="{ display: isStreaming ? 'block' : 'none', backgroundColor: 'black' }"
+            class="w-100 card-widget-note-modal-iframe"
+            :src="iFrameUrl">
           </iframe>
         </div>
       </div>
     </div>
   </div>
   <div class="row gx-3">
+    <div class="col-lg-3 col-12">
+      <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <h3 class="mb-0 display-4">
+              <span x-text="data?.data?.registeredLocations ? Object.keys(data?.data?.registeredLocations).length : 'Error!'"></span>
+            </h3>
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <button
+                type="button"
+                class="btn btn-white p-1"
+                data-bs-toggle="modal"
+                data-bs-target="">
+                <i class="ph-table"></i>
+              </button>
+            </div>
+          </div>
+          <h6>Registered Location</h6>
+        </div>
+      </div>
+      <div class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Registered Location</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body overflow-auto text-nowrap">
+              <table class="table table-center">
+                <thead>
+                  <tr>
+                    <th class="">No.</th>
+                    <th>Location ID</th>
+                    <th>Location Confirmation</th>
+                    <th>Active Hour</th>
+                    <th>Inactive Hour</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template x-for="key, index in Object.keys(registeredLocations)">
+                    <tr>
+                      <td class="align-middle">
+                        <span x-text="index + 1"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="key"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="registeredLocations[key][0]['last_ping_at'] || 'No ping data'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="registeredLocations[key][0]['active_hour'] || 'No active hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="registeredLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`getHour('${registeredLocations[key][0]['id']}')`">
+                          Get Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setActiveHour('${registeredLocations[key][0]['id']}')`">
+                          Set Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setInctiveHour('${registeredLocations[key][0]['id']}')`">
+                          Set Inactive Hours
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-link"
+                data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-12">
+      <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <h3 class="mb-0 display-4"></h3>
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <button
+                type="button"
+                class="btn btn-white p-1"
+                data-bs-toggle="modal"
+                data-bs-target="">
+                <i class="ph-table"></i>
+              </button>
+            </div>
+          </div>
+          <h6>Active Location</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-12">
+      <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <h3 class="mb-0 display-4"></h3>
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <button
+                type="button"
+                class="btn btn-white p-1"
+                data-bs-toggle="modal"
+                data-bs-target="">
+                <i class="ph-table"></i>
+              </button>
+            </div>
+          </div>
+          <h6>Inactive Location</h6>
+        </div>
+      </div>
+    </div>
     <template x-for="item in data?.status_type_widgets">
       <div class="col-lg-3 col-12">
         <div
@@ -373,17 +506,39 @@ $setting = App\Models\Setting::first();
           alpineThis.triggerFetch()
         })
       },
+
+      /**
+       * Dashboard V3 - Data
+       */
       data: null,
+      selectedStatusType: null,
+      selectedDeviceStatus: null,
+
+      /**
+       * Dashboard V3 - Filters
+       */
       date: "{{ $oldDate }}",
       startDate: '{{ $startDate }}',
       endDate: '{{ $endDate }}',
-      selectedStatusType: null,
       branches: [],
       buildings: [],
       rooms: [],
-      selectedDeviceStatus: null,
+
+      /**
+       * Dashboard V3 - Streaming
+       */
       isStreaming: false,
       isStreamingLoading: false,
+      iFrameUrl: "",
+
+      /**
+       * Dashboard V3 - Locations
+       */
+      registeredLocations: {},
+      activeLocations: {},
+      inactiveLocations: {},
+
+
       async triggerFetch() {
         let url = '{{ route("dashboard.ajax") }}';
         let branches = this.branches;
@@ -444,33 +599,9 @@ $setting = App\Models\Setting::first();
           .listen('.newDataEvent', async (e) => {
             console.log("newDataEvent", e)
             if (e?.message?.type === "stream_listener") {
-              var topic = e?.message?.topic;
-              var topicapp = topic.split('/')[0];
-              var topicbranch = topic.split('/')[1];
-              var topicbuilding = topic.split('/')[2];
-              var iframe = $(
-                `.card-widget-note-modal-` +
-                topicapp +
-                `-` +
-                topicbranch +
-                `-` +
-                topicbuilding +
-                ` ` +
-                `.card-widget-note-modal-iframe`
-              );
-              var iframe_loading = $(
-                `.card-widget-note-modal-` +
-                topicapp +
-                `-` +
-                topicbranch +
-                `-` +
-                topicbuilding +
-                ` ` +
-                `.card-widget-note-modal-iframe-loading`
-              );
-              iframe.attr('src', 'https://' + e?.message?.plain_payload);
-              iframe.show();
-              iframe_loading.hide();
+              this.iFrameUrl = e?.message?.data?.url;
+              this.isStreaming = true;
+              this.isStreamingLoading = false;
             } else if (e?.message?.type === "gethourbyroom") {
               // await printRegisteredLocation();
             } else {
@@ -497,6 +628,7 @@ $setting = App\Models\Setting::first();
       async stream() {
         this.isStreamingLoading = true;
         await new Promise(resolve => setTimeout(resolve, 1000));
+        this.iFrameUrl = "https://www.google.com";
         this.isStreaming = true;
         this.isStreamingLoading = false;
       }
