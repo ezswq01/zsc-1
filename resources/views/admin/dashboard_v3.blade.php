@@ -253,7 +253,7 @@ $setting = App\Models\Setting::first();
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-success" @click="stream">
+          <button class="btn btn-success" @click="stream(selectedDeviceStatus?.device_id)">
             <i class="ph-video-camera me-2"></i>
             STREAM
           </button>
@@ -288,6 +288,25 @@ $setting = App\Models\Setting::first();
     </div>
   </div>
   <div class="row gx-3">
+    @if($setting->is_access_device)
+    <div class="col-lg-3 col-12">
+      <div
+        class="card text-white shadow-lg"
+        :style="{
+          backgroundColor: data.absent_received_logs.length > 0 
+            ? 'rgb(200, 0, 0)' 
+            : 'rgb(0, 100, 0)'
+        }">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <h3 class="mb-0 display-4" x-text="data.absent_received_logs.length"></h3>
+            <div class="d-flex justify-content-between align-items-start gap-2"></div>
+          </div>
+          <h6>ABSENT DEVICE</h6>
+        </div>
+      </div>
+    </div>
+    @endif
     <div class="col-lg-3 col-12">
       <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
         <div class="card-body">
@@ -305,14 +324,14 @@ $setting = App\Models\Setting::first();
               </button>
             </div>
           </div>
-          <h6>Registered Location</h6>
+          <h6>REGISTERED LOCATION</h6>
         </div>
       </div>
       <div class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Registered Location</h5>
+              <h5 class="modal-title">REGISTERED LOCATION</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -397,7 +416,80 @@ $setting = App\Models\Setting::first();
               </button>
             </div>
           </div>
-          <h6>Active Location</h6>
+          <h6>ACTIVE LOCATION</h6>
+        </div>
+      </div>
+      <div class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">ACTIVE LOCATION</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body overflow-auto text-nowrap">
+              <table class="table table-center">
+                <thead>
+                  <tr>
+                    <th class="">No.</th>
+                    <th>Location ID</th>
+                    <th>Location Confirmation</th>
+                    <th>Active Hour</th>
+                    <th>Inactive Hour</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template x-for="key, index in Object.keys(activeLocations)">
+                    <tr>
+                      <td class="align-middle">
+                        <span x-text="index + 1"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="key"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="activeLocations[key][0]['last_ping_at'] || 'No ping data'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="activeLocations[key][0]['active_hour'] || 'No active hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="activeLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`getHour('${registeredLocations[key][0]['id']}')`">
+                          Get Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setActiveHour('${activeLocations[key][0]['id']}')`">
+                          Set Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setInctiveHour('${activeLocations[key][0]['id']}')`">
+                          Set Inactive Hours
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-link"
+                data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -416,7 +508,80 @@ $setting = App\Models\Setting::first();
               </button>
             </div>
           </div>
-          <h6>Inactive Location</h6>
+          <h6>INACTIVE LOCATION</h6>
+        </div>
+      </div>
+      <div class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">INACTIVE LOCATION</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body overflow-auto text-nowrap">
+              <table class="table table-center">
+                <thead>
+                  <tr>
+                    <th class="">No.</th>
+                    <th>Location ID</th>
+                    <th>Location Confirmation</th>
+                    <th>Active Hour</th>
+                    <th>Inactive Hour</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template x-for="key, index in Object.keys(inactiveLocations)">
+                    <tr>
+                      <td class="align-middle">
+                        <span x-text="index + 1"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="key"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="inactiveLocations[key][0]['last_ping_at'] || 'No ping data'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="inactiveLocations[key][0]['active_hour'] || 'No active hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <span x-text="inactiveLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
+                      </td>
+                      <td class="align-middle">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`getHour('${inactiveLocations[key][0]['id']}')`">
+                          Get Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setActiveHour('${inactiveLocations[key][0]['id']}')`">
+                          Set Active Hours
+                        </button>
+                        <button
+                          class="btn btn-sm btn-primary"
+                          :onclick="`setInctiveHour('${inactiveLocations[key][0]['id']}')`">
+                          Set Inactive Hours
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-link"
+                data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -462,15 +627,20 @@ $setting = App\Models\Setting::first();
 <script src="//unpkg.com/alpinejs" defer></script>
 <script>
   document.addEventListener('alpine:init', () => {
+    var audio = new Audio('/mcc-notification.wav');
     Alpine.data('dashboard', () => ({
       init() {
         const alpineThis = this;
-        this.triggerFetch();
+        alpineThis.triggerFetch();
+        alpineThis.getRegisteredLocation();
+        setInterval(async () => {
+          alpineThis.getRegisteredLocation();
+        }, 1000 * 60 * 1); // 1 minute
         $('.datepicker-basic').daterangepicker({
           timePicker: true,
           showDropdowns: true,
-          startDate: moment(this.startDate),
-          endDate: moment(this.endDate),
+          startDate: moment(alpineThis.startDate),
+          endDate: moment(alpineThis.endDate),
           locale: {
             format: 'YYYY-MM-DD HH:mm:ss'
           }
@@ -507,16 +677,12 @@ $setting = App\Models\Setting::first();
         })
       },
 
-      /**
-       * Dashboard V3 - Data
-       */
+      /** Dashboard V3 - Data */
       data: null,
       selectedStatusType: null,
       selectedDeviceStatus: null,
 
-      /**
-       * Dashboard V3 - Filters
-       */
+      /** Dashboard V3 - Filters*/
       date: "{{ $oldDate }}",
       startDate: '{{ $startDate }}',
       endDate: '{{ $endDate }}',
@@ -524,21 +690,17 @@ $setting = App\Models\Setting::first();
       buildings: [],
       rooms: [],
 
-      /**
-       * Dashboard V3 - Streaming
-       */
+      /** Dashboard V3 - Streaming*/
       isStreaming: false,
       isStreamingLoading: false,
       iFrameUrl: "",
 
-      /**
-       * Dashboard V3 - Locations
-       */
+      /** Dashboard V3 - Locations*/
       registeredLocations: {},
       activeLocations: {},
       inactiveLocations: {},
 
-
+      /** Dashboard V3 - Fetch*/
       async triggerFetch() {
         let url = '{{ route("dashboard.ajax") }}';
         let branches = this.branches;
@@ -592,20 +754,194 @@ $setting = App\Models\Setting::first();
         });
         const res = await response.json();
         this.data = res;
-        console.log("this.data", this.data)
       },
+      async submitNote() {
+        const alpineThis = this;
+        if (!alpineThis.selectedDeviceStatus) return alert('Something went wrong!');
+        if (!alpineThis.selectedDeviceStatus.notes) return alert('Please enter a note!');
+        const data = {
+          "_token": '{{ csrf_token() }}',
+          "device_status_id": alpineThis.selectedDeviceStatus.id,
+          "notes": alpineThis.selectedDeviceStatus.notes,
+        };
+        $.ajax({
+          url: '/admin/device_status/notes',
+          type: 'POST',
+          data: data,
+          success: async function(response) {
+            await alpineThis.getFetch();
+            alert('Note submitted successfully!');
+          },
+          error: function(error) {
+            console.log("submitNote error", error);
+          }
+        })
+      },
+      async publishAction(action) {
+        const alpineThis = this;
+        if (!alpineThis.selectedDeviceStatus) return alert('Something went wrong!');
+        if (!alpineThis.selectedDeviceStatus.notes) return alert('Please enter a note!');
+        const data = {
+          "_token": '{{ csrf_token() }}',
+          "id": action,
+          "device_status_id": alpineThis.selectedDeviceStatus.id,
+          "log_id": alpineThis.selectedDeviceStatus?.device_log?.id,
+          "notes": alpineThis.selectedDeviceStatus.notes
+        };
+        $.ajax({
+          url: '/admin/devices/publish',
+          type: 'POST',
+          data: data,
+          success: async function(response) {
+            await alpineThis.getFetch();
+            alert('Published successfully!');
+          },
+          error: function(error) {
+            console.log("publishAction error", error);
+            alert('Failed to publish action!');
+          }
+        })
+      },
+      async stream(device_id) {
+        const alpineThis = this;
+        alpineThis.isStreamingLoading = true;
+        alpineThis.iFrameUrl = "";
+        alpineThis.isStreaming = false;
+        const data = {
+          '_token': '{{ csrf_token() }}',
+          'device_id': device_id
+        };
+        $.ajax({
+          url: '/admin/devices/publish-streaming',
+          type: 'POST',
+          data: data,
+          success: async function(response) {
+            console.log("stream success", response);
+            alert('Requested streaming successfully!');
+          },
+          error: function(error) {
+            console.log("stream error", error);
+            alert('Failed to request streaming!');
+            alpineThis.isStreamingLoading = false;
+          }
+        })
+      },
+
+
+      /** Dashboard V3 - Locations*/
+      async getRegisteredLocation() {
+        const alpineThis = this;
+        $.ajax({
+          url: '/admin/devices/get-registered-locations',
+          type: 'post',
+          data: {
+            _token: '{{ csrf_token() }}'
+          },
+          success: async function(response) {
+            console.log("getRegisteredLocation success", response);
+            alpineThis.registeredLocations = response.data.registeredLocations;
+            alpineThis.activeLocations = response.data.activeLocations;
+            alpineThis.inactiveLocations = response.data.inactiveLocations;
+          },
+          error: async function(error) {
+            console.log("getRegisteredLocation error", error);
+            alert('Failed to get registered location!');
+          }
+        })
+      },
+      async getHour(deviceId) {
+        $.ajax({
+          url: '/admin/devices/get-hour',
+          type: 'post',
+          data: {
+            _token: '{{ csrf_token() }}',
+            device_id: deviceId
+          },
+          success: function(response) {
+            console.log("getHour success", response);
+            alert('Hour fetched successfully!');
+          },
+          error: function(error) {
+            console.log("getHour error", error);
+            alert('Failed to get hour!');
+          }
+        })
+      },
+      async setActiveHour(deviceId) {
+        const hour = prompt('Please enter the hour value:');
+        if (!hour) {
+          alert('Please enter a valid hour value!');
+          return;
+        }
+        const minute = prompt('Please enter the minute value:');
+        if (!minute) {
+          alert('Please enter a valid minute value!');
+          return;
+        }
+        const time = hour + ':' + minute;
+        $.ajax({
+          url: '/admin/devices/set-active-hour',
+          type: 'post',
+          data: {
+            _token: '{{ csrf_token() }}',
+            device_id: deviceId,
+            time: time,
+          },
+          success: function(response) {
+            console.log("setActiveHour success", response);
+            alert('Active hour set successfully!');
+          },
+          error: function(error) {
+            console.log("setActiveHour error", error);
+            alert('Failed to set active hour!');
+          }
+        })
+      },
+      async setInctiveHour(deviceId) {
+        const hour = prompt('Please enter the hour value:');
+        if (!hour) {
+          alert('Please enter a valid hour value!');
+          return;
+        }
+        const minute = prompt('Please enter the minute value:');
+        if (!minute) {
+          alert('Please enter a valid minute value!');
+          return;
+        }
+        const time = hour + ':' + minute;
+        $.ajax({
+          url: '/admin/devices/set-inactive-hour',
+          type: 'post',
+          data: {
+            _token: '{{ csrf_token() }}',
+            device_id: deviceId,
+            time: time,
+          },
+          success: function(response) {
+            console.log("setInctiveHour success", response);
+            alert('Inactive hour set successfully!');
+          },
+          error: function(error) {
+            console.log("setInctiveHour error", error);
+            alert('Failed to set inactive hour!');
+          }
+        })
+      },
+
+
       socketListener() {
+        const alpineThis = this;
         window.Echo.channel('laravel_database_newDataChannel')
           .listen('.newDataEvent', async (e) => {
             console.log("newDataEvent", e)
             if (e?.message?.type === "stream_listener") {
-              this.iFrameUrl = e?.message?.data?.url;
-              this.isStreaming = true;
-              this.isStreamingLoading = false;
+              alpineThis.iFrameUrl = e?.message?.data?.url;
+              alpineThis.isStreaming = true;
+              alpineThis.isStreamingLoading = false;
             } else if (e?.message?.type === "gethourbyroom") {
-              // await printRegisteredLocation();
+              alpineThis.getRegisteredLocation();
             } else {
-              this.triggerFetch();
+              alpineThis.triggerFetch();
               if (e?.message?.data?.at(0)?.notes === "Normal State") {
                 // do nothing
               } else if (e?.message?.data?.length > 0) {
@@ -615,23 +951,10 @@ $setting = App\Models\Setting::first();
           })
           .listen('.camDataEvent', (e) => {
             console.log("camDataEvent", e)
-            this.triggerFetch();
+            alpineThis.triggerFetch();
             // audio.play();
           });
       },
-      async submitNote() {
-        console.log("submitNote", this.selectedDeviceStatus)
-      },
-      async publishAction(action) {
-        console.log("publishAction", action)
-      },
-      async stream() {
-        this.isStreamingLoading = true;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        this.iFrameUrl = "https://www.google.com";
-        this.isStreaming = true;
-        this.isStreamingLoading = false;
-      }
     }))
   })
 </script>
