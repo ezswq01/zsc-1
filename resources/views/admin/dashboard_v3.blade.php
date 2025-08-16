@@ -321,7 +321,7 @@ $setting = App\Models\Setting::first();
                 type="button"
                 class="btn btn-white p-1"
                 data-bs-toggle="modal"
-                data-bs-target="">
+                data-bs-target="#registeredLocationModal">
                 <i class="ph-table"></i>
               </button>
             </div>
@@ -329,7 +329,7 @@ $setting = App\Models\Setting::first();
           <h6>REGISTERED LOCATION</h6>
         </div>
       </div>
-      <div class="modal fade" tabindex="-1">
+      <div class="modal fade" tabindex="-1" id="registeredLocationModal">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
@@ -372,17 +372,17 @@ $setting = App\Models\Setting::first();
                       <td class="align-middle">
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`getHour('${registeredLocations[key][0]['id']}')`">
+                          @click="getHour(registeredLocations[key][0]['id'])">
                           Get Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setActiveHour('${registeredLocations[key][0]['id']}')`">
+                          @click="setActiveHour(registeredLocations[key][0]['id'])">
                           Set Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setInctiveHour('${registeredLocations[key][0]['id']}')`">
+                          @click="setInctiveHour(registeredLocations[key][0]['id'])">
                           Set Inactive Hours
                         </button>
                       </td>
@@ -415,7 +415,7 @@ $setting = App\Models\Setting::first();
                 type="button"
                 class="btn btn-white p-1"
                 data-bs-toggle="modal"
-                data-bs-target="">
+                data-bs-target="#activeLocationModal">
                 <i class="ph-table"></i>
               </button>
             </div>
@@ -423,7 +423,7 @@ $setting = App\Models\Setting::first();
           <h6>ACTIVE LOCATION</h6>
         </div>
       </div>
-      <div class="modal fade" tabindex="-1">
+      <div class="modal fade" tabindex="-1" id="activeLocationModal">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
@@ -466,17 +466,17 @@ $setting = App\Models\Setting::first();
                       <td class="align-middle">
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`getHour('${registeredLocations[key][0]['id']}')`">
+                          @click="getHour(activeLocations[key][0]['id'])">
                           Get Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setActiveHour('${activeLocations[key][0]['id']}')`">
+                          @click="setActiveHour(activeLocations[key][0]['id'])">
                           Set Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setInctiveHour('${activeLocations[key][0]['id']}')`">
+                          @click="setInctiveHour(activeLocations[key][0]['id'])">
                           Set Inactive Hours
                         </button>
                       </td>
@@ -509,7 +509,7 @@ $setting = App\Models\Setting::first();
                 type="button"
                 class="btn btn-white p-1"
                 data-bs-toggle="modal"
-                data-bs-target="">
+                data-bs-target="#inactiveLocationModal">
                 <i class="ph-table"></i>
               </button>
             </div>
@@ -517,7 +517,7 @@ $setting = App\Models\Setting::first();
           <h6>INACTIVE LOCATION</h6>
         </div>
       </div>
-      <div class="modal fade" tabindex="-1">
+      <div class="modal fade" tabindex="-1" id="inactiveLocationModal">
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
@@ -560,17 +560,17 @@ $setting = App\Models\Setting::first();
                       <td class="align-middle">
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`getHour('${inactiveLocations[key][0]['id']}')`">
+                          @click="getHour(inactiveLocations[key][0]['id'])">
                           Get Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setActiveHour('${inactiveLocations[key][0]['id']}')`">
+                          @click="setActiveHour(inactiveLocations[key][0]['id'])">
                           Set Active Hours
                         </button>
                         <button
                           class="btn btn-sm btn-primary"
-                          :onclick="`setInctiveHour('${inactiveLocations[key][0]['id']}')`">
+                          @click="setInctiveHour(inactiveLocations[key][0]['id'])">
                           Set Inactive Hours
                         </button>
                       </td>
