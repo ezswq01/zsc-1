@@ -350,7 +350,7 @@ $setting = App\Models\Setting::first();
                   </tr>
                 </thead>
                 <tbody>
-                  <template x-for="key, index in Object.keys(registeredLocations)">
+                  <template x-for="(key, index) in Object.keys(registeredLocations)">
                     <tr>
                       <td class="align-middle">
                         <span x-text="index + 1"></span>
