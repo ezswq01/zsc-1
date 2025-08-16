@@ -244,11 +244,11 @@ $setting = App\Models\Setting::first();
             class="form-control mb-2"
             rows="5"
             style="resize: none;"
-            x-model="selectedDeviceStatus.notes"></textarea>
+            x-model="selectedDeviceStatus?.notes"></textarea>
           <div class="d-flex gap-2 align-items-center">
             <span>State: </span>
-            <span class="state" :class="selectedDeviceStatus.is_normal_state ? 'btn btn-success' : 'btn btn-danger'">
-              <span x-text="selectedDeviceStatus.is_normal_state ? 'Normal' : 'Not Normal'"></span>
+            <span class="state" :class="selectedDeviceStatus?.is_normal_state ? 'btn btn-success' : 'btn btn-danger'">
+              <span x-text="selectedDeviceStatus?.is_normal_state ? 'Normal' : 'Not Normal'"></span>
             </span>
           </div>
         </div>
@@ -758,11 +758,11 @@ $setting = App\Models\Setting::first();
       async submitNote() {
         const alpineThis = this;
         if (!alpineThis.selectedDeviceStatus) return alert('Something went wrong!');
-        if (!alpineThis.selectedDeviceStatus.notes) return alert('Please enter a note!');
+        if (!alpineThis.selectedDeviceStatus?.notes) return alert('Please enter a note!');
         const data = {
           "_token": '{{ csrf_token() }}',
-          "device_status_id": alpineThis.selectedDeviceStatus.id,
-          "notes": alpineThis.selectedDeviceStatus.notes,
+          "device_status_id": alpineThis.selectedDeviceStatus?.id,
+          "notes": alpineThis.selectedDeviceStatus?.notes,
         };
         $.ajax({
           url: '/admin/device_status/notes',
@@ -780,13 +780,13 @@ $setting = App\Models\Setting::first();
       async publishAction(action) {
         const alpineThis = this;
         if (!alpineThis.selectedDeviceStatus) return alert('Something went wrong!');
-        if (!alpineThis.selectedDeviceStatus.notes) return alert('Please enter a note!');
+        if (!alpineThis.selectedDeviceStatus?.notes) return alert('Please enter a note!');
         const data = {
           "_token": '{{ csrf_token() }}',
           "id": action,
-          "device_status_id": alpineThis.selectedDeviceStatus.id,
+          "device_status_id": alpineThis.selectedDeviceStatus?.id,
           "log_id": alpineThis.selectedDeviceStatus?.device_log?.id,
-          "notes": alpineThis.selectedDeviceStatus.notes
+          "notes": alpineThis.selectedDeviceStatus?.notes
         };
         $.ajax({
           url: '/admin/devices/publish',
@@ -839,9 +839,9 @@ $setting = App\Models\Setting::first();
           },
           success: async function(response) {
             console.log("getRegisteredLocation success", response);
-            alpineThis.registeredLocations = response.data.registeredLocations;
-            alpineThis.activeLocations = response.data.activeLocations;
-            alpineThis.inactiveLocations = response.data.inactiveLocations;
+            alpineThis.registeredLocations = response.data.registeredLocations || {};
+            alpineThis.activeLocations = response.data.activeLocations || {};
+            alpineThis.inactiveLocations = response.data.inactiveLocations || {};
           },
           error: async function(error) {
             console.log("getRegisteredLocation error", error);
