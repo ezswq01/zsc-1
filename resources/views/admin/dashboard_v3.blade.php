@@ -314,7 +314,7 @@ $setting = App\Models\Setting::first();
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start">
             <h3 class="mb-0 display-4">
-              <span x-text="data?.data?.registeredLocations ? Object.keys(data?.data?.registeredLocations).length : 'Error!'"></span>
+              <span x-text="data?.data?.registeredLocations ? Object.keys(data?.data?.registeredLocations).length : 0"></span>
             </h3>
             <div class="d-flex justify-content-between align-items-start gap-2">
               <button
@@ -407,7 +407,9 @@ $setting = App\Models\Setting::first();
       <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start">
-            <h3 class="mb-0 display-4"></h3>
+            <h3 class="mb-0 display-4">
+              <span x-text="data?.data?.activeLocations ? Object.keys(data?.data?.activeLocations).length : 0"></span>
+            </h3>
             <div class="d-flex justify-content-between align-items-start gap-2">
               <button
                 type="button"
@@ -499,7 +501,9 @@ $setting = App\Models\Setting::first();
       <div class="card text-white shadow-lg" style="background-color: rgb(0, 100, 0);">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start">
-            <h3 class="mb-0 display-4"></h3>
+            <h3 class="mb-0 display-4">
+              <span x-text="data?.data?.inactiveLocations ? Object.keys(data?.data?.inactiveLocations).length : 0"></span>
+            </h3>
             <div class="d-flex justify-content-between align-items-start gap-2">
               <button
                 type="button"
