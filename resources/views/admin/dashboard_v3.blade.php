@@ -370,21 +370,23 @@ $setting = App\Models\Setting::first();
                         <span x-text="registeredLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
                       </td>
                       <td class="align-middle">
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="getHour(registeredLocations[key][0]['id'])">
-                          Get Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setActiveHour(registeredLocations[key][0]['id'])">
-                          Set Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setInctiveHour(registeredLocations[key][0]['id'])">
-                          Set Inactive Hours
-                        </button>
+                        <div class="d-flex gap-2 flex-column">
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="getHour(registeredLocations[key][0]['id'])">
+                            Get Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setActiveHour(registeredLocations[key][0]['id'])">
+                            Set Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setInctiveHour(registeredLocations[key][0]['id'])">
+                            Set Inactive Hours
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   </template>
@@ -464,21 +466,23 @@ $setting = App\Models\Setting::first();
                         <span x-text="activeLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
                       </td>
                       <td class="align-middle">
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="getHour(activeLocations[key][0]['id'])">
-                          Get Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setActiveHour(activeLocations[key][0]['id'])">
-                          Set Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setInctiveHour(activeLocations[key][0]['id'])">
-                          Set Inactive Hours
-                        </button>
+                        <div class="d-flex gap-2 flex-column">
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="getHour(activeLocations[key][0]['id'])">
+                            Get Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setActiveHour(activeLocations[key][0]['id'])">
+                            Set Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setInctiveHour(activeLocations[key][0]['id'])">
+                            Set Inactive Hours
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   </template>
@@ -558,21 +562,23 @@ $setting = App\Models\Setting::first();
                         <span x-text="inactiveLocations[key][0]['inactive_hour'] || 'No inactive hour'"></span>
                       </td>
                       <td class="align-middle">
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="getHour(inactiveLocations[key][0]['id'])">
-                          Get Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setActiveHour(inactiveLocations[key][0]['id'])">
-                          Set Active Hours
-                        </button>
-                        <button
-                          class="btn btn-sm btn-primary"
-                          @click="setInctiveHour(inactiveLocations[key][0]['id'])">
-                          Set Inactive Hours
-                        </button>
+                        <div class="d-flex gap-2 flex-column">
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="getHour(inactiveLocations[key][0]['id'])">
+                            Get Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setActiveHour(inactiveLocations[key][0]['id'])">
+                            Set Active Hours
+                          </button>
+                          <button
+                            class="btn btn-sm btn-primary"
+                            @click="setInctiveHour(inactiveLocations[key][0]['id'])">
+                            Set Inactive Hours
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   </template>
