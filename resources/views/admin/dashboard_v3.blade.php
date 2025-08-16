@@ -240,11 +240,13 @@ $setting = App\Models\Setting::first();
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <textarea
-            class="form-control mb-2"
-            rows="5"
-            style="resize: none;"
-            x-model="selectedDeviceStatus?.notes"></textarea>
+          <template x-if="selectedDeviceStatus">
+            <textarea
+              class="form-control mb-2"
+              rows="5"
+              style="resize: none;"
+              x-model="selectedDeviceStatus.notes"></textarea>
+          </template>
           <div class="d-flex gap-2 align-items-center">
             <span>State: </span>
             <span class="state" :class="selectedDeviceStatus?.is_normal_state ? 'btn btn-success' : 'btn btn-danger'">
