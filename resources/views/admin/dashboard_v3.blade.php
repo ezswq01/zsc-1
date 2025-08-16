@@ -350,7 +350,7 @@ $setting = App\Models\Setting::first();
                   </tr>
                 </thead>
                 <tbody>
-                  <template x-for="(value, key, index) in registeredLocations">
+                  <template x-for="(value, key, index) in registeredLocations" :key="key">
                     <tr>
                       <td class="align-middle">
                         <span x-text="index + 1"></span>
@@ -442,7 +442,7 @@ $setting = App\Models\Setting::first();
                   </tr>
                 </thead>
                 <tbody>
-                  <template x-for="(value, key, index) in activeLocations">
+                  <template x-for="(value, key, index) in activeLocations" :key="key">
                     <tr>
                       <td class="align-middle">
                         <span x-text="index + 1"></span>
@@ -534,7 +534,7 @@ $setting = App\Models\Setting::first();
                   </tr>
                 </thead>
                 <tbody>
-                  <template x-for="(value, key, index) in inactiveLocations">
+                  <template x-for="(value, key, index) in inactiveLocations" :key="key">
                     <tr>
                       <td class="align-middle">
                         <span x-text="index + 1"></span>
