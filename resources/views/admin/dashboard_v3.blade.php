@@ -645,11 +645,14 @@ $setting = App\Models\Setting::first();
         const alpineThis = this;
 
         // LISTENER
-        $('#card-widget-note-modal').on('hidden.bs.modal', function (e) {
-          alpineThis.isStreamingLoading = false;
-          alpineThis.isStreaming = false;
-          alpineThis.iFrameUrl = '';
-        });
+        setTimeout(() => {
+          $('#card-widget-note-modal').on('hidden.bs.modal', function (e) {
+            console.log('modal closed')
+            alpineThis.isStreamingLoading = false;
+            alpineThis.isStreaming = false;
+            alpineThis.iFrameUrl = '';
+          });
+        }, 1000);
 
         // FETCH
         alpineThis.triggerFetch();
