@@ -643,11 +643,22 @@ $setting = App\Models\Setting::first();
     Alpine.data('dashboard', () => ({
       init() {
         const alpineThis = this;
+
+        // LISTENER
+        $('#card-widget-note-modal').on('hidden.bs.modal', function (e) {
+          alpineThis.isStreamingLoading = false;
+          alpineThis.isStreaming = false;
+          alpineThis.iFrameUrl = '';
+        });
+
+        // FETCH
         alpineThis.triggerFetch();
         alpineThis.getRegisteredLocation();
         setInterval(async () => {
           alpineThis.getRegisteredLocation();
         }, 1000 * 60 * 1); // 1 minute
+
+        // FILTERS
         $('.datepicker-basic').daterangepicker({
           timePicker: true,
           showDropdowns: true,
