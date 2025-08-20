@@ -640,7 +640,7 @@ $setting = App\Models\Setting::first();
 <script>
   document.addEventListener('alpine:init', () => {
     var audio = new Audio('/mcc-notification.wav');
-    Alpine.data('dashboard', () => ({
+    Alpine.data('dashboard', () => ({ 
       init() {
         const alpineThis = this;
 
@@ -653,6 +653,9 @@ $setting = App\Models\Setting::first();
             alpineThis.iFrameUrl = '';
           });
         }, 1000);
+
+        // SOCKET
+        alpineThis.socketListener();
 
         // FETCH
         alpineThis.triggerFetch();
@@ -780,6 +783,8 @@ $setting = App\Models\Setting::first();
         });
         const res = await response.json();
         this.data = res;
+        console.log(this.selectedStatusType) // card modal
+        console.log(this.selectedDeviceStatus) // note modal
       },
       async submitNote() {
         const alpineThis = this;
@@ -864,7 +869,6 @@ $setting = App\Models\Setting::first();
             _token: '{{ csrf_token() }}'
           },
           success: async function(response) {
-            console.log("getRegisteredLocation success", response);
             alpineThis.registeredLocations = response.data.registeredLocations || {};
             alpineThis.activeLocations = response.data.activeLocations || {};
             alpineThis.inactiveLocations = response.data.inactiveLocations || {};
@@ -961,7 +965,7 @@ $setting = App\Models\Setting::first();
           .listen('.newDataEvent', async (e) => {
             console.log("newDataEvent", e)
             if (e?.message?.type === "stream_listener") {
-              alpineThis.iFrameUrl = e?.message?.data?.url;
+              alpineThis.iFrameUrl = e?.message?.plain_payload;
               alpineThis.isStreaming = true;
               alpineThis.isStreamingLoading = false;
             } else if (e?.message?.type === "gethourbyroom") {
