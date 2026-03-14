@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
+
+class StatusType extends Model
+{
+    use HasEagerLimit;
+
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $fillable = [
+        'name',
+        'category',
+        'color',
+        'trigger_color',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function device_status()
+    {
+        return $this->hasMany(DeviceStatus::class, 'status_type_id');
+    }
+
+    public function subscribe_expression()
+    {
+        return $this->hasMany(SubscribeExpression::class, 'status_type_id');
+    }
+
+    public function status_type_widget()
+    {
+        return $this->hasOne(StatusTypeWidget::class, 'status_type_id');
+    }
+}

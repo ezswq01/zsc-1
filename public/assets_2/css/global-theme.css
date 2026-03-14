@@ -1,0 +1,518 @@
+/* =======================================================================
+   ZSC GLOBAL THEME SYSTEM  v5
+   public/assets_2/css/global-theme.css
+   Load AFTER all.min.css in main.blade.php.
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   1. VARIABLES
+   ----------------------------------------------------------------------- */
+:root {
+  --c-bg-page:     #ffffff;
+  --c-bg-surface:  #ffffff;
+  --c-bg-input:    #f4f5f7;
+  --c-bg-hover:    #f0f1f3;
+  --c-bg-active:   #e8eaed;
+
+  --c-text-primary:   #111827;
+  --c-text-secondary: #6b7280;
+  --c-text-muted:     #9ca3af;
+  --c-accent:         #3b82f6;
+  --c-accent-soft:    #eff6ff;
+
+  --c-shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+  --c-shadow-drop: 0 4px 16px rgba(0,0,0,0.10);
+  --c-shadow-in:   inset 0 1px 2px rgba(0,0,0,0.06);
+
+  --c-nav-link:      #4b5563;
+  --c-nav-hover:     #111827;
+  --c-nav-active-bg: rgba(59,130,246,0.08);
+  --c-nav-active-fg: #2563eb;
+}
+
+[data-theme="dark"] {
+  --c-bg-page:     #0f1117;
+  --c-bg-surface:  #1a1d2e;
+  --c-bg-input:    #252840;
+  --c-bg-hover:    #1e2238;
+  --c-bg-active:   #2a2f4a;
+
+  --c-text-primary:   #f1f5f9;
+  --c-text-secondary: #cbd5e1;
+  --c-text-muted:     #94a3b8;
+  --c-accent:         #60a5fa;
+  --c-accent-soft:    rgba(96,165,250,0.12);
+
+  --c-shadow-card: 0 2px 8px rgba(0,0,0,0.35);
+  --c-shadow-drop: 0 4px 16px rgba(0,0,0,0.50);
+  --c-shadow-in:   inset 0 1px 2px rgba(0,0,0,0.30);
+
+  --c-nav-link:      #cbd5e1;
+  --c-nav-hover:     #f1f5f9;
+  --c-nav-active-bg: rgba(96,165,250,0.12);
+  --c-nav-active-fg: #60a5fa;
+}
+
+/* -----------------------------------------------------------------------
+   2. BASE
+   ----------------------------------------------------------------------- */
+html, body {
+  background-color: var(--c-bg-page) !important;
+  color: var(--c-text-primary) !important;
+}
+
+.page-content,
+.content-wrapper,
+.content-inner,
+.content,
+.row > *,
+.container-fluid { background-color: transparent !important; }
+
+/* -----------------------------------------------------------------------
+   3. SIDEBAR — seamless (no edge line/shadow), collapsed by default
+   ----------------------------------------------------------------------- */
+
+/* Core sidebar — no border, no shadow */
+.sidebar,
+.sidebar-main,
+.sidebar-content {
+  background-color: var(--c-bg-surface) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sidebar-section,
+.sidebar-section-body {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/*
+   SIDEBAR COLLAPSED DEFAULT
+   ─────────────────────────
+   Limitless uses `sidebar-xs` on <body> to switch to icon-only narrow mode.
+   We add it via JS in layout_main on DOMContentLoaded.
+   The CSS below ensures autohide hover expand works smoothly.
+*/
+
+/* When collapsed (sidebar-xs), hovering the sidebar temporarily expands it */
+.sidebar-xs .sidebar-main {
+  transition: width 0.18s ease !important;
+}
+.sidebar-xs .sidebar-main:hover {
+  /* Limitless already handles the expand via its own sidebar-xs hover rules.
+     We just make sure no conflicting shadow/border appears. */
+  box-shadow: var(--c-shadow-drop) !important;
+}
+
+/* Sidebar header "Menu" + resize toggle */
+.sidebar-section-body h5 { color: var(--c-text-primary) !important; font-weight: 600; }
+.nav-item-header .text-uppercase,
+.nav-item-header > div { color: var(--c-text-muted) !important; }
+
+/* Nav links */
+.nav-sidebar .nav-link {
+  color: var(--c-nav-link) !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  margin: 1px 8px !important;
+}
+.nav-sidebar .nav-link:hover { background-color: var(--c-bg-hover) !important; color: var(--c-nav-hover) !important; }
+.nav-sidebar .nav-link.active,
+.nav-sidebar .nav-link[aria-expanded="true"] { background-color: var(--c-nav-active-bg) !important; color: var(--c-nav-active-fg) !important; font-weight: 600; }
+.nav-sidebar .nav-link i { color: inherit !important; }
+
+.nav-group-sub { background-color: transparent !important; border: none !important; padding-left: 0.5rem !important; }
+.nav-group-sub .nav-link { font-size: 0.875rem !important; color: var(--c-text-secondary) !important; border: none !important; }
+.nav-group-sub .nav-link:hover { background-color: var(--c-bg-hover) !important; color: var(--c-nav-hover) !important; }
+.nav-group-sub .nav-link.active { background-color: var(--c-nav-active-bg) !important; color: var(--c-nav-active-fg) !important; }
+
+.btn-black { background: transparent !important; border: none !important; color: var(--c-text-secondary) !important; box-shadow: none !important; }
+.btn-black:hover { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+
+/* -----------------------------------------------------------------------
+   4. NAVBAR — seamless, no bottom edge
+   ----------------------------------------------------------------------- */
+.navbar,
+.navbar-static,
+.navbar-expand-lg {
+  background-color: var(--c-bg-surface) !important;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.navbar .navbar-nav-link,
+.navbar .nav-link { color: var(--c-text-secondary) !important; }
+.navbar .navbar-nav-link:hover,
+.navbar .nav-link:hover { color: var(--c-text-primary) !important; background-color: var(--c-bg-hover) !important; }
+.navbar .d-lg-inline-block { color: var(--c-text-primary) !important; }
+.navbar .notification-count { background-color: #f59e0b !important; color: #000 !important; }
+
+.navbar .dropdown-menu { background-color: var(--c-bg-surface) !important; border: none !important; box-shadow: var(--c-shadow-drop) !important; border-radius: 0.5rem !important; }
+.navbar .dropdown-menu .dropdown-item { color: var(--c-text-secondary) !important; border-radius: 0.4rem !important; padding: 0.5rem 0.85rem !important; }
+.navbar .dropdown-menu .dropdown-item:hover { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+
+/* ─── LOGO — invert in dark mode ────────────────────────────────────────
+   Works best for logos that are dark/black on a transparent background.
+   In dark mode we invert the image so a black logo becomes white.
+   `hue-rotate(180deg)` undoes any colour shift introduced by invert.
+   Adjust brightness() if your logo washes out or becomes too dim.
+------------------------------------------------------------------------ */
+.zsc-logo {
+  transition: filter 0.15s ease;
+}
+[data-theme="dark"] .zsc-logo {
+  filter: invert(1) hue-rotate(180deg) brightness(1.6) !important;
+}
+
+/* Theme toggle */
+#zsc-theme-toggle {
+  background: none; border: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--c-text-secondary); font-size: 1.1rem;
+}
+#zsc-theme-toggle:hover { background-color: var(--c-bg-hover); }
+[data-theme="dark"] #zsc-theme-toggle { color: #fbbf24; }
+
+/* -----------------------------------------------------------------------
+   5. FOOTER — seamless, no top edge
+   ----------------------------------------------------------------------- */
+.navbar-footer {
+  background-color: var(--c-bg-surface) !important;
+  border: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+}
+.navbar-footer span { color: var(--c-text-muted) !important; }
+
+/* -----------------------------------------------------------------------
+   6. PAGE HEADER — seamless, no bottom edge
+   ----------------------------------------------------------------------- */
+.page-header,
+.page-header-light,
+[class*="page-header"] {
+  background-color: var(--c-bg-surface) !important;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  margin-bottom: 1.25rem;
+}
+.page-title, .page-header h4 { color: var(--c-text-primary) !important; }
+.breadcrumb { background: transparent !important; margin: 0; padding: 0; }
+.breadcrumb-item, .breadcrumb-item a { color: var(--c-text-secondary) !important; }
+.breadcrumb-item.active { color: var(--c-text-muted) !important; }
+.breadcrumb-item + .breadcrumb-item::before { color: var(--c-text-muted) !important; }
+
+/* -----------------------------------------------------------------------
+   7. CARDS — coloured protected via [class*="bg-"]
+   ----------------------------------------------------------------------- */
+.card:not([class*="bg-"]):not([style*="background"]) {
+  background-color: var(--c-bg-surface) !important;
+  border: none !important;
+  box-shadow: var(--c-shadow-card) !important;
+}
+.card:not([class*="bg-"]):not([style*="background"]):hover { box-shadow: var(--c-shadow-drop) !important; }
+
+.card[class*="bg-"],
+.card[style*="background-color"],
+.card[style*="background:"] { border: none !important; box-shadow: var(--c-shadow-card) !important; }
+
+.card-header { background-color: transparent !important; border-bottom: none !important; color: var(--c-text-primary) !important; }
+.card-footer { background-color: transparent !important; border-top: none !important; }
+.card-body { color: var(--c-text-primary) !important; }
+
+.card[class*="bg-"] *,
+.card[style*="background-color"] *,
+.card[style*="background:"]      * { color: inherit !important; }
+
+/* -----------------------------------------------------------------------
+   8. MODALS — follow dark/light theme, with contrast border for depth
+   ----------------------------------------------------------------------- */
+.modal-content {
+  background-color: var(--c-bg-surface) !important;
+  /* Contrast border — visible in both themes as a clean edge */
+  border: 1px solid rgba(0,0,0,0.10) !important;
+  box-shadow: var(--c-shadow-drop) !important;
+  border-radius: 0.75rem !important;
+  color: var(--c-text-primary) !important;
+}
+[data-theme="dark"] .modal-content {
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+.modal-header {
+  background-color: var(--c-bg-surface) !important;
+  /* Hairline separator between header and body */
+  border-bottom: 1px solid rgba(0,0,0,0.07) !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+[data-theme="dark"] .modal-header {
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+}
+.modal-footer {
+  background-color: var(--c-bg-surface) !important;
+  border-top: 1px solid rgba(0,0,0,0.07) !important;
+  border-radius: 0 0 0.75rem 0.75rem !important;
+}
+[data-theme="dark"] .modal-footer {
+  border-top: 1px solid rgba(255,255,255,0.07) !important;
+}
+.modal-title  { color: var(--c-text-primary) !important; }
+.modal-body   { color: var(--c-text-primary) !important; background-color: var(--c-bg-surface) !important; }
+
+/* Text inside modals — use theme vars */
+.modal-content .text-muted     { color: var(--c-text-muted) !important; }
+.modal-content .text-secondary { color: var(--c-text-secondary) !important; }
+.modal-content label,
+.modal-content .form-label,
+.modal-content .col-form-label { color: var(--c-text-secondary) !important; }
+.modal-content p,
+.modal-content span,
+.modal-content td,
+.modal-content th { color: var(--c-text-primary) !important; }
+.modal-content h1, .modal-content h2, .modal-content h3,
+.modal-content h4, .modal-content h5, .modal-content h6 { color: var(--c-text-primary) !important; }
+
+/* Inputs inside modals — use theme vars */
+.modal-content .form-control,
+.modal-content .form-select {
+  background-color: var(--c-bg-input) !important;
+  border: none !important;
+  box-shadow: var(--c-shadow-in) !important;
+  color: var(--c-text-primary) !important;
+}
+.modal-content .form-control::placeholder { color: var(--c-text-muted) !important; }
+.modal-content .form-control:focus,
+.modal-content .form-select:focus {
+  background-color: var(--c-bg-surface) !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.18), var(--c-shadow-in) !important;
+  color: var(--c-text-primary) !important;
+}
+.modal-content .input-group-text {
+  background-color: var(--c-bg-input) !important;
+  border: none !important;
+  color: var(--c-text-secondary) !important;
+}
+
+/* Tables inside modals */
+.modal-content .table th {
+  background-color: var(--c-bg-surface) !important;
+  color: var(--c-text-secondary) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.07) !important;
+}
+[data-theme="dark"] .modal-content .table th {
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+}
+.modal-content .table td {
+  background-color: var(--c-bg-surface) !important;
+  color: var(--c-text-primary) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.04) !important;
+}
+[data-theme="dark"] .modal-content .table td {
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* Close button — invert in dark mode */
+.modal-content .btn-close { filter: none !important; }
+[data-theme="dark"] .modal-content .btn-close { filter: invert(1) brightness(1.8) !important; }
+
+/* -----------------------------------------------------------------------
+   9. FORMS & INPUTS (outside modals)
+   ----------------------------------------------------------------------- */
+.form-control, .form-select {
+  background-color: var(--c-bg-input) !important;
+  border: none !important;
+  box-shadow: var(--c-shadow-in) !important;
+  color: var(--c-text-primary) !important;
+}
+.form-control:focus, .form-select:focus {
+  background-color: var(--c-bg-surface) !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.18), var(--c-shadow-in) !important;
+  color: var(--c-text-primary) !important;
+  outline: none;
+}
+.form-control::placeholder { color: var(--c-text-muted) !important; }
+.form-control:disabled { background-color: var(--c-bg-active) !important; color: var(--c-text-muted) !important; }
+
+.form-label, label, .col-form-label { color: var(--c-text-secondary) !important; }
+.input-group-text { background-color: var(--c-bg-input) !important; border: none !important; box-shadow: var(--c-shadow-in) !important; color: var(--c-text-secondary) !important; }
+.form-check-input { background-color: var(--c-bg-input) !important; border: none !important; box-shadow: var(--c-shadow-in) !important; }
+.form-check-input:checked { background-color: var(--c-accent) !important; box-shadow: none !important; }
+.form-check-label { color: var(--c-text-secondary) !important; }
+
+/* -----------------------------------------------------------------------
+   10. SELECT2
+   ----------------------------------------------------------------------- */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple { background-color: var(--c-bg-input) !important; border: none !important; box-shadow: var(--c-shadow-in) !important; color: var(--c-text-primary) !important; min-height: 38px; display: flex; align-items: center; border-radius: 0.375rem !important; }
+.select2-container--default .select2-selection--single .select2-selection__rendered { color: var(--c-text-primary) !important; line-height: 36px !important; }
+.select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px !important; }
+.select2-dropdown { background-color: var(--c-bg-surface) !important; border: none !important; box-shadow: var(--c-shadow-drop) !important; border-radius: 0.5rem !important; overflow: hidden; }
+.select2-container--default .select2-search--dropdown .select2-search__field { background-color: var(--c-bg-input) !important; border: none !important; box-shadow: var(--c-shadow-in) !important; color: var(--c-text-primary) !important; border-radius: 0.375rem !important; margin: 6px !important; width: calc(100% - 12px) !important; }
+.select2-container--default .select2-results__option { color: var(--c-text-secondary) !important; background-color: transparent !important; }
+.select2-container--default .select2-results__option--highlighted { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+.select2-container--default .select2-results__option[aria-selected=true] { background-color: var(--c-accent-soft) !important; color: var(--c-accent) !important; }
+
+/* -----------------------------------------------------------------------
+   11. TABLES
+   ----------------------------------------------------------------------- */
+.table, .dataTable { color: var(--c-text-primary) !important; border-collapse: separate; border-spacing: 0; background-color: transparent !important; }
+.table th, .dataTable th { background-color: var(--c-bg-surface) !important; color: var(--c-text-secondary) !important; border: none !important; font-size: 0.74rem; letter-spacing: 0.6px; text-transform: uppercase; padding: 0.85rem 0.75rem; font-weight: 600; }
+.table td, .dataTable td { background-color: var(--c-bg-surface) !important; color: var(--c-text-primary) !important; border: none !important; border-bottom: 1px solid rgba(0,0,0,0.05) !important; padding: 0.75rem; vertical-align: middle; }
+[data-theme="dark"] .table td,
+[data-theme="dark"] .dataTable td { border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+.table tbody tr:last-child td { border-bottom: none !important; }
+.table tbody tr:hover td { background-color: var(--c-bg-hover) !important; }
+
+.dataTables_wrapper,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate { color: var(--c-text-secondary) !important; background: transparent !important; border: none !important; }
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select { background-color: var(--c-bg-input) !important; border: none !important; box-shadow: var(--c-shadow-in) !important; color: var(--c-text-primary) !important; border-radius: 0.375rem !important; padding: 0.375rem 0.75rem; }
+.dataTables_paginate .paginate_button { background-color: var(--c-bg-input) !important; color: var(--c-text-secondary) !important; border: none !important; border-radius: 0.375rem !important; margin: 0 1px !important; }
+.dataTables_paginate .paginate_button:hover { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; border: none !important; }
+.dataTables_paginate .paginate_button.current,
+.dataTables_paginate .paginate_button.current:hover { background-color: var(--c-accent) !important; color: #fff !important; border: none !important; }
+
+/* -----------------------------------------------------------------------
+   12. DROPDOWNS
+   ----------------------------------------------------------------------- */
+.dropdown-menu { background-color: var(--c-bg-surface) !important; border: none !important; box-shadow: var(--c-shadow-drop) !important; border-radius: 0.5rem !important; padding: 0.4rem !important; }
+.dropdown-item { color: var(--c-text-secondary) !important; border-radius: 0.4rem !important; padding: 0.5rem 0.85rem !important; }
+.dropdown-item:hover, .dropdown-item:focus { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+.dropdown-divider { border: none !important; height: 1px !important; background-color: rgba(0,0,0,0.06); margin: 0.3rem 0 !important; }
+[data-theme="dark"] .dropdown-divider { background-color: rgba(255,255,255,0.06); }
+
+/* -----------------------------------------------------------------------
+   13. BUTTONS
+   ----------------------------------------------------------------------- */
+.btn { border-width: 0 !important; }
+.btn-white, .btn-light { background-color: var(--c-bg-input) !important; border: none !important; color: var(--c-text-secondary) !important; box-shadow: none !important; }
+.btn-white:hover, .btn-light:hover { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+.btn-secondary { background-color: var(--c-bg-input) !important; border: none !important; color: var(--c-text-primary) !important; box-shadow: none !important; }
+.btn-secondary:hover { background-color: var(--c-bg-hover) !important; }
+.btn-link { color: var(--c-accent) !important; }
+
+/* -----------------------------------------------------------------------
+   14. FILTER PILLS
+   ----------------------------------------------------------------------- */
+.filter-pill { background-color: var(--c-bg-input) !important; border: none !important; color: var(--c-text-primary) !important; padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600; border-radius: 50rem; box-shadow: none !important; }
+button.filter-pill:hover, a.filter-pill:hover { background-color: var(--c-bg-hover) !important; text-decoration: none; }
+.filter-pill.active { background-color: var(--c-bg-active) !important; box-shadow: var(--c-shadow-in) !important; }
+.filter-pill.highlighted-pill { background-color: #fee2e2 !important; border: none !important; color: #b91c1c !important; }
+.filter-pill.highlighted-pill .badge { background-color: #ef4444 !important; color: #fff !important; }
+[data-theme="dark"] .filter-pill.highlighted-pill { background-color: rgba(239,68,68,0.18) !important; color: #fca5a5 !important; }
+
+/* -----------------------------------------------------------------------
+   15. OFFCANVAS / ALERTS / LIST GROUPS / TABS / PAGINATION
+   ----------------------------------------------------------------------- */
+.alert { border: none !important; }
+.offcanvas { background-color: var(--c-bg-surface) !important; border: none !important; box-shadow: var(--c-shadow-drop) !important; }
+.offcanvas-header { border-bottom: none !important; }
+.offcanvas-title { color: var(--c-text-primary) !important; }
+
+.list-group-item { background-color: var(--c-bg-surface) !important; border: none !important; color: var(--c-text-primary) !important; }
+.list-group-item:hover { background-color: var(--c-bg-hover) !important; }
+.list-group-item.active { background-color: var(--c-accent-soft) !important; color: var(--c-accent) !important; }
+
+.nav-tabs { border-bottom: none !important; }
+.nav-tabs .nav-link { border: none !important; color: var(--c-text-secondary) !important; border-radius: 0.4rem 0.4rem 0 0 !important; }
+.nav-tabs .nav-link.active { background-color: var(--c-bg-surface) !important; color: var(--c-accent) !important; box-shadow: 0 2px 0 var(--c-accent); }
+
+.pagination .page-link { background-color: var(--c-bg-input) !important; border: none !important; color: var(--c-text-secondary) !important; margin: 0 2px; border-radius: 0.375rem !important; }
+.pagination .page-link:hover { background-color: var(--c-bg-hover) !important; color: var(--c-text-primary) !important; }
+.pagination .page-item.active .page-link { background-color: var(--c-accent) !important; color: #fff !important; }
+
+/* -----------------------------------------------------------------------
+   16. GLOBAL BORDER STRIP
+   ----------------------------------------------------------------------- */
+.border, .border-top, .border-bottom, .border-start, .border-end { border-color: transparent !important; }
+.border-start-width-3 { border-left-width: 3px !important; border-left-style: solid !important; }
+hr { border: none !important; height: 1px; background-color: rgba(0,0,0,0.05); opacity: 1; }
+[data-theme="dark"] hr { background-color: rgba(255,255,255,0.06); }
+
+/* -----------------------------------------------------------------------
+   17. DARK MODE TEXT CONTRAST — every text element readable
+   ----------------------------------------------------------------------- */
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
+[data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 { color: var(--c-text-primary) !important; }
+[data-theme="dark"] p      { color: var(--c-text-secondary) !important; }
+[data-theme="dark"] span   { color: inherit; }
+[data-theme="dark"] td, [data-theme="dark"] th { color: var(--c-text-primary) !important; }
+[data-theme="dark"] label,
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .col-form-label { color: var(--c-text-secondary) !important; }
+[data-theme="dark"] small,
+[data-theme="dark"] .small { color: var(--c-text-muted) !important; }
+[data-theme="dark"] .text-muted     { color: var(--c-text-muted)     !important; }
+[data-theme="dark"] .text-secondary { color: var(--c-text-secondary) !important; }
+[data-theme="dark"] .text-dark      { color: var(--c-text-primary)   !important; }
+[data-theme="dark"] .fw-bold,
+[data-theme="dark"] strong { color: var(--c-text-primary) !important; }
+[data-theme="dark"] a:not(.btn):not(.nav-link):not(.navbar-nav-link):not(.dropdown-item) { color: var(--c-accent) !important; }
+
+/* Light mode utilities */
+.text-muted     { color: var(--c-text-muted)     !important; }
+.text-secondary { color: var(--c-text-secondary) !important; }
+.text-dark      { color: var(--c-text-primary)   !important; }
+
+/* -----------------------------------------------------------------------
+   18. SWEETALERT
+   ----------------------------------------------------------------------- */
+.swal2-popup { background-color: var(--c-bg-surface) !important; border: none !important; box-shadow: var(--c-shadow-drop) !important; }
+.swal2-title { color: var(--c-text-primary) !important; }
+.swal2-html-container { color: var(--c-text-secondary) !important; }
+
+/* -----------------------------------------------------------------------
+   19. UTILITIES
+   ----------------------------------------------------------------------- */
+.bg-light { background-color: var(--c-bg-input) !important; }
+.bg-white { background-color: var(--c-bg-surface) !important; }
+.bg-body  { background-color: var(--c-bg-page) !important; }
+.shadow-sm, .shadow, .shadow-lg { border: none !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* -----------------------------------------------------------------------
+   20. TRANSITIONS
+   IMPORTANT: Do NOT use animation:none on * — Alpine.js uses @keyframes
+   internally for x-show/x-transition. Killing all animations breaks
+   Alpine component rendering (elements stay hidden, columns disappear).
+   Instead, only apply theme-switch transitions to specific elements.
+   ----------------------------------------------------------------------- */
+html, body,
+.navbar, .sidebar, .sidebar-main, .sidebar-content,
+.navbar-footer, .page-header,
+.card, .card-header, .card-footer, .card-body,
+.dropdown-menu,
+.modal-content, .modal-header, .modal-footer, .modal-body,
+.offcanvas, .list-group-item,
+.form-control, .form-select, .input-group-text,
+.nav-link, .navbar-nav-link, .dropdown-item,
+.btn, .filter-pill,
+.table td, .table th {
+  transition-property: background-color, color, filter, box-shadow !important;
+  transition-duration: 0.15s !important;
+  transition-timing-function: ease !important;
+}
+/* Keep Bootstrap / Limitless structural transitions working */
+.collapsing   { transition: height 0.2s ease !important; }
+.fade         { transition: opacity 0.15s linear !important; }
+.modal.fade .modal-dialog { transition: transform 0.2s ease-out !important; }
+.offcanvas    { transition: transform 0.2s ease !important; }
+.sidebar-main { transition: width 0.18s ease !important; }
+
+/* -----------------------------------------------------------------------
+   21. SCROLLBAR — fully invisible
+   ----------------------------------------------------------------------- */
+* {
+  scrollbar-width: none;   /* Firefox — hides completely */
+}
+*::-webkit-scrollbar {
+  display: none;           /* Chrome / Safari / Edge — hides completely */
+  width: 0;
+  height: 0;
+}
