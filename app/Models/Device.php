@@ -171,4 +171,9 @@ class Device extends Model
         }
         return $status_responses;
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'room', 'code');
+    }
 }

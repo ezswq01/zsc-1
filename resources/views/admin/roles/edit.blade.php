@@ -48,7 +48,7 @@
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Permissions</label>
                             <div class="col-lg-8">
-                                <select class="form-control select" data-placeholder="Select Permissions"
+                                <select class="form-control select2" data-placeholder="Select Permissions"
                                     name="permissions[]" multiple="multiple">
                                     @foreach ($permissions as $key => $permission)
                                         <optgroup label="{{ Str::upper($key) }}">
@@ -73,3 +73,18 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+<!-- Select2 Initialization Script -->
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 on the multi-select fields
+        $('.select2').select2({
+            width: '100%',
+            placeholder: function(){
+                $(this).data('placeholder');
+            }
+        });
+    });
+</script>
+@endpush

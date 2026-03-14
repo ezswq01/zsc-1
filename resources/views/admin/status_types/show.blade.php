@@ -44,6 +44,14 @@
                                     placeholder="Type Name" required type="text">
                             </div>
                         </div>
+                        <!-- NEW CATEGORY FIELD -->
+                        <div class="row mb-3">
+                            <label class="col-lg-4 col-form-label">Category</label>
+                            <div class="col-lg-8">
+                                <input disabled value="{{ old("category", $data->category) }}" class="form-control" name="category"
+                                    placeholder="Type Category" required type="text">
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label class="col-lg-4 col-form-label">Color</label>
                             <div class="col-lg-8">

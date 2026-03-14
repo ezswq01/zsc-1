@@ -42,6 +42,7 @@
                 <tr>
                     <th>No</th>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Color</th>
                     <th>Trigger Color</th>
                     <th class="text-center">Actions</th>
@@ -109,6 +110,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'category',
+                        name: 'category'
                     },
                     {
                         data: 'color',

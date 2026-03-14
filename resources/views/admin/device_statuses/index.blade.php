@@ -34,8 +34,26 @@
         </div>
 
         <div class="card-header">
-            <div class="d-flex flex-lg-row flex-column gap-2 justify-content-between">
-                List of All Device Logs.
+            <div class="d-flex flex-column flex-lg-row gap-2 justify-content-between">
+                {{-- Location Filters --}}
+                <div class="d-flex flex-column flex-lg-row gap-2">
+                    <div class="">
+                        <select class="form-select" id="branch_filter">
+                            <option value="">All Locations</option>
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->branch }}">{{ $branch->branch }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="">
+                        <select class="form-select" id="building_filter">
+                            <option value="">All Sub-locations</option>
+                            @foreach($buildings as $building)
+                                <option value="{{ $building->building }}" data-branch="{{ $building->branch }}" style="display: none;">{{ $building->building }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="">
                     <input type="text" class="form-control datepicker-basic @error('date') is-invalid @enderror"
                         placeholder="Pick Start & End Date" name="date">
@@ -43,18 +61,18 @@
             </div>
         </div>
 
-        <div style="overflow-x:auto">
-            <table id="datatable" class="table text-nowrap">
+        <div style="overflow-x: auto">
+            <table id="datatable" class="table">
                 <thead>
                     <tr>
                         <th>Time</th>
                         <th>Device ID</th>
                         <th>Status</th>
-                        <th>Locations</th>
+                        <th>Location</th>
                         <th>Sub Location</th>
                         <th>Location-id</th>
                         <th>Notes</th>
-                        <th>Marked as Normal</th>
+                        <th>Is Normal State</th>
                         <th>Noted</th>
                         <th>Updated By</th>
                         <th>Last Updated</th>
@@ -67,183 +85,128 @@
 @endsection
 
 @push('js')
-    @php
-        $oldDate = old('date');
-        $dates = $oldDate ? explode(' - ', $oldDate) : null;
-        $startDate = $oldDate ? $dates[0] : now()->startOf('hour')->format('Y-m-d H:i:s');
-        $endDate = $oldDate ? $dates[1] : now()->startOf('hour')->add(32, 'hour')->format('Y-m-d H:i:s');
-    @endphp
-
-    <script>
-        const startDate = '{{ $startDate }}';
-        const endDate = '{{ $endDate }}';
-        $('.datepicker-basic').daterangepicker({
-            timePicker: true,
-            showDropdowns: true,
-            startDate: moment(startDate),
-            endDate: moment(endDate),
-            locale: {
-                format: 'YYYY-MM-DD HH:mm:ss'
-            }
-        }).on('apply.daterangepicker', function(ev, picker) {
-            // console.log(picker);
-            window.location.href = `{{ route('admin.device_statuses.index') }}?date=${picker.startDate.format('YYYY-MM-DD HH:mm:ss')} - ${picker.endDate.format('YYYY-MM-DD HH:mm:ss')}`;
-        });
-    </script>
-
     <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            let data = @json($device_statuses);
-            data = data.map((item) => ({
-                ...item,
-                user_name: item?.user?.name || "-",
-            }))
-            const exportOption = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            const buttons = [{
-                extend: 'copyHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                }
-            }, {
-                extend: 'excelHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_statuses')
-                },
-            }, {
-                extend: 'csvHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_statuses')
-                },
-            }, {
-                extend: 'pdfHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_statuses')
-                },
-            }];
-            $(`#datatable`).DataTable({
-                data: data,
-                order: [
-                    [0, "desc"]
-                ],
-                columnDefs: [{
-                        targets: [0, 1, 2, 3, 4, 5, 6, 9, 10],
-                        className: "align-middle",
-                    },
-                    {
-                        targets: [7, 8],
-                        visible: false,
+
+            // Helper: build the export URL with all active filter state
+            function buildExportUrl(baseUrl) {
+                let date     = $('.datepicker-basic').val();
+                let search   = $('input[type=search]').val();
+                let branch   = $('#branch_filter').val();
+                let building = $('#building_filter').val();
+                let order    = datatable.order()[0];
+                let colIndex = order[0];
+                let dir      = order[1];
+                let colName  = datatable.settings().init().columns[colIndex].name;
+
+                return baseUrl
+                    + '?date='     + encodeURIComponent(date)
+                    + '&search='   + encodeURIComponent(search)
+                    + '&branch='   + encodeURIComponent(branch)
+                    + '&building=' + encodeURIComponent(building)
+                    + '&sort='     + encodeURIComponent(colName)
+                    + '&dir='      + encodeURIComponent(dir);
+            }
+
+            const buttons = [
+                {
+                    text: 'Export CSV',
+                    className: 'btn btn-light',
+                    action: function () {
+                        window.location.href = buildExportUrl('{{ route("admin.device_statuses.export") }}');
                     }
-                ],
+                },
+                {
+                    text: 'Export Excel',
+                    className: 'btn btn-light',
+                    action: function () {
+                        window.location.href = buildExportUrl('{{ route("admin.device_statuses.export.excel") }}');
+                    }
+                }
+            ];
+
+            const datatable = $('#datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{!! route("admin.device_statuses.index") !!}',
+                    data: function(d) {
+                        d.date     = $('.datepicker-basic').val();
+                        d.branch   = $('#branch_filter').val();
+                        d.building = $('#building_filter').val();
+                    }
+                },
                 dom: '<"datatable-header"fBl><"datatable-scroll"t><"datatable-footer"ip>',
                 buttons,
-                columns: [{
-                        data: "created_at",
-                        render: function(data, type, row) {
-                            return moment(data).format("YYYY-MM-DD HH:mm:ss");
-                        },
-                    },
-                    {
-                        data: "device",
-                        render: function(data, type, row) {
-                            return data?.device_id ? data?.device_id : "-";
-                        },
-                    },
-                    {
-                        data: "marked_as_read",
-                        render: function(data, type, row) {
-                            return `
-                                <div id="mark_${row.id}">
-                                    ${
-                                        data
-                                            ? `<i class="ph-check-circle text-success"></i>`
-                                            : `<i class="ph-question text-danger"></i>`
-                                    }
-                                </div>
-                            `;
-                        },
-                    },
-                    {
-                        data: "device",
-                        render: function(data, type, row) {
-                            return data?.branch;
-                        },
-                    },
-                    {
-                        data: "device",
-                        render: function(data, type, row) {
-                            return data?.building;
-                        },
-                    },
-                    {
-                        data: "device",
-                        render: function(data, type, row) {
-                            return data?.room;
-                        },
-                    },
-                    {
-                        data: "notes",
-                        render: function(data, type, row) {
-                            return data;
-                        },
-                    },
-                    {
-                        data: "marked_as_read",
-                        render: function(data, type, row) {
-                            return `
-                                <div class="form-check form-switch">
-                                    ${
-                                        data ? 
-                                        `<span class="badge bg-success">TRUE</span>` : 
-                                        `<span class="badge bg-danger">FALSE</span>`
-                                    }
-                                </div>
-                            `;
-                        }
-                    },
-                    {
-                        data: "noted",
-                        render: function(data, type, row) {
-                            return `
-                                <div class="form-check form-switch">
-                                    ${
-                                        data ? 
-                                        `<span class="badge bg-success">TRUE</span>` : 
-                                        `<span class="badge bg-danger">FALSE</span>`
-                                    }
-                                </div>
-                            `;
-                        }
-                    },
-                    {
-                        data: "user_name",
-                        render: function(data, type, row) {
-                            return data;
-                        },
-                    },
-                    {
-                        data: "updated_at",
-                        render: function(data, type, row) {
-                            return moment(data).format("YYYY-MM-DD HH:mm:ss");
-                        },
-                    }
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                pageLength: 10,
+                columns: [
+                    { data: 'created_at',        name: 'created_at', render: function(data) {
+                        return moment(data).format('YYYY-MM-DD HH:mm:ss');
+                    }},
+                    { data: 'device.device_id',  name: 'device.device_id', defaultContent: '-' },
+                    { data: 'marked_as_read',    name: 'marked_as_read', orderable: false, searchable: false, render: function(data, type, row) {
+                        return `<div id="mark_${row.id}">${data
+                            ? '<i class="ph-check-circle text-success"></i>'
+                            : '<i class="ph-question text-danger"></i>'
+                        }</div>`;
+                    }},
+                    { data: 'device.branch',     name: 'device.branch',   defaultContent: '-' },
+                    { data: 'device.building',   name: 'device.building', defaultContent: '-' },
+                    { data: 'device.room',       name: 'device.room',     defaultContent: '-' },
+                    { data: 'notes',             name: 'notes',           defaultContent: '' },
+                    { data: 'is_normal_state',   name: 'is_normal_state', visible: false },
+                    { data: 'noted',             name: 'noted',           visible: false },
+                    { data: 'user_name',         name: 'user.name',       defaultContent: '-' },
+                    { data: 'updated_at',        name: 'updated_at', render: function(data) {
+                        return moment(data).format('YYYY-MM-DD HH:mm:ss');
+                    }},
                 ],
+                order: [[0, 'desc']]
+            });
+
+            // --- Location Filter Logic ---
+            $('#branch_filter').on('change', function() {
+                const selectedBranch = $(this).val();
+                const buildingFilter = $('#building_filter');
+
+                buildingFilter.val('');
+                buildingFilter.find('option').not(':first').hide();
+
+                if (selectedBranch) {
+                    buildingFilter.find('option[data-branch="' + selectedBranch + '"]').show();
+                }
+
+                datatable.draw();
+            });
+
+            $('#building_filter').on('change', function() {
+                datatable.draw();
+            });
+
+            // --- Date Picker Logic ---
+            $('.datepicker-basic').daterangepicker({
+                timePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('.datepicker-basic').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+                datatable.draw();
+            });
+
+            $('.datepicker-basic').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                datatable.draw();
             });
         });
     </script>

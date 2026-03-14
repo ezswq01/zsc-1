@@ -59,39 +59,25 @@
         $(document).ready(function() {
             const exportOption = [0, 1];
             const buttons = [{
-                extend: 'copyHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                }
-            }, {
+          //      extend: 'copyHtml5',
+          //      className: 'btn btn-light',
+          //      exportOptions: { columns: exportOption }
+          //  }, {
                 extend: 'excelHtml5',
                 className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_types')
-                },
+                exportOptions: { columns: exportOption },
+                filename: function () { return getExportFilename('device_types'); }
             }, {
                 extend: 'csvHtml5',
                 className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_types')
-                },
-            }, {
-                extend: 'pdfHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('device_types')
-                },
-            }, ];
+                exportOptions: { columns: exportOption },
+                filename: function () { return getExportFilename('device_types'); }
+          //  }, {
+          //      extend: 'pdfHtml5',
+          //      className: 'btn btn-light',
+          //      exportOptions: { columns: exportOption },
+          //      filename: function () { return getExportFilename('device_types'); }
+            }];
 
             const datatable = $('#datatable').DataTable({
                 processing: true,

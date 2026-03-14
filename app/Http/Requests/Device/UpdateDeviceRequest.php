@@ -30,7 +30,7 @@ class UpdateDeviceRequest extends FormRequest
             'device_type_id' => 'required|exists:device_types,id',
             'branch' => 'required|string|max:255',
             'building' => 'required|string|max:255',
-            'room' => 'required|string|max:255',
+            'room' => 'required|string|max:255|exists:locations,code',
             'subscribe_expressions.*.status_type.*' => 'sometimes|exists:status_types,id',
 
             // OLD CODES
@@ -47,6 +47,13 @@ class UpdateDeviceRequest extends FormRequest
             //     ->doNotTrimItems()
             //     ->min(2)
             //     ->max(7), 'max:255'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'room.exists' => 'The Location ID does not exist in the locations list. Please add it to Locations first.',
         ];
     }
 }

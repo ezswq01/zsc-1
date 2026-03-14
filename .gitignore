@@ -1,8 +1,8 @@
-/node_modules
-/public/hot
+/vendor/
+/node_modules/
 /public/storage
+/public/hot
 /storage/*.key
-/vendor
 .env
 .env.backup
 .phpunit.result.cache
@@ -10,3 +10,12 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+tree.log
+"false,"
+"Normal State,"
+laravel-echo-server.lock

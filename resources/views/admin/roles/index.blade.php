@@ -60,39 +60,26 @@
         $(document).ready(function() {
             const exportOption = [0, 1];
             const buttons = [{
-                extend: 'copyHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                }
-            }, {
+          //      extend: 'copyHtml5',
+          //      className: 'btn btn-light',
+          //      exportOptions: { columns: exportOption }
+          //  }, {
                 extend: 'excelHtml5',
                 className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('roles')
-                },
+                exportOptions: { columns: exportOption },
+                filename: function () { return getExportFilename('roles'); }
             }, {
                 extend: 'csvHtml5',
                 className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('roles')
-                },
-            }, {
-                extend: 'pdfHtml5',
-                className: 'btn btn-light',
-                exportOptions: {
-                    columns: exportOption
-                },
-                filename: function() {
-                    return getExportFilename('roles')
-                },
-            }, ];
+                exportOptions: { columns: exportOption },
+                filename: function () { return getExportFilename('roles'); }
+          //  }, {
+          //      extend: 'pdfHtml5',
+          //      className: 'btn btn-light',
+          //      exportOptions: { columns: exportOption },
+          //      filename: function () { return getExportFilename('roles'); }
+            }];
+
 
             const datatable = $('#datatable').DataTable({
                 processing: true,
