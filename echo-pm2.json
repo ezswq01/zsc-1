@@ -1,5 +1,0 @@
-{
-   "name": "mcc-les-9994",
-   "script": "laravel-echo-server",
-   "args": "start"
-}
